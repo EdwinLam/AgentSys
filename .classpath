@@ -40,5 +40,8 @@
 	<classpathentry kind="lib" path="D:/My Documents/百度云/代购网/AgentSys/WebContent/WEB-INF/lib/org.springframework.web.servlet-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="D:/My Documents/百度云/代购网/AgentSys/WebContent/WEB-INF/lib/org.springframework.web-3.1.1.RELEASE.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="D:/My Documents/百度云/代购网/AgentSys/WebContent/WEB-INF/lib/commons-beanutils-1.8.0.jar"/>
+	<classpathentry kind="lib" path="D:/My Documents/百度云/代购网/AgentSys/WebContent/WEB-INF/lib/ojdbc14.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

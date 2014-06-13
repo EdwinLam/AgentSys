@@ -1,15 +1,10 @@
 package com.edwin.agentsys.index;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.geloin.spring.controller.LoginController;
 
 
@@ -38,6 +33,10 @@ public class IndexController {
 	public ModelAndView index(HttpServletResponse response) throws Exception {
 		logger.info("首页初始化");
 		return new ModelAndView("index");
+	}
+	
+	public String testDeme(){
+		return "test";
 	}
 	
 }
