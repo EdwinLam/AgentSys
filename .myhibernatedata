@@ -1,0 +1,21 @@
+#MyEclipse Hibernate Properties
+#Sun Jun 15 13:23:18 CST 2014
+genBasicCompId=false
+sessionFactoryName=com.edwin.agentsys.test.HibernateSessionFactory
+profile=
+daoSFId=
+jndiPath=
+detectM2M=false
+reStrategyClass=
+detectO2O=false
+springDaoFile=
+useJavaTypes=true
+keyGenerator=native
+genVersionTag=false
+sessionFactoryId=
+basePersistenceClass=
+genAnnotations=false
+reSettingsFile=
+configFile=/AgentSys/src/hibernate.cfg.xml
+createConfigFile=true
+baseDaoClass=com.edwin.agentsys.model.BaseHibernateDAO
