@@ -5,6 +5,11 @@
 <html>
 	<head><title>test</title></head>
 	<body>
-		test${result}
+	<form action="/index.do?action=register" method="post">
+		名字:<input type="text" name="name"/>
+		账号:<input type="text" name="account"/>
+		密码:<input type="text" name="psw"/>
+		<input type="submit" id="su" value="提交"/ >
+	</form>
 	</body>
 </html>

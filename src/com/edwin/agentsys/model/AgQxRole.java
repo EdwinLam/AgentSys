@@ -1,26 +1,24 @@
 package com.edwin.agentsys.model;
 
 /**
- * QxUser entity. @author MyEclipse Persistence Tools
+ * AgQxRole entity. @author MyEclipse Persistence Tools
  */
 
-public class QxUser implements java.io.Serializable {
+public class AgQxRole implements java.io.Serializable {
 
 	// Fields
 
 	private Integer id;
-	private String account;
 	private String name;
 
 	// Constructors
 
 	/** default constructor */
-	public QxUser() {
+	public AgQxRole() {
 	}
 
 	/** full constructor */
-	public QxUser(String account, String name) {
-		this.account = account;
+	public AgQxRole(String name) {
 		this.name = name;
 	}
 
@@ -32,14 +30,6 @@ public class QxUser implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getAccount() {
-		return this.account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
 	}
 
 	public String getName() {

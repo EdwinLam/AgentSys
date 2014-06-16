@@ -20,7 +20,14 @@
 		<property name="myeclipse.connection.profile">
 			agentsys
 		</property>
-		<mapping resource="com/edwin/agentsys/model/QxUser.hbm.xml" />
+		<mapping resource="com/edwin/agentsys/model/AgQxUser.hbm.xml" />
+		<mapping resource="com/edwin/agentsys/model/AgQxRole.hbm.xml" />
+		<mapping
+			resource="com/edwin/agentsys/model/AgCpProduct.hbm.xml" />
+		<mapping
+			resource="com/edwin/agentsys/model/AgCpPackage.hbm.xml" />
+		<mapping
+			resource="com/edwin/agentsys/model/AgCpPackageProduct.hbm.xml" />
 
 	</session-factory>
 

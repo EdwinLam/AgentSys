@@ -1,6 +1,7 @@
 package com.edwin.agentsys.index;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.edwin.agentsys.model.QxUser;
-import com.edwin.agentsys.model.QxUserDAO;
+import com.edwin.agentsys.index.vo.RegisterVo;
+import com.edwin.agentsys.model.AgCpProductDAO;
+import com.edwin.agentsys.model.AgQxUser;
+import com.edwin.agentsys.model.AgQxUserDAO;
 import com.edwin.agentsys.test.HibernateSessionFactory;
 import com.geloin.spring.controller.LoginController;
 
@@ -37,23 +40,42 @@ public class IndexController {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "action=init")
 	public ModelAndView index(HttpServletResponse response) throws Exception {
 		logger.info("首页初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
-		QxUserDAO qxUserDao=new QxUserDAO();
-		QxUser qxUser = qxUserDao.findById(1);
-		map.put("result", qxUser.getAccount());
-		qxUser.setAccount("test2");
-		qxUser.setName("小明");
-		QxUser qxUser2 = new QxUser();
-		qxUser2.setAccount("gg");
-		qxUser2.setName("ggg");
+		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
+		List<AgCpProductDAO> agCpProduct =agCpProductDAO.findAll();
+		map.put("agCpProduct", agCpProduct);
+//		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务  
+//		 tr.commit();   //提交事务  
+//		HibernateSessionFactory.getSession().flush();
+		return new ModelAndView("index",map);
+	}
+	
+	@RequestMapping(params = "action=registerinit")
+	public ModelAndView registerinit(HttpServletResponse response) throws Exception {
+		logger.info("注册页面初始化");
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		return new ModelAndView("register",map);
+	}
+	
+	@RequestMapping(params = "action=register")
+	public ModelAndView register(RegisterVo registerVo) throws Exception {
+		logger.info("注册页面初始化");
+		AgQxUser agQxUser = new AgQxUser();
+		agQxUser.setAccount(registerVo.getAccount());
+		agQxUser.setPsw(registerVo.getPsw());
+		agQxUser.setName(registerVo.getName());
+		agQxUser.setRoleId(2);
+		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
 		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务  
-		qxUserDao.save(qxUser);
-		qxUserDao.save(qxUser2);
+		agQxUserDAO.save(agQxUser);
 		 tr.commit();   //提交事务  
 		HibernateSessionFactory.getSession().flush();
+		Map<String, Object> map = new HashMap<String, Object>();
 		return new ModelAndView("index",map);
 	}
 	
