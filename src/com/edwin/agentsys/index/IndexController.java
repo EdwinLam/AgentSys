@@ -45,9 +45,10 @@ public class IndexController {
 	public ModelAndView index(HttpServletResponse response) throws Exception {
 		logger.info("首页初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
-		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
-		List<AgCpProductDAO> agCpProduct =agCpProductDAO.findAll();
-		map.put("agCpProduct", agCpProduct);
+//		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
+//		List<AgCpProductDAO> agCpProduct =agCpProductDAO.findAll();
+//		map.put("agCpProduct", agCpProduct);
+		map.put("test", "这是测试");
 //		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务  
 //		 tr.commit();   //提交事务  
 //		HibernateSessionFactory.getSession().flush();

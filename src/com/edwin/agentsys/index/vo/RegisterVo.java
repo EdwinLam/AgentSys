@@ -1,5 +1,4 @@
 package com.edwin.agentsys.index.vo;
-
 public class RegisterVo {
 	private String name;
 	private String account;
