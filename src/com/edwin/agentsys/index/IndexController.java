@@ -59,7 +59,6 @@ public class IndexController {
 	public ModelAndView registerinit(HttpServletResponse response) throws Exception {
 		logger.info("注册页面初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
-		
 		return new ModelAndView("register",map);
 	}
 	
