@@ -20,7 +20,6 @@
 		#masonry
 		{
 			padding: 0;
-			min-height: 450px;
 			margin: 0 auto;
 		}
 		
@@ -46,11 +45,10 @@
 		{
 			background-color: #fff;
 			padding-top: 0;
-			font-size: 13px;
+			font-size: 12px;
 		}
 		#masonry .thumbnail .caption .title
 		{
-			color: #666;
 			font-size: 10px;
 			font-weight: bold;
 			margin: 5px 0;
@@ -66,6 +64,7 @@
 </head>
     
 <body >
+
 	<div class="navbar navbar-inverse  navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
@@ -101,21 +100,7 @@
 
 					<div id="masonry_ghost" class="hide">
 					
-					#foreach($product in $productBeanList)
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="$!product.img_url">
-								<div class="pricebox">
-									<div class="showbox">
-										<span class="yuan">¥</span><span class="num">$!product.price</span>
-										</div><div class="mask"></div></div>
-							</div>
-							<div class="caption">
-								<div class="title">$!product.title</div>
-								<div class="content"></div>
-							</div>
-						</div>
-					 #end
+				
 					</div>
 
 
@@ -123,7 +108,7 @@
 
 				<footer class="footer">
 					<div class="container">
-						<p>Example</p>
+						<div class="loading" ><img src="/image/index/loading.gif"><span>正在加载...</span></div>
 					</div>
 				</footer>
 				<div class="container">
@@ -196,13 +181,14 @@
 								</fieldset>
 							</form>
 						</div>
-						<div class="modal-footer">
+						<div class="modal-footer" >
 							<a href="javascript:void(0);" class="btn btn-success"
 								id="registerBtn">注册</a> <a href="#" class="btn"
 								data-dismiss="modal">返回</a>
 						</div>
 					</div>
 				</div>
+				<div id="elevator_item" > <a id="elevator" onclick="return false;" title="回到顶部"></a> </div>
 				<script src="js/jquery-1.11.1.min.js"></script>
 				<script src="js/bootstrap.min.js"></script>
 				<script src="js/main.js"></script>

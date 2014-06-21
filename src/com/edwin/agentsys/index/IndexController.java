@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.edwin.agentsys.base.Constant;
+import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.ProductShowBean;
 import com.edwin.agentsys.index.vo.RegisterVo;
 import com.edwin.agentsys.model.AgCpPackage;
@@ -56,7 +58,7 @@ public class IndexController {
 		ProductShowBean productBean=null;
 		AgCpProduct agCpProduct=null;
 		AgCpPackage agCpPackage=null;
-		List<AgCpProduct> agCpProductList =agCpProductDAO.findAll();
+		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(1, Constant.INDEX_PRODUCT_SIZE);
 		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
 			  productBean=new ProductShowBean();
 			  agCpProduct  =   agCpProductList.get(i); 
@@ -69,6 +71,38 @@ public class IndexController {
 		   }   
 		map.put("productBeanList", productBeanList);
 		return new ModelAndView("index",map);
+	}
+	
+	/**
+	 * 按页获取商品信息
+	 * @param response
+	 * @param curPage
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping(params = "action=getproduct")
+	public ModelAndView getProdcut(HttpServletResponse response,int curPage) throws Exception {
+		JsonView jsonView=new JsonView();
+		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
+		AgCpPackageDAO agCpPackageDao=new AgCpPackageDAO();
+		List<Map<String,String>> productMapList=new ArrayList<Map<String,String>>();
+		AgCpProduct agCpProduct=null;
+		AgCpPackage agCpPackage=null;
+		  Map<String,String> productInfo=null;
+		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(curPage, Constant.INDEX_PRODUCT_SIZE);
+		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
+			  productInfo=new HashMap<String,String>();
+			  agCpProduct  =   agCpProductList.get(i); 
+			  agCpPackage=agCpPackageDao.findById(agCpProduct.getDefaultPackageId());
+			  productInfo.put("id", agCpProduct.getId()+"");
+			  productInfo.put("name", agCpProduct.getName());
+			  productInfo.put("price", agCpPackage.getPrice()+"");
+			  productInfo.put("img_url", agCpProduct.getImgUrl()+"");
+			  productMapList.add(productInfo);
+		   }
+		  jsonView.setProperty("productData", productMapList);
+		return new ModelAndView(jsonView);
 	}
 	
 	@RequestMapping(params = "action=registerinit")

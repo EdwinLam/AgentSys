@@ -77,5 +77,6 @@
 	<classpathentry kind="lib" path="C:/Users/Administrator/AgentSys/WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Administrator/AgentSys/WebContent/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Administrator/AgentSys/WebContent/WEB-INF/lib/velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="K:/gsxxt/gsxxt_web/WebContent/WEB-INF/lib/ezmorph-1.0.3.jar"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

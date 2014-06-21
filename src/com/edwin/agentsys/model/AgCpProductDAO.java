@@ -162,4 +162,20 @@ public class AgCpProductDAO extends BaseHibernateDAO  {
             throw re;
         }
     }
+    
+    public  List findByPage(int offset,int pagesize){
+    	log.debug("finding by page");
+		try {
+			String queryString = "from AgCpProduct";
+	         Query queryObject = getSession().createQuery(queryString);
+	         if (offset != 0 && pagesize != 0) {
+	        	 queryObject.setFirstResult((offset - 1) * pagesize);
+	        	 queryObject.setMaxResults(pagesize);
+	            }
+			 return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("inding by page failed", re);
+			throw re;
+		}
+    }
 }

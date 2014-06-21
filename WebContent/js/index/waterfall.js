@@ -1,92 +1,114 @@
-$(function() {
-	// 获取数据
-	var ghostNode = $('#masonry_ghost').find('.thumbnail'), i, ghostIndexArray = [];
-	var ghostCount = ghostNode.length;
-	for (i = 0; i < ghostCount; i++) {
-		ghostIndexArray[i] = i;
-	}
-	ghostIndexArray.sort(function(a, b) {
-		if (Math.random() > 0.5) {
-			return a - b;
-		} else {
-			return b - a;
+var curPage = 1;
+var isInit=true;
+var masNode = $('#masonry');
+var ghostMasNode=$("#masonry_ghost");
+var imagesLoading = false;
+
+
+function processNewItems(items) {
+	items.each(function() {
+				var $this = $(this);
+				var imgsNode = $this.find('.imgs');
+				var title = $this.find('.title').text();
+				var author = $this.find('.author').text();
+				title += '&nbsp;&nbsp;(' + author + ')';
+				var lightboxName = 'lightbox_'; // + imgNames[0];
+				var imgNames = imgsNode.find('input[type=hidden]').val()
+						.split(',');
+				jQuery
+						.each(
+								imgNames,
+								function(index, item) {
+									imgsNode
+											.append('<a href="http://fineui.com/case/images/large/'
+													+ item
+													+ '" data-lightbox="'
+													+ lightboxName
+													+ '" title="'
+													+ title
+													+ '"><img src="'
+													+ item
+													+ '" /></a>');
+								});
+			});
+}
+
+
+function getNewItems() {
+
+	$(".loading").show();
+	var newItemStr="";
+	$.ajax({
+		type : "post",
+		url : "/index.do?action=getproduct&curPage=" + curPage,
+		dataType : "json",
+		success : function(data) {
+			var productData = data.productData;
+			$.each(productData, function(idx, item) {
+				//输出
+				newItemStr += "<div class=\"thumbnail dealflag\">"
+						+ "<div class=\"imgs\">"
+						+"<a href=\"#\" title=\""+ item.name+"\"><img src=\""+ item.img_url+"\"/></a>"
+						+ "<div class=\"pricebox\">"
+						+ "<div class=\"showbox\">"
+						+ "<span class=\"yuan\">¥</span><span class=\"num\">"
+						+ item.price+
+				"</span>" + "</div><div class=\"mask\"></div></div>" + "</div>"
+						+ "<div class=\"caption\">" + "	<div class=\"title\">"
+						+ item.name + "</div>"
+						+ "	<div class=\"content\"></div> " + " </div> "
+						+ "</div>";
+			});
+			masNode.append($(newItemStr));
+			var items=masNode.find(".dealflag").removeClass("dealflag");
+			if(items.length>0){
+				items.css('opacity', 0);
+				items.imagesLoaded(function() {
+					items.css('opacity', 1);
+					if(isInit){
+						isInit=false;
+						masNode.masonry({
+							itemSelector : '.thumbnail',
+							isFitWidth : true
+						});
+					}else{
+						masNode.masonry('appended', items);
+					}
+					$(".loading").hide();
+					curPage++;
+					imagesLoading = false;
+				});
+			}else{
+				imagesLoading = false;
+				$(".loading").hide();
+			}
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert(errorThrown);
 		}
 	});
+}
 
-	var currentIndex = 0;
-	var masNode = $('#masonry');
-	var imagesLoading = false;
 
-	function getNewItems() {
-		var newItemContainer = $('<div/>');
-		for ( var i = 0; i < 8; i++) {
-			if (currentIndex < ghostCount) {
-				newItemContainer.append(ghostNode
-						.get(ghostIndexArray[currentIndex]));
-				currentIndex++;
-			}
-		}
-		return newItemContainer.find('.thumbnail');
-	}
+function topAni(){
+	$('html,body').animate({scrollTop:0}, 300);
+}
 
-	function processNewItems(items) {
-		items.each(function() {
-					var $this = $(this);
-					var imgsNode = $this.find('.imgs');
-					var title = $this.find('.title').text();
-					var author = $this.find('.author').text();
-					title += '&nbsp;&nbsp;(' + author + ')';
-					var lightboxName = 'lightbox_'; // + imgNames[0];
-					var imgNames = imgsNode.find('input[type=hidden]').val().split(',');
-					jQuery.each(imgNames,function(index, item) {
-							imgsNode.append('<a href="http://fineui.com/case/images/large/'
-														+ item
-														+ '" data-lightbox="'
-														+ lightboxName
-														+ '" title="'
-														+ title
-														+ '"><img src="'
-														+ item + '" /></a>');
-							});
-				});
-	}
-
-	function initMasonry() {
-		var items = getNewItems().css('opacity', 0);
-		processNewItems(items);
-		masNode.append(items);
-		imagesLoading = true;
-		items.imagesLoaded(function() {
-			imagesLoading = false;
-			items.css('opacity', 1);
-			masNode.masonry({
-				itemSelector : '.thumbnail',
-				isFitWidth : true
-			});
-		});
-	}
-
-	function appendToMasonry() {
-		var items = getNewItems().css('opacity', 0);
-		processNewItems(items);
-		masNode.append(items);
-		imagesLoading = true;
-		items.imagesLoaded(function() {
-			imagesLoading = false;
-			items.css('opacity', 1);
-			masNode.masonry('appended', items);
-		});
-	}
-
-	initMasonry();
-
+$(function() {
+	getNewItems();
+	$("#elevator").click(function(){topAni();});
 	$(window).scroll(
 			function() {
-
-				if ($(document).height() - $(window).height()
-						- $(document).scrollTop() < 10) {
+				if($(document).scrollTop()<200){
+					$("#elevator_item").hide();
+				}else{
+					$("#elevator_item").show();
+				}
+				
+				if ($(document).height() - $(window).height()- $(document).scrollTop() < 10) {
 					if (!imagesLoading) {
-						appendToMasonry();
+						imagesLoading=true;
+						 getNewItems();
 					}
 				}
 			});
