@@ -23,6 +23,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 			.getLogger(AgCpPackageDAO.class);
 	// property constants
 	public static final String NAME = "name";
+	public static final String PRICE = "price";
 
 	public void save(AgCpPackage transientInstance) {
 		log.debug("saving AgCpPackage instance");
@@ -90,6 +91,10 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 
 	public List findByName(Object name) {
 		return findByProperty(NAME, name);
+	}
+
+	public List findByPrice(Object price) {
+		return findByProperty(PRICE, price);
 	}
 
 	public List findAll() {

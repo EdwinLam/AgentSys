@@ -1,73 +1,97 @@
 package com.edwin.agentsys.model;
 
+
+
 /**
  * AgQxUser entity. @author MyEclipse Persistence Tools
  */
 
-public class AgQxUser implements java.io.Serializable {
+public class AgQxUser  implements java.io.Serializable {
 
-	// Fields
 
-	private Integer id;
-	private String account;
-	private String name;
-	private String psw;
-	private Integer roleId;
+    // Fields    
 
-	// Constructors
+     private Integer id;
+     private String account;
+     private String phone;
+     private String name;
+     private String psw;
+     private Integer roleId;
 
-	/** default constructor */
-	public AgQxUser() {
-	}
 
-	/** full constructor */
-	public AgQxUser(String account, String name, String psw, Integer roleId) {
-		this.account = account;
-		this.name = name;
-		this.psw = psw;
-		this.roleId = roleId;
-	}
+    // Constructors
 
-	// Property accessors
+    /** default constructor */
+    public AgQxUser() {
+    }
 
-	public Integer getId() {
-		return this.id;
-	}
+    
+    /** full constructor */
+    public AgQxUser(String account, String phone, String name, String psw, Integer roleId) {
+        this.account = account;
+        this.phone = phone;
+        this.name = name;
+        this.psw = psw;
+        this.roleId = roleId;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+   
+    // Property accessors
 
-	public String getAccount() {
-		return this.account;
-	}
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setAccount(String account) {
-		this.account = account;
-	}
+    public String getAccount() {
+        return this.account;
+    }
+    
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getPhone() {
+        return this.phone;
+    }
+    
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getPsw() {
-		return this.psw;
-	}
+    public String getPsw() {
+        return this.psw;
+    }
+    
+    public void setPsw(String psw) {
+        this.psw = psw;
+    }
 
-	public void setPsw(String psw) {
-		this.psw = psw;
-	}
+    public Integer getRoleId() {
+        return this.roleId;
+    }
+    
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+   
 
-	public Integer getRoleId() {
-		return this.roleId;
-	}
 
-	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
-	}
+
+
+
+
+
 
 }

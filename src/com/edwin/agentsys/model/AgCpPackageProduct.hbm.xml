@@ -11,12 +11,12 @@
             <generator class="native" />
         </id>
         <property name="packageId" type="java.lang.Integer">
-            <column name="package_id">
+            <column name="package_id" not-null="true">
                 <comment>套餐id</comment>
             </column>
         </property>
         <property name="productId" type="java.lang.Integer">
-            <column name="product_id">
+            <column name="product_id" not-null="true">
                 <comment>产品ID</comment>
             </column>
         </property>

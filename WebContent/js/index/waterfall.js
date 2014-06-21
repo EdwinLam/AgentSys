@@ -19,7 +19,7 @@ $(function() {
 
 	function getNewItems() {
 		var newItemContainer = $('<div/>');
-		for ( var i = 0; i < 6; i++) {
+		for ( var i = 0; i < 8; i++) {
 			if (currentIndex < ghostCount) {
 				newItemContainer.append(ghostNode
 						.get(ghostIndexArray[currentIndex]));
@@ -30,31 +30,24 @@ $(function() {
 	}
 
 	function processNewItems(items) {
-		items
-				.each(function() {
+		items.each(function() {
 					var $this = $(this);
 					var imgsNode = $this.find('.imgs');
 					var title = $this.find('.title').text();
 					var author = $this.find('.author').text();
 					title += '&nbsp;&nbsp;(' + author + ')';
 					var lightboxName = 'lightbox_'; // + imgNames[0];
-
-					var imgNames = imgsNode.find('input[type=hidden]').val()
-							.split(',');
-					jQuery
-							.each(
-									imgNames,
-									function(index, item) {
-										imgsNode
-												.append('<a href="http://fineui.com/case/images/large/'
+					var imgNames = imgsNode.find('input[type=hidden]').val().split(',');
+					jQuery.each(imgNames,function(index, item) {
+							imgsNode.append('<a href="http://fineui.com/case/images/large/'
 														+ item
 														+ '" data-lightbox="'
 														+ lightboxName
 														+ '" title="'
 														+ title
-														+ '"><img src="http://fineui.com/case/images/'
+														+ '"><img src="'
 														+ item + '" /></a>');
-									});
+							});
 				});
 	}
 
@@ -62,7 +55,6 @@ $(function() {
 		var items = getNewItems().css('opacity', 0);
 		processNewItems(items);
 		masNode.append(items);
-
 		imagesLoading = true;
 		items.imagesLoaded(function() {
 			imagesLoading = false;
@@ -78,7 +70,6 @@ $(function() {
 		var items = getNewItems().css('opacity', 0);
 		processNewItems(items);
 		masNode.append(items);
-
 		imagesLoading = true;
 		items.imagesLoaded(function() {
 			imagesLoading = false;
@@ -94,7 +85,6 @@ $(function() {
 
 				if ($(document).height() - $(window).height()
 						- $(document).scrollTop() < 10) {
-
 					if (!imagesLoading) {
 						appendToMasonry();
 					}

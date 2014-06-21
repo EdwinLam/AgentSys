@@ -1,53 +1,67 @@
 package com.edwin.agentsys.model;
 
+
+
 /**
  * AgCpPackageProduct entity. @author MyEclipse Persistence Tools
  */
 
-public class AgCpPackageProduct implements java.io.Serializable {
+public class AgCpPackageProduct  implements java.io.Serializable {
 
-	// Fields
 
-	private Integer id;
-	private Integer packageId;
-	private Integer productId;
+    // Fields    
 
-	// Constructors
+     private Integer id;
+     private Integer packageId;
+     private Integer productId;
 
-	/** default constructor */
-	public AgCpPackageProduct() {
-	}
 
-	/** full constructor */
-	public AgCpPackageProduct(Integer packageId, Integer productId) {
-		this.packageId = packageId;
-		this.productId = productId;
-	}
+    // Constructors
 
-	// Property accessors
+    /** default constructor */
+    public AgCpPackageProduct() {
+    }
 
-	public Integer getId() {
-		return this.id;
-	}
+    
+    /** full constructor */
+    public AgCpPackageProduct(Integer packageId, Integer productId) {
+        this.packageId = packageId;
+        this.productId = productId;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+   
+    // Property accessors
 
-	public Integer getPackageId() {
-		return this.packageId;
-	}
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setPackageId(Integer packageId) {
-		this.packageId = packageId;
-	}
+    public Integer getPackageId() {
+        return this.packageId;
+    }
+    
+    public void setPackageId(Integer packageId) {
+        this.packageId = packageId;
+    }
 
-	public Integer getProductId() {
-		return this.productId;
-	}
+    public Integer getProductId() {
+        return this.productId;
+    }
+    
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+   
 
-	public void setProductId(Integer productId) {
-		this.productId = productId;
-	}
+
+
+
+
+
+
 
 }

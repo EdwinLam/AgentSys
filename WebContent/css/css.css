@@ -1,0 +1,44 @@
+.pricebox {
+	position: absolute;
+	width: 60px;
+	height: 24px;
+	line-height: 24px;
+	bottom: 58px;
+	right: 14px;
+}
+
+
+.pricebox .showbox {
+	z-index: 2;
+	position: absolute;
+	width: 60px;
+	height: 24px;
+	top: 0;
+	left: 0;
+	text-align: center;
+}
+
+.pricebox .yuan {
+	color: #fff;
+	font-family: arial;
+	padding-right: 1px;
+}
+
+.pricebox .num {
+	color: #fff;
+	font-size: 14px;
+	font-family: tahoma;
+}
+
+.pricebox .mask {
+		z-index: 1;
+		position: absolute;
+		background-color: #000;
+		width: 60px;
+		height: 24px;
+		top: 0;
+		left: 0;
+		opacity: .2;
+		border-radius: 10px;
+		filter: alpha(opacity=20);
+}

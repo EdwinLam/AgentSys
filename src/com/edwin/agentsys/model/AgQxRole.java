@@ -1,43 +1,57 @@
 package com.edwin.agentsys.model;
 
+
+
 /**
  * AgQxRole entity. @author MyEclipse Persistence Tools
  */
 
-public class AgQxRole implements java.io.Serializable {
+public class AgQxRole  implements java.io.Serializable {
 
-	// Fields
 
-	private Integer id;
-	private String name;
+    // Fields    
 
-	// Constructors
+     private Integer id;
+     private String name;
 
-	/** default constructor */
-	public AgQxRole() {
-	}
 
-	/** full constructor */
-	public AgQxRole(String name) {
-		this.name = name;
-	}
+    // Constructors
 
-	// Property accessors
+    /** default constructor */
+    public AgQxRole() {
+    }
 
-	public Integer getId() {
-		return this.id;
-	}
+    
+    /** full constructor */
+    public AgQxRole(String name) {
+        this.name = name;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+   
+    // Property accessors
 
-	public String getName() {
-		return this.name;
-	}
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+   
+
+
+
+
+
+
+
 
 }

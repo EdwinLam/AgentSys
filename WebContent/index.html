@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>典型案例 - FineUI - 基于 ExtJS 的专业 ASP.NET 控件库</title>
+    <title>EasyBuy</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="Title" content="Example" />
@@ -10,6 +10,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/docs.css" rel="stylesheet">
+    <link href="css/css.css" rel="stylesheet">
 <!--[if lt IE 9]>
 	<script src="js/html5.js"></script>
 <![endif]-->
@@ -49,7 +50,8 @@
 		}
 		#masonry .thumbnail .caption .title
 		{
-			font-size: 13px;
+			color: #666;
+			font-size: 10px;
 			font-weight: bold;
 			margin: 5px 0;
 			text-align: left;
@@ -70,7 +72,7 @@
 				<a class="btn btn-navbar" data-toggle="collapse"
 					data-target=".nav-collapse"> <span class="icon-bar"></span> <span
 					class="icon-bar"></span> <span class="icon-bar"></span>
-				</a> <a class="brand" href="#">TOP</a>
+				</a> <a class="brand" href="#">EasyBuy</a>
 				<div class="nav-collapse">
 					<ul class="nav">
 						<li class="active"><a data-toggle="modal" href="#registerDialog"
@@ -86,150 +88,34 @@
 
 		<div class="jumbotron subhead">
 			<div class="container">
-				<h1>Example</h1>
-				<p class="lead">Loading..</p>
+				<h1>EasyBuy</h1>
+				<p class="lead"></p>
 			</div>
 		</div>
 		<div class="container">
 
-					<div
-						style="padding:30px; text-align:center; border-bottom:solid 1px #ddd; display:none;">
-						<a target="_blank"
-							href="http://fineui.com/bbs/forum.php?mod=forumdisplay&fid=37"
-							class="btn btn-large btn-primary">申请加入典型案例</a>
-					</div>
+	
 
 					<div id="masonry" class="container-fluid"></div>
 
 
 					<div id="masonry_ghost" class="hide">
+					
+					#foreach($product in $productBeanList)
 						<div class="thumbnail">
 							<div class="imgs">
-								<input type="hidden" value="2426.png">
+								<input type="hidden" value="$!product.img_url">
+								<div class="pricebox">
+									<div class="showbox">
+										<span class="yuan">¥</span><span class="num">$!product.price</span>
+										</div><div class="mask"></div></div>
 							</div>
 							<div class="caption">
-								<div class="title">简单OA管理系统</div>
+								<div class="title">$!product.title</div>
 								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=2426">小小生</a>
-								</div>
 							</div>
 						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="227.png">
-							</div>
-							<div class="caption">
-								<div class="title">集团报表提报系统</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=227">wangdotnet</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="672.png,672_1.png">
-							</div>
-							<div class="caption">
-								<div class="title">
-									<a target="_blank"
-										href="http://fineui.com/bbs/forum.php?mod=viewthread&tid=925">小型网站管理系统</a>
-								</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=672">拓梦·D</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="160.png">
-							</div>
-							<div class="caption">
-								<div class="title">企贷担保管理系统</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=160">☆幻~精灵</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="970.jpg,970_2.jpg">
-							</div>
-							<div class="caption">
-								<div class="title">
-									<a target="_blank"
-										href="http://fineui.com/bbs/forum.php?mod=viewthread&tid=692">旅游电子商务管理系统</a>
-								</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=970">蓝色天空</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="552.jpg">
-							</div>
-							<div class="caption">
-								<div class="title">资源全生命管理系统</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=552">孤独的过客</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="1431.jpg,1431_1.jpg">
-							</div>
-							<div class="caption">
-								<div class="title">学院在线考试系统</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=1431">CoolHots</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="1004.jpg,1004_1.jpg">
-							</div>
-							<div class="caption">
-								<div class="title">公司WEB ERP系統</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=1004">随州热线</a>
-								</div>
-							</div>
-						</div>
-						<div class="thumbnail">
-							<div class="imgs">
-								<input type="hidden" value="604.png">
-							</div>
-							<div class="caption">
-								<div class="title">
-									<a target="_blank" href="http://www.hui500.com/index.aspx">企业人事管理系统</a>
-								</div>
-								<div class="content"></div>
-								<div class="author">
-									by <a target="_blank"
-										href="http://fineui.com/bbs/home.php?mod=space&uid=604">慧信</a>
-								</div>
-							</div>
-						</div>
-
-
+					 #end
 					</div>
 
 

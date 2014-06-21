@@ -1,5 +1,6 @@
 package com.edwin.agentsys.index;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.edwin.agentsys.index.bean.ProductShowBean;
 import com.edwin.agentsys.index.vo.RegisterVo;
+import com.edwin.agentsys.model.AgCpPackage;
+import com.edwin.agentsys.model.AgCpPackageDAO;
+import com.edwin.agentsys.model.AgCpProduct;
 import com.edwin.agentsys.model.AgCpProductDAO;
 import com.edwin.agentsys.model.AgQxUser;
 import com.edwin.agentsys.model.AgQxUserDAO;
@@ -45,13 +50,24 @@ public class IndexController {
 	public ModelAndView index(HttpServletResponse response) throws Exception {
 		logger.info("首页初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
-//		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
-//		List<AgCpProductDAO> agCpProduct =agCpProductDAO.findAll();
-//		map.put("agCpProduct", agCpProduct);
-		map.put("test", "这是测试");
-//		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务  
-//		 tr.commit();   //提交事务  
-//		HibernateSessionFactory.getSession().flush();
+		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
+		AgCpPackageDAO agCpPackageDao=new AgCpPackageDAO();
+		List<ProductShowBean> productBeanList=new ArrayList<ProductShowBean>();
+		ProductShowBean productBean=null;
+		AgCpProduct agCpProduct=null;
+		AgCpPackage agCpPackage=null;
+		List<AgCpProduct> agCpProductList =agCpProductDAO.findAll();
+		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
+			  productBean=new ProductShowBean();
+			  agCpProduct  =   agCpProductList.get(i); 
+			  productBean.setTitle(agCpProduct.getName());
+			  productBean.setProductId(agCpProduct.getId());
+			  productBean.setImg_url(agCpProduct.getImgUrl());
+			  agCpPackage=agCpPackageDao.findById(agCpProduct.getDefaultPackageId());
+			  productBean.setPrice(agCpPackage.getPrice());
+			  productBeanList.add(productBean);
+		   }   
+		map.put("productBeanList", productBeanList);
 		return new ModelAndView("index",map);
 	}
 	

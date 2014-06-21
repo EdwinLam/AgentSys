@@ -28,6 +28,10 @@
 			resource="com/edwin/agentsys/model/AgCpPackage.hbm.xml" />
 		<mapping
 			resource="com/edwin/agentsys/model/AgCpPackageProduct.hbm.xml" />
+		<mapping resource="com/edwin/agentsys/model/AgCpCart.hbm.xml" />
+		<mapping
+			resource="com/edwin/agentsys/model/AgCpOrderdDetail.hbm.xml" />
+		<mapping resource="com/edwin/agentsys/model/AgCpOrder.hbm.xml" />
 
 	</session-factory>
 
