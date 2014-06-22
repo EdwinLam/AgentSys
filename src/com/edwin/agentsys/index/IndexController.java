@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edwin.agentsys.base.Constant;
+import com.edwin.agentsys.base.LoggerUtil;
+import com.edwin.agentsys.base.MD5Util;
 import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.ProductShowBean;
 import com.edwin.agentsys.index.vo.RegisterVo;
@@ -23,7 +24,6 @@ import com.edwin.agentsys.model.AgCpProductDAO;
 import com.edwin.agentsys.model.AgQxUser;
 import com.edwin.agentsys.model.AgQxUserDAO;
 import com.edwin.agentsys.test.HibernateSessionFactory;
-import com.geloin.spring.controller.LoginController;
 
 
 /**   
@@ -39,7 +39,6 @@ import com.geloin.spring.controller.LoginController;
 @Controller
 @RequestMapping("/index.do")
 public class IndexController {
-	private static Logger logger = Logger.getLogger(LoginController.class);
 	
 	/**
 	 * 首页界面
@@ -50,7 +49,7 @@ public class IndexController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "action=init")
 	public ModelAndView index(HttpServletResponse response) throws Exception {
-		logger.info("首页初始化");
+		LoggerUtil.info("首页初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
 		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
 		AgCpPackageDAO agCpPackageDao=new AgCpPackageDAO();
@@ -107,27 +106,55 @@ public class IndexController {
 	
 	@RequestMapping(params = "action=registerinit")
 	public ModelAndView registerinit(HttpServletResponse response) throws Exception {
-		logger.info("注册页面初始化");
+		LoggerUtil.info("注册页面初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
 		return new ModelAndView("register",map);
 	}
 	
 	@RequestMapping(params = "action=register")
 	public ModelAndView register(RegisterVo registerVo) throws Exception {
-		logger.info("注册页面初始化");
+		JsonView jsonView=new JsonView();
+		LoggerUtil.info("用户注册");
+		if(registerVo.getPhone()==""||registerVo.getNick()==""||registerVo.getPsw()==""){
+			jsonView.setProperty("isSuc", false);	
+			jsonView.setProperty("msg", "参数异常!");
+			return new ModelAndView(jsonView);
+		}
 		AgQxUser agQxUser = new AgQxUser();
-		agQxUser.setAccount(registerVo.getAccount());
-		agQxUser.setPsw(registerVo.getPsw());
-		agQxUser.setName(registerVo.getName());
+		agQxUser.setAccount(registerVo.getPhone());
+		agQxUser.setPsw(MD5Util.Encrypt(registerVo.getPsw()));
+		agQxUser.setName(registerVo.getNick());
+		agQxUser.setPhone(registerVo.getPhone());
 		agQxUser.setRoleId(2);
 		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
+		if(agQxUserDAO.findByAccount(registerVo.getPhone()).size()>0||agQxUserDAO.findByName(registerVo.getNick()).size()>0){
+			jsonView.setProperty("isSuc", false);	
+			jsonView.setProperty("msg", "名称或号码已存在，请重新检查!");
+			return new ModelAndView(jsonView);
+		}
 		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务  
 		agQxUserDAO.save(agQxUser);
 		 tr.commit();   //提交事务  
 		HibernateSessionFactory.getSession().flush();
-		Map<String, Object> map = new HashMap<String, Object>();
-		return new ModelAndView("index",map);
+		jsonView.setProperty("isSuc", true);
+		jsonView.setProperty("msg", "注册成功!");
+		return new ModelAndView(jsonView);
 	}
+	
+	@RequestMapping(params = "action=checkPhone")
+	public ModelAndView checkPhone(String phone) throws Exception {
+		JsonView jsonView=new JsonView();
+		LoggerUtil.info("注册用户号码唯一性检查");
+		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
+		if(agQxUserDAO.findByAccount(phone).size()>0){
+			jsonView.setProperty("isExist", "1"); 
+		}else{
+			jsonView.setProperty("isExist", "0"); 
+		}
+		return new ModelAndView(jsonView);
+	}
+	
+	
 	
 	public String testDeme(){
 		return "test";

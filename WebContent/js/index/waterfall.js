@@ -1,7 +1,6 @@
 var curPage = 1;
 var isInit=true;
 var masNode = $('#masonry');
-var ghostMasNode=$("#masonry_ghost");
 var imagesLoading = false;
 
 
@@ -35,7 +34,6 @@ function processNewItems(items) {
 
 
 function getNewItems() {
-
 	$(".loading").show();
 	var newItemStr="";
 	$.ajax({

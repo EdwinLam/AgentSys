@@ -1,19 +1,19 @@
 package com.edwin.agentsys.index.vo;
 public class RegisterVo {
-	private String name;
-	private String account;
+	private String nick;
+	private String phone;
 	private String psw;
-	public String getName() {
-		return name;
+	public String getNick() {
+		return nick;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
-	public String getAccount() {
-		return account;
+	public String getPhone() {
+		return phone;
 	}
-	public void setAccount(String account) {
-		this.account = account;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public String getPsw() {
 		return psw;
@@ -21,4 +21,5 @@ public class RegisterVo {
 	public void setPsw(String psw) {
 		this.psw = psw;
 	}
+
 }

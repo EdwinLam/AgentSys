@@ -62,11 +62,9 @@ public class JsonView implements View {
 	/**
 	 * 使用json返回数据供前台js进行解析.
 	 */
-	@SuppressWarnings("unchecked")
 	public void render(Map arg0, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		resp.setCharacterEncoding("UTF-8");
 		PrintWriter out = resp.getWriter();
-		System.out.println(resp.getCharacterEncoding());
 		out.write(this.getJSONString());
 		out.close();
 		out = null;

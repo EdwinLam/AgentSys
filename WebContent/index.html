@@ -84,28 +84,17 @@
 		</div>
 	</div>
 	<!--顶边栏结束-->
-
 		<div class="jumbotron subhead">
 			<div class="container">
 				<h1>EasyBuy</h1>
 				<p class="lead"></p>
 			</div>
 		</div>
+		<!--banner结束-->
 		<div class="container">
-
-	
-
 					<div id="masonry" class="container-fluid"></div>
-
-
-					<div id="masonry_ghost" class="hide">
-					
-				
-					</div>
-
-
-				</div>
-
+		</div>
+			<!-- 产品展示结束-->
 				<footer class="footer">
 					<div class="container">
 						<div class="loading" ><img src="/image/index/loading.gif"><span>正在加载...</span></div>
@@ -139,10 +128,11 @@
 						<div class="modal-footer">
 							<a href="javascript:void(0);" class="btn btn-success"
 								id="loginBtn">登录</a> <a href="#" class="btn"
-								data-dismiss="modal">返回</a>
+								data-dismiss="modal" id="registerReBtn">返回</a>
 						</div>
 					</div>
 				</div>
+				
 				<div class="container">
 					<div id="registerDialog" class="modal hide fade in"
 						style="display: none; ">
@@ -151,7 +141,7 @@
 							<h3>用户注册</h3>
 						</div>
 						<div class="modal-body">
-							<form class="form-horizontal" id="registerForm"
+							<form class="form-horizontal" id="registerForm" action="/index.do?action=register"
 								autocomplete="off">
 								<fieldset>
 									<div class="control-group">

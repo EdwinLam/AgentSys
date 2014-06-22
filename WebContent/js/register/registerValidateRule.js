@@ -5,6 +5,30 @@ jQuery.validator.addMethod("isMobile", function(value, element) {
   return this.optional(element) || (length == 11 && mobile.test(value)); 
 }, "请正确填写您的手机号码"); 
 
+jQuery.validator.addMethod("isExistPhone", function(value, element) { 
+	var isSuc=false;
+	  $.ajax({
+		  async: false,
+			type : "post",
+			url : "/index.do?action=checkPhone&phone=" + value,
+			dataType : "json",
+			success : function(data) {
+				if(data.isExist=="1"){
+					isSuc= false;
+				}else{
+					isSuc= true;
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+	  return isSuc;
+	}, "您的号码已被注册"); 
+
+
+
 $(document).ready(function() {
 	$("#registerBtn").click(function(){
 		$("#registerForm").submit();
@@ -13,7 +37,22 @@ $(document).ready(function() {
 	var validator=$("#registerForm").validate({
 		errorClass:"help-inline",
 		errorElement:"span",
-		debug: true,
+		submitHandler:function(form){
+			  $.ajax({
+					type : "post",
+					url : "/index.do?action=register",
+					data: {nick:$("#nick").val(), phone:$("#phone").val(),psw:$("#psw").val()},
+					dataType : "json",
+					success : function(data) {
+						alert(data.msg);
+						$("#registerDialog").modal('hide');
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						alert("服务器正在维护中...");
+						return false;
+					}
+				});
+		 },
 		errorPlacement: function(error, element) { 
 			$obj=element.parent().parent();
 		    error.appendTo(element.parent());
@@ -30,7 +69,8 @@ $(document).ready(function() {
 		rules : {
 			phone : {
 					required:true,
-					 isMobile:true 
+					 isMobile:true,
+					 isExistPhone:true
 				},
 			nick : "required",
 			email : {
