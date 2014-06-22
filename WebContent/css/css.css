@@ -84,3 +84,156 @@
 .loading span {
 	font-size: 1.6em;
 }
+
+#pin_view_layer {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(229,229,229,.95);
+	z-index: 99994;
+	overflow: auto;
+	padding-top: 40px;
+}
+
+#pin_view_layer .close-layer {
+	width: 56px;
+	height: 56px;
+	position: fixed;
+	right: 14px;
+	top: 0;
+	cursor: pointer;
+}
+
+#pin_view_layer .close-layer i {
+	background: url(/image/index/btn_close_layer.png) 0 0 no-repeat;
+	width: 36px;
+	height: 36px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -18px 0 0 -18px;
+}
+
+#pin_view_layer .pin-view {
+width: 992px;
+margin: 0 auto;
+}
+
+.pin-view .pin-view-wrapper {
+width: 992px;
+margin: 0 auto;
+position: relative;
+}
+
+.pin-view .main-part {
+width: 992px;
+float: left;
+}
+
+.pin-view .piece {
+background: #fff;
+padding: 16px 20px;
+box-shadow: 0 1px 3px rgba(34,25,25,.4);
+margin-bottom: 16px;
+position:relative;
+}
+
+.imgbox {
+	overflow: hidden;
+	width: 992px;
+	_width: 990px;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.imgbox .bigimgbox {
+height: 600px;
+overflow: hidden;
+}
+
+.imgbox .shopdetaiwrap {
+display: block;
+text-align: center;
+font-size: 0;
+cursor: default;
+}
+
+
+
+.imgbox .shopdetaiwrap img {
+vertical-align: middle;
+_width: 448px;
+}
+
+.imgbox img {
+margin-left: -1px;
+max-width: 450px;
+}
+
+.infobox{
+	margin-left:20px;
+	width:448px;
+	height:450px;
+}
+
+.fl {
+	float:left;
+	_display:inline;
+}
+
+.shoptitle {
+	text-align:left;
+	overflow: hidden;
+	color: #333;
+	font: 700 16px "Microsoft YaHei";
+	height: 28px;
+	width: 100%;
+	line-height: 28px;
+	margin-bottom: 15px;
+}
+
+
+.shoptitleline {
+	width: 100%;
+	height: 6px;
+	background: url(/image/index/productline.png) repeat-x;
+	overflow: hidden;
+}
+
+.showpricebox {
+	display:block;
+}
+.showpricebox  li {
+position: relative;
+padding-left: 70px;
+z-index: 2;
+}
+
+.showpricebox  label {
+	position: absolute;
+	top: 8px;
+	left: 0;
+	color: #999;
+}
+
+.nowprice .pricein {
+padding: 0 5px;
+color: #fc3c75;
+font: 700 30px/36px verdana,arial;
+}
+
+.unit {
+font: 400 14px/36px 'Microsoft YaHei',STXihei,MingLiu;
+color: #aaa;
+}
+
+ul {
+margin: 0;
+padding: 0;
+list-style: none;
+}
+
+
+

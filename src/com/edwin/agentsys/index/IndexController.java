@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ import com.edwin.agentsys.base.LoggerUtil;
 import com.edwin.agentsys.base.MD5Util;
 import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.ProductShowBean;
+import com.edwin.agentsys.index.bean.UserSessionBean;
+import com.edwin.agentsys.index.vo.LoginVo;
 import com.edwin.agentsys.index.vo.RegisterVo;
 import com.edwin.agentsys.model.AgCpPackage;
 import com.edwin.agentsys.model.AgCpPackageDAO;
@@ -46,29 +49,12 @@ public class IndexController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "action=init")
-	public ModelAndView index(HttpServletResponse response) throws Exception {
+	public ModelAndView index(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		LoggerUtil.info("首页初始化");
 		Map<String, Object> map = new HashMap<String, Object>();
-		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
-		AgCpPackageDAO agCpPackageDao=new AgCpPackageDAO();
-		List<ProductShowBean> productBeanList=new ArrayList<ProductShowBean>();
-		ProductShowBean productBean=null;
-		AgCpProduct agCpProduct=null;
-		AgCpPackage agCpPackage=null;
-		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(1, Constant.INDEX_PRODUCT_SIZE);
-		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
-			  productBean=new ProductShowBean();
-			  agCpProduct  =   agCpProductList.get(i); 
-			  productBean.setTitle(agCpProduct.getName());
-			  productBean.setProductId(agCpProduct.getId());
-			  productBean.setImg_url(agCpProduct.getImgUrl());
-			  agCpPackage=agCpPackageDao.findById(agCpProduct.getDefaultPackageId());
-			  productBean.setPrice(agCpPackage.getPrice());
-			  productBeanList.add(productBean);
-		   }   
-		map.put("productBeanList", productBeanList);
+		UserSessionBean userSessionBean=(UserSessionBean)request.getSession().getAttribute(Constant.USER_SESSION);
+		map.put("userSessionBean", userSessionBean);
 		return new ModelAndView("index",map);
 	}
 	
@@ -138,6 +124,40 @@ public class IndexController {
 		HibernateSessionFactory.getSession().flush();
 		jsonView.setProperty("isSuc", true);
 		jsonView.setProperty("msg", "注册成功!");
+		return new ModelAndView(jsonView);
+	}
+	
+	@RequestMapping(params = "action=login")
+	public ModelAndView login(LoginVo loginVo,HttpServletRequest request) throws Exception {
+		JsonView jsonView=new JsonView();
+		LoggerUtil.info("用户登陆");
+		if(loginVo.getL_phone()==""||loginVo.getL_psw()==""){
+			jsonView.setProperty("isSuc", false);	
+			jsonView.setProperty("msg", "参数异常!");
+			return new ModelAndView(jsonView);
+		}
+		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
+		List userList=agQxUserDAO.findByAccount(loginVo.getL_phone());
+		if(userList.size()==0){
+			jsonView.setProperty("isSuc", false);	
+			jsonView.setProperty("msg", "账号或者密码错误!");
+			return new ModelAndView(jsonView);
+		}
+		AgQxUser agQxUser =(AgQxUser)userList.get(0);
+		//密码验证
+		if(MD5Util.validPassword(loginVo.getL_psw(), agQxUser.getPsw())){
+			UserSessionBean userSessionBean=new UserSessionBean();
+			userSessionBean.setAccount(agQxUser.getAccount());
+			userSessionBean.setName(agQxUser.getName());
+			userSessionBean.setPhone(agQxUser.getPhone());
+			request.getSession().setAttribute(Constant.USER_SESSION, userSessionBean);
+			jsonView.setProperty("isSuc", true);
+			jsonView.setProperty("msg", "登陆成功!");
+		}else{
+			jsonView.setProperty("isSuc", false);	
+			jsonView.setProperty("msg", "账号或者密码错误!");
+			return new ModelAndView(jsonView);
+		}
 		return new ModelAndView(jsonView);
 	}
 	
