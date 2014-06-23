@@ -173,9 +173,10 @@ max-width: 450px;
 }
 
 .infobox{
+	position:relative;
 	margin-left:20px;
 	width:448px;
-	height:450px;
+	min-height:594px;
 }
 
 .fl {
@@ -218,6 +219,11 @@ z-index: 2;
 	color: #999;
 }
 
+.nowprice .soldcount {
+	text-align:left;
+	padding-top:8px;
+}
+
 .nowprice .pricein {
 padding: 0 5px;
 color: #fc3c75;
@@ -234,6 +240,95 @@ margin: 0;
 padding: 0;
 list-style: none;
 }
+
+.shopnum {
+	text-align:left;
+	position: relative;
+	width: 79px;
+	height: 36px;
+	zoom: 1;
+	padding-top:3px;
+}
+
+.shop-goods-num-btn {
+		position: absolute;
+		cursor: pointer;
+		display: block;
+		width: 22px;
+		height: 17px;
+		right: 0;
+}
+
+.shop-goods-icons {
+background-image: url(/image/index/buyinfo.png);
+_background-image: url(/image/index/buyinfo.png);
+background-repeat: no-repeat;
+}
+
+ .buy-num {
+	background-image: url(/image/index/buyinfo.png);
+	background-repeat: no-repeat;
+	background-position: -104px -8px;
+	display: block;
+	border: 0;
+	width: 38px;
+	height: 26px;
+	font-weight: bold;
+	line-height: 28px;
+	padding: 5px 10px;
+	color: #333;
+}
+
+.num-add {
+background-position: -104px -48px;
+top: 0;
+}
+
+ .num-reduce {
+background-position: -104px -88px;
+top: 19px;
+}
+
+.buybox {
+	width:100%;
+	bottom:0px;
+	position: absolute;
+	padding: 10px 0 20px;
+	bottom:0px;
+}
+
+.buy-btn {
+	background: url(/image/index/buyinfo.png) no-repeat;
+	display: inline-block;
+}
+.buy_wrap{
+	margin: 0 auto;
+	width: 290px;
+	display:block;
+}
+
+.buy-now {
+display: block;
+overflow-y: hidden;
+text-indent: -999px;
+width: 145px;
+height: 50px;
+background-position: 0 -144px;
+}
+
+.add-scart {
+	display: block;
+	overflow-y: hidden;
+	text-indent: -999px;
+	width: 133px;
+	height: 50px;
+	background-position: -139px -144px;
+}
+
+
+
+
+
 
 
 
