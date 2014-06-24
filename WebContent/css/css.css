@@ -1,3 +1,9 @@
+/*基础样式*/  
+.fl {
+	float:left;
+	_display:inline;
+}
+
 .pricebox {
 	position: absolute;
 	width: 60px;
@@ -85,7 +91,8 @@
 	font-size: 1.6em;
 }
 
-#pin_view_layer {
+/*产品展示窗口*/  
+#product_show_dialog {/*窗口主题*/
 	position: fixed;
 	top: 0;
 	right: 0;
@@ -97,7 +104,7 @@
 	padding-top: 40px;
 }
 
-#pin_view_layer .close-layer {
+#product_show_dialog .close-layer {/*关闭层*/  
 	width: 56px;
 	height: 56px;
 	position: fixed;
@@ -106,7 +113,8 @@
 	cursor: pointer;
 }
 
-#pin_view_layer .close-layer i {
+#product_show_dialog .close-layer i {/*关闭按钮*/  
+	width: 56px;
 	background: url(/image/index/btn_close_layer.png) 0 0 no-repeat;
 	width: 36px;
 	height: 36px;
@@ -116,61 +124,42 @@
 	margin: -18px 0 0 -18px;
 }
 
-#pin_view_layer .pin-view {
-width: 992px;
-margin: 0 auto;
+#product_show_dialog .product_view {/*展示窗体*/  
+	width: 992px;
+	margin: 0 auto;
+	position: relative;
 }
 
-.pin-view .pin-view-wrapper {
-width: 992px;
-margin: 0 auto;
-position: relative;
+#product_show_dialog .product_view_frame{/*展示外观调整*/  
+	background: #fff;
+	padding: 16px 20px;
+	box-shadow: 0 1px 3px rgba(34,25,25,.4);
+	margin-bottom: 16px;
 }
 
-.pin-view .main-part {
-width: 992px;
-float: left;
-}
-
-.pin-view .piece {
-background: #fff;
-padding: 16px 20px;
-box-shadow: 0 1px 3px rgba(34,25,25,.4);
-margin-bottom: 16px;
-position:relative;
-}
-
-.imgbox {
+#product_show_dialog .product_content {/*内容展示框调整*/  
 	overflow: hidden;
 	width: 992px;
 	_width: 990px;
 	text-align: center;
 	margin-bottom: 20px;
+	min-height:560px;
 }
 
-.imgbox .bigimgbox {
-height: 600px;
-overflow: hidden;
+#product_show_dialog .product_imgbox  {/*产品图片展示框*/
+	width:468px;
+	height: 599px;
+	overflow: hidden;
 }
 
-.imgbox .shopdetaiwrap {
-display: block;
-text-align: center;
-font-size: 0;
-cursor: default;
+#product_show_dialog .product_imgbox  img{/*产品图片*/
+	min-width:468px;
+	max-width:468px; 
+	padding:0px; 
+	margin:0; 
 }
 
-
-
-.imgbox .shopdetaiwrap img {
-vertical-align: middle;
-_width: 448px;
-}
-
-.imgbox img {
-margin-left: -1px;
-max-width: 450px;
-}
+	
 
 .infobox{
 	position:relative;
@@ -179,10 +168,7 @@ max-width: 450px;
 	min-height:594px;
 }
 
-.fl {
-	float:left;
-	_display:inline;
-}
+
 
 .shoptitle {
 	text-align:left;
@@ -323,6 +309,12 @@ background-position: 0 -144px;
 	width: 133px;
 	height: 50px;
 	background-position: -139px -144px;
+}
+
+.address{
+	display:none;
+	width: 368px;
+	height: 114px;
 }
 
 

@@ -8,5 +8,11 @@ $(document).ready(function() {
 		$(this).find("i").css("background-position","0 0");
 	}
 	);
-	
+	$(".close-layer i").click(function(){
+		$("#product_show_dialog").hide();
+	});
 });
+
+function showProductDialog(id){
+	
+}

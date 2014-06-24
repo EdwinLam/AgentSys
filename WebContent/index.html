@@ -197,21 +197,15 @@
 		<a id="elevator" onclick="return false;" title="回到顶部"></a>
 	</div>
 
-	<div id="pin_view_layer">
+	<div id="product_show_dialog">
 		<div class="close-layer">
 			<i></i>
 		</div>
-		<div class="pin-view">
-			<div class="pin-view-wrapper">
-				<div class="main-part">
-					<div class="image-piece piece">
-
-						<div class="imgbox">
-							<div class="bigimgbox fl" style="height: 599px;">
-								<a class="shopdetaiwrap" href="javascript:;"
-									style="height: 599px;"> <img id="shopdetaiimg"
-									src="image/product/test.jpg" alt="清新,竖条纹,百搭款,简约,短袖,衬衫">
-								</a>
+		<div class="product_view">
+					<div class="product_view_frame">
+						<div class="product_content">
+							<div class="product_imgbox fl" >
+								<img src="image/product/test.jpg"  width="50px" alt="清新,竖条纹,百搭款,简约,短袖,衬衫"/>
 							</div>
 							<div class="infobox fl">
 								<div class="shoptitle ">清新竖条纹百搭款简约短袖衬衫</div>
@@ -238,6 +232,11 @@
 											<span
 												class="num-reduce shop-goods-icons shop-goods-num-btn reduce disable"></span>
 										</div></li>
+									<li class="nowprice_li"><label for="">收货地址：</label>
+										<div class="nowprice clearfix">
+											<span class="soldcount fl"">中山市东区&nbsp;<a href="#">修改</a></span>
+											<textarea class="address"></textarea>
+										</div></li>
 								</ul>
 								<div class="buybox buybox3">
 									<div class="buy_wrap clearfix">
@@ -249,13 +248,7 @@
 
 						</div>
 					</div>
-
-
-
-				</div>
 			</div>
-		</div>
-	</div>
 	</div>
 
 	<script src="js/jquery-1.11.1.min.js"></script>
