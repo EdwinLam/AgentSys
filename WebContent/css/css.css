@@ -4,6 +4,11 @@
 	_display:inline;
 }
 
+.fr{
+	float:right;
+	_display:inline;
+}
+
 .pricebox {
 	position: absolute;
 	width: 60px;
@@ -314,6 +319,12 @@
 }
 
 .address{
+	 vertical-align:middle;
+	width: 330px;
+	height: 114px;
+}
+
+.remark{
 	width: 368px;
 	height: 114px;
 }

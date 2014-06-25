@@ -17,7 +17,7 @@
             if($(this).val().length>3){
            	 $(this).val( $(this).val().substring(0,3));
            }
-        }).css("ime-mode", "disabled"); //CSS设置输入法不可用    
+        });
         return _obj;  
     }  
 
@@ -61,6 +61,17 @@ $(document).ready(function() {
 	});
 	$("#scartBtn").click(function(){
 		alert("购物车按钮");
+	});
+	
+	$("#maBtn").click(function(){
+		$("#addressinfo").attr("disabled",false);
+		$("#addressinfo").focus();
+		$("#maBtn").hide();
+	});
+	
+	$("#addressinfo").blur(function(){
+		$("#addressinfo").attr("disabled",true);
+		$("#maBtn").show();
 	});
 });
 
