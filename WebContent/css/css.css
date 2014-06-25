@@ -161,7 +161,7 @@
 
 	
 
-.infobox{
+#product_show_dialog .infobox{/*产品信息展示区*/
 	position:relative;
 	margin-left:20px;
 	width:448px;
@@ -170,7 +170,7 @@
 
 
 
-.shoptitle {
+#product_show_dialog .shoptitle {/*产品标题*/
 	text-align:left;
 	overflow: hidden;
 	color: #333;
@@ -182,52 +182,53 @@
 }
 
 
-.shoptitleline {
+#product_show_dialog .shoptitleline {/*产品标题下划线*/
 	width: 100%;
 	height: 6px;
 	background: url(/image/index/productline.png) repeat-x;
 	overflow: hidden;
 }
 
-.showpricebox {
+#product_show_dialog  .shopattrbox {/*产品属性展示区*/
+	margin: 0;
+	padding: 0;
+	list-style: none;
 	display:block;
 }
-.showpricebox  li {
-position: relative;
-padding-left: 70px;
-z-index: 2;
+
+#product_show_dialog .shopattrbox  li {/*产品属性行*/
+	position: relative;
+	padding-left: 70px;
+	text-align:left;
+	padding-top:8px;
+	z-index: 2;
 }
 
-.showpricebox  label {
+#product_show_dialog .shopattrbox  label {/*产品属性行标题*/
 	position: absolute;
 	top: 8px;
 	left: 0;
 	color: #999;
 }
 
-.nowprice .soldcount {
-	text-align:left;
-	padding-top:8px;
+#product_show_dialog  .nowprice {/*销量数价格*/
+	margin-top: -8px;
 }
 
-.nowprice .pricein {
-padding: 0 5px;
-color: #fc3c75;
-font: 700 30px/36px verdana,arial;
+#product_show_dialog  .pricein {/*产品价格*/
+	padding: 0 5px;
+	color: #fc3c75;
+	font: 700 30px/36px verdana,arial;
 }
 
-.unit {
-font: 400 14px/36px 'Microsoft YaHei',STXihei,MingLiu;
-color: #aaa;
+#product_show_dialog .unit {/*产品价格符号*/
+		font: 400 14px/36px 'Microsoft YaHei',STXihei,MingLiu;
+		color: #aaa;
 }
 
-ul {
-margin: 0;
-padding: 0;
-list-style: none;
-}
 
-.shopnum {
+#product_show_dialog  .shopnum {/*产品购买数量*/
+	-moz-user-select: none; -khtml-user-select: none; user-select: none;
 	text-align:left;
 	position: relative;
 	width: 79px;
@@ -236,22 +237,7 @@ list-style: none;
 	padding-top:3px;
 }
 
-.shop-goods-num-btn {
-		position: absolute;
-		cursor: pointer;
-		display: block;
-		width: 22px;
-		height: 17px;
-		right: 0;
-}
-
-.shop-goods-icons {
-background-image: url(/image/index/buyinfo.png);
-_background-image: url(/image/index/buyinfo.png);
-background-repeat: no-repeat;
-}
-
- .buy-num {
+#product_show_dialog  .buy-num {
 	background-image: url(/image/index/buyinfo.png);
 	background-repeat: no-repeat;
 	background-position: -104px -8px;
@@ -265,17 +251,32 @@ background-repeat: no-repeat;
 	color: #333;
 }
 
-.num-add {
-background-position: -104px -48px;
-top: 0;
+#product_show_dialog  .num-add {
+	background-position: -104px -48px;
+	top: 2px;;
 }
 
- .num-reduce {
-background-position: -104px -88px;
-top: 19px;
+ #product_show_dialog  .num-reduce {
+	background-position: -104px -88px;
+	top: 22px;
 }
 
-.buybox {
+#product_show_dialog  .shop-goods-num-btn {
+		position: absolute;
+		cursor: pointer;
+		display: block;
+		width: 22px;
+		height: 17px;
+		right: 0;
+}
+
+#product_show_dialog  .shop-goods-icons {
+	background-image: url(/image/index/buyinfo.png);
+	_background-image: url(/image/index/buyinfo.png);
+	background-repeat: no-repeat;
+}
+
+#product_show_dialog  .buybox {/*产品操作按钮*/
 	width:100%;
 	bottom:0px;
 	position: absolute;
@@ -283,26 +284,27 @@ top: 19px;
 	bottom:0px;
 }
 
-.buy-btn {
+.buy-btn {/*操作按钮*/
 	background: url(/image/index/buyinfo.png) no-repeat;
 	display: inline-block;
 }
+
 .buy_wrap{
 	margin: 0 auto;
 	width: 290px;
 	display:block;
 }
 
-.buy-now {
-display: block;
-overflow-y: hidden;
-text-indent: -999px;
-width: 145px;
-height: 50px;
-background-position: 0 -144px;
+.buy-now {/*购买按钮*/
+	display: block;
+	overflow-y: hidden;
+	text-indent: -999px;
+	width: 145px;
+	height: 50px;
+	background-position: 0 -144px;
 }
 
-.add-scart {
+.add-scart {/*添加到购物车按钮*/
 	display: block;
 	overflow-y: hidden;
 	text-indent: -999px;
@@ -312,7 +314,6 @@ background-position: 0 -144px;
 }
 
 .address{
-	display:none;
 	width: 368px;
 	height: 114px;
 }
