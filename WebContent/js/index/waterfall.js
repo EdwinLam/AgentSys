@@ -2,7 +2,7 @@ var curPage = 1;
 var isInit=true;
 var masNode = $('#masonry');
 var imagesLoading = false;
-
+var productInfo = [];
 
 function processNewItems(items) {
 	items.each(function() {
@@ -43,10 +43,12 @@ function getNewItems() {
 		success : function(data) {
 			var productData = data.productData;
 			$.each(productData, function(idx, item) {
+				productInfo[item.id]=item;//将物品信息写入数组
 				//输出
 				newItemStr += "<div class=\"thumbnail dealflag\">"
 						+ "<div class=\"imgs\">"
-						+"<a href=\"#\" title=\""+ item.name+"\"><img src=\""+ item.img_url+"\"/></a>"
+						+"<a href=\"javascript:;\" title=\""+ item.name+"\" onclick=\"showProductDialog("
+						+ item.id+")\"><img src=\""+ item.img_url+"\"/></a>"
 						+ "<div class=\"pricebox\">"
 						+ "<div class=\"showbox\">"
 						+ "<span class=\"yuan\">¥</span><span class=\"num\">"

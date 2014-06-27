@@ -1,4 +1,5 @@
-//只能输入0-9的数字和小数点  
+
+	//只能输入0-9的数字和小数点  
     $.fn.mustFloat = function(){  
         return validate($(this),/[^0-9.]/g);  
     };  
@@ -22,7 +23,6 @@
     }  
 
 $(document).ready(function() {
-	$("body").css("overflow","hidden");
 	$("#pin_view_layer").css("overflow","scroll");
 	$(".close-layer").hover(function(){
 		$(this).find("i").css("background-position","0 -50px");
@@ -32,11 +32,12 @@ $(document).ready(function() {
 	}
 	);
 	$(".close-layer i").click(function(){
+		$("body").css("overflow","auto");
 		$("#product_show_dialog").hide();
 	});
 	//限制购买数量只能输入数字
 	$("#buynum").mustInt().blur(function(){
-		if($(this).val()==""){
+		if($(this).val()==""||$(this).val()==0){
 			$(this).val(1);
 		}
 	});
@@ -45,15 +46,13 @@ $(document).ready(function() {
 		var num=$("#buynum").val();
 		if(num<999)
 			$("#buynum").val((num*1+1*1));
-		$("#buynumup").attr("disabled",num==999?false:true);
-		$("#buynumdown").attr("disabled",num==1?false:true);
+		$("#buynumup").attr("disabled",num==999?true:false);
 	});
 	$("#buynumdown").click(function(){
 		var num=$("#buynum").val();
 		if(num!=1)
 			$("#buynum").val(num*1-1*1);
-		$("#buynumup").attr("disabled",num==999?false:true);
-		$("#buynumdown").attr("disabled",num==1?false:true);
+		$("#buynumdown").attr("disabled",num==1?true:false);
 	});
 	
 	$("#buyBtn").click(function(){
@@ -75,6 +74,16 @@ $(document).ready(function() {
 	});
 });
 
+/**
+ * 展示商品详情
+ * @param id
+ */
 function showProductDialog(id){
-	
+	var prodcutEntity=productInfo[id];
+	$("body").css("overflow","hidden");
+	$("#priceVal").html(prodcutEntity.price);
+	$("#titleVal").html(prodcutEntity.name);
+	$("#introduceVal").html(prodcutEntity.introduce);
+	$("#imgVal").attr("src",prodcutEntity.img_url);
+	$("#product_show_dialog").show();
 }

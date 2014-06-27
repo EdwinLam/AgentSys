@@ -84,6 +84,7 @@ public class IndexController {
 			  productInfo.put("name", agCpProduct.getName());
 			  productInfo.put("price", agCpPackage.getPrice()+"");
 			  productInfo.put("img_url", agCpProduct.getImgUrl()+"");
+			  productInfo.put("introduce", agCpProduct.getIntroduce()+"");
 			  productMapList.add(productInfo);
 		   }
 		  jsonView.setProperty("productData", productMapList);
