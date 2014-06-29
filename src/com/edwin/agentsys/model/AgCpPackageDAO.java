@@ -24,6 +24,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 	// property constants
 	public static final String NAME = "name";
 	public static final String PRICE = "price";
+	public static final String PRODUCT_ID = "productId";
 
 	public void save(AgCpPackage transientInstance) {
 		log.debug("saving AgCpPackage instance");
@@ -95,6 +96,10 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 
 	public List findByPrice(Object price) {
 		return findByProperty(PRICE, price);
+	}
+
+	public List findByProductId(Object productId) {
+		return findByProperty(PRODUCT_ID, productId);
 	}
 
 	public List findAll() {

@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
 encoding//WebContent/index.html=UTF-8
+encoding//WebContent/login.html=UTF-8
+encoding//WebContent/register.html=UTF-8
+encoding//WebContent/showbox.html=UTF-8
 encoding//src/view.properties=UTF-8
 encoding/<project>=UTF-8

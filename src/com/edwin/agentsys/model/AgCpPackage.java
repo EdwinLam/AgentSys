@@ -11,6 +11,7 @@ public class AgCpPackage implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private Float price;
+	private Integer productId;
 
 	// Constructors
 
@@ -24,9 +25,10 @@ public class AgCpPackage implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AgCpPackage(String name, Float price) {
+	public AgCpPackage(String name, Float price, Integer productId) {
 		this.name = name;
 		this.price = price;
+		this.productId = productId;
 	}
 
 	// Property accessors
@@ -53,6 +55,14 @@ public class AgCpPackage implements java.io.Serializable {
 
 	public void setPrice(Float price) {
 		this.price = price;
+	}
+
+	public Integer getProductId() {
+		return this.productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
 
 }

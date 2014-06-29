@@ -16,10 +16,10 @@ import com.edwin.agentsys.base.Constant;
 import com.edwin.agentsys.base.LoggerUtil;
 import com.edwin.agentsys.base.MD5Util;
 import com.edwin.agentsys.base.view.JsonView;
-import com.edwin.agentsys.index.bean.ProductShowBean;
 import com.edwin.agentsys.index.bean.UserSessionBean;
 import com.edwin.agentsys.index.vo.LoginVo;
 import com.edwin.agentsys.index.vo.RegisterVo;
+import com.edwin.agentsys.model.AgCpCartDAO;
 import com.edwin.agentsys.model.AgCpPackage;
 import com.edwin.agentsys.model.AgCpPackageDAO;
 import com.edwin.agentsys.model.AgCpProduct;
@@ -29,20 +29,11 @@ import com.edwin.agentsys.model.AgQxUserDAO;
 import com.edwin.agentsys.test.HibernateSessionFactory;
 
 
-/**   
-*    
-* 项目名称：AgentSys   
-* 类名称：IndexController   
-* 类描述：   
-* 创建人：Edwin   
-* 创建时间：2014-6-13 下午2:40:42   
-* @version    
-*    
-*/
 @Controller
 @RequestMapping("/index.do")
 public class IndexController {
-	
+	AgCpCartDAO agCpCartDAO = new AgCpCartDAO();
+
 	/**
 	 * 首页界面
 	 * @param response
@@ -55,6 +46,12 @@ public class IndexController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		UserSessionBean userSessionBean=(UserSessionBean)request.getSession().getAttribute(Constant.USER_SESSION);
 		map.put("userSessionBean", userSessionBean);
+		if(userSessionBean!=null){
+			List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+			map.put("cartSize",agcpCartList.size());
+		}else{
+			map.put("cartSize",0);
+		}
 		return new ModelAndView("index",map);
 	}
 	
@@ -85,6 +82,7 @@ public class IndexController {
 			  productInfo.put("price", agCpPackage.getPrice()+"");
 			  productInfo.put("img_url", agCpProduct.getImgUrl()+"");
 			  productInfo.put("introduce", agCpProduct.getIntroduce()+"");
+			  productInfo.put("packageId", agCpPackage.getId()+"");
 			  productMapList.add(productInfo);
 		   }
 		  jsonView.setProperty("productData", productMapList);
@@ -151,6 +149,7 @@ public class IndexController {
 			userSessionBean.setAccount(agQxUser.getAccount());
 			userSessionBean.setName(agQxUser.getName());
 			userSessionBean.setPhone(agQxUser.getPhone());
+			userSessionBean.setId(agQxUser.getId());
 			request.getSession().setAttribute(Constant.USER_SESSION, userSessionBean);
 			jsonView.setProperty("isSuc", true);
 			jsonView.setProperty("msg", "登陆成功!");
@@ -173,12 +172,6 @@ public class IndexController {
 			jsonView.setProperty("isExist", "0"); 
 		}
 		return new ModelAndView(jsonView);
-	}
-	
-	
-	
-	public String testDeme(){
-		return "test";
 	}
 	
 }

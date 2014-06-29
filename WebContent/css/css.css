@@ -40,12 +40,11 @@ body {
 }
 
 #elevator_item {
-	display:none;
 	width: 60px;
 	height: 100px;
 	position: fixed;
 	right: 18px;
-	bottom: 15px;
+	bottom:  75px;
 	-webkit-transition: opacity .4s ease-in-out;
 	-moz-transition: opacity .4s ease-in-out;
 	-o-transition: opacity .4s ease-in-out;
@@ -53,7 +52,8 @@ body {
 	z-index: 99992;
 }
 #elevator {
-	display: block;
+	opacity:0;
+	display:block;
 	width: 60px;
 	height: 50px;
 	background: url(/image/index/icon_top.png) center center no-repeat;
@@ -63,6 +63,35 @@ body {
 	box-shadow: 0 1px 3px rgba(0,0,0,.2);
 	cursor: pointer;
 	margin-bottom: 10px;
+}
+
+#cart {
+	position:relative;
+	display: block;
+	width: 60px;
+	height: 50px;
+	background: url(/image/index/icon_cart.png) center center no-repeat;
+	background-color: #444;
+	background-color: rgba(0,0,0,.6);
+	border-radius: 2px;
+	box-shadow: 0 1px 3px rgba(0,0,0,.2);
+	cursor: pointer;
+	margin-bottom: 10px;
+}
+
+#cart span{
+	position:absolute;
+	top:2px;
+	right:2px;
+	font-size:15px;
+	 line-height:16px; 
+	 display:block;
+	 text-align:center;
+	width:16px;
+	height:16px;
+	border-radius:8px;
+	background-color: red;
+	color:#FFF; 
 }
 
 .pricebox .num {

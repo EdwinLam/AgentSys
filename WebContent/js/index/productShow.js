@@ -59,7 +59,7 @@ $(document).ready(function() {
 		alert("购买按钮");
 	});
 	$("#scartBtn").click(function(){
-		alert("购物车按钮");
+		 addToCart();
 	});
 	
 	$("#maBtn").click(function(){
@@ -74,6 +74,27 @@ $(document).ready(function() {
 	});
 });
 
+function addToCart(){
+	var count=$("#buynum").val();
+	var packageId=$("#buynum").val();
+	  $.ajax({
+		  	async: false,
+			type : "post",
+			url : "/order.do?action=addToCart_ajaxreq&packageId=" + packageId+"&count="+count,
+			dataType : "json",
+			success : function(data) {
+				alert(data.msg);
+				if(data.isSuc){
+					$("#cart").html("<span>"+data.size+"</span>");
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+}
+
 /**
  * 展示商品详情
  * @param id
@@ -85,5 +106,6 @@ function showProductDialog(id){
 	$("#titleVal").html(prodcutEntity.name);
 	$("#introduceVal").html(prodcutEntity.introduce);
 	$("#imgVal").attr("src",prodcutEntity.img_url);
+	$("#hidden_packageId").val(prodcutEntity.packageId);
 	$("#product_show_dialog").show();
 }

@@ -18,5 +18,8 @@
         <property name="price" type="java.lang.Float">
             <column name="price" precision="11" />
         </property>
+        <property name="productId" type="java.lang.Integer">
+            <column name="product_id" />
+        </property>
     </class>
 </hibernate-mapping>

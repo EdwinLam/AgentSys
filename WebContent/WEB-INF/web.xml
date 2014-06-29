@@ -58,13 +58,18 @@
         org.springframework.web.util.Log4jConfigListener
       </listener-class>
    </listener>
+   
+   <!-- session监听 -->
+     <filter>
+    <filter-name>urlfilter</filter-name>
+    <filter-class>com.edwin.agentsys.base.ActionFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>urlfilter</filter-name>
+    <url-pattern>/order.do</url-pattern>
+  </filter-mapping>
 
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
+		<welcome-file>/main.html</welcome-file>
 	</welcome-file-list>
 </web-app>  

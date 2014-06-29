@@ -100,9 +100,9 @@ $(function() {
 	$(window).scroll(
 			function() {
 				if($(document).scrollTop()<200){
-					$("#elevator_item").hide();
+					$("#elevator").css("opacity","0");
 				}else{
-					$("#elevator_item").show();
+					$("#elevator").css("opacity","1");
 				}
 				
 				if ($(document).height() - $(window).height()- $(document).scrollTop() < 10) {

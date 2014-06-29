@@ -20,7 +20,7 @@ public class JsonView implements View {
 
 	private String msg;
 
-	private boolean success = true;
+	private boolean isSuc = true;
 
 	/**
 	 * 用于存储各属性和值
@@ -38,9 +38,9 @@ public class JsonView implements View {
 		this.msg = StringUtils.trimToEmpty(msg);
 	}
 
-	public JsonView(boolean success, String msg) {
+	public JsonView(boolean isSuc, String msg) {
 		this.msg = StringUtils.trimToEmpty(msg);
-		this.success = success;
+		this.isSuc = isSuc;
 	}
 
 	public String getContentType() {
@@ -76,11 +76,27 @@ public class JsonView implements View {
 	private String getJSONString() {
 		JSONObject obj = JSONObject.fromMap(this.map);
 		if(msg != null){
-			obj.put("success", success);
-			obj.put("message", msg);
+			obj.put("isSuc", isSuc);
+			obj.put("msg", msg);
 			//此处为了兼容前端JS的代码
 		}
 		return obj.toString();
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public boolean isSuc() {
+		return isSuc;
+	}
+
+	public void setSuc(boolean isSuc) {
+		this.isSuc = isSuc;
 	}
 	
 	
