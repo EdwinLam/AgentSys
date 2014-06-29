@@ -112,5 +112,24 @@ $(function() {
 					}
 				}
 			});
-
+	$("#loginoutBtn").click(function(){
+		 loginout();
+	});
 });
+
+function loginout(){
+	  $.ajax({
+		  	async: false,
+			type : "post",
+			url : "/index.do?action=loginout",
+			dataType : "json",
+			success : function(data) {
+				alert(data.msg);
+				 location.reload();
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+}

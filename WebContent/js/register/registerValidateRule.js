@@ -49,7 +49,7 @@ $(document).ready(function() {
 					dataType : "json",
 					success : function(data) {
 						alert(data.msg);
-						$("#loginDialog").modal('hide');
+						 location.reload();
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						alert("服务器正在维护中...");

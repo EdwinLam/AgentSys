@@ -126,6 +126,15 @@ public class IndexController {
 		return new ModelAndView(jsonView);
 	}
 	
+	@RequestMapping(params = "action=loginout")
+	public ModelAndView loginout(HttpServletRequest request) throws Exception {
+		JsonView jsonView=new JsonView();
+		request.getSession().removeAttribute(Constant.USER_SESSION);
+		jsonView.setProperty("isSuc", true);	
+		jsonView.setProperty("msg", "登出成功!");
+		return new ModelAndView(jsonView);
+	}
+	
 	@RequestMapping(params = "action=login")
 	public ModelAndView login(LoginVo loginVo,HttpServletRequest request) throws Exception {
 		JsonView jsonView=new JsonView();

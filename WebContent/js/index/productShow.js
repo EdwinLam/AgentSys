@@ -84,7 +84,7 @@ function addToCart(){
 			dataType : "json",
 			success : function(data) {
 				alert(data.msg);
-				if(data.isSuc){
+				if(data.isSuc=="true"){
 					$("#cart").html("<span>"+data.size+"</span>");
 				}
 			},
