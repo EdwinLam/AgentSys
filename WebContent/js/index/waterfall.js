@@ -115,7 +115,22 @@ $(function() {
 	$("#loginoutBtn").click(function(){
 		 loginout();
 	});
+	
+	$("#cart").click(function(){
+		showCartListDialog();
+	});
 });
+
+
+/**
+ * 购物车展示框
+ * @param id
+ */
+function showCartListDialog(){
+	$("body").css("overflow","hidden");
+	$("#product_show_dialog").show();
+	$("#cartListShow").show();
+}
 
 function loginout(){
 	  $.ajax({

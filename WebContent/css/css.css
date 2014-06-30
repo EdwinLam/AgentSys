@@ -363,6 +363,87 @@ body {
 	height: 114px;
 }
 
+.showboxc{
+	display:none;
+}
+
+#product_show_dialog  .cart_top{/*¹ºÎï³µ¶¥²¿*/
+	height:30px;
+	width:100%;
+	background:black;
+}
+
+#product_show_dialog .cart_top_span{
+	color:white;
+	line-height:30px;
+	font-weight:bold;
+}
+
+#product_show_dialog .cart_content {
+	overflow: hidden;
+	text-align: center;
+	margin-bottom: 20px;
+	min-height:560px;
+}
+
+.cart_product_info li a{
+	font-size: 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.cart_product_info img{
+	display:block;
+	min-width:50px;
+	max-width:50px; 
+	float:left;
+}
+
+.cart_product_info  tr{
+	padding-top:5px;
+}
+.cart_product_img{
+	float:left;
+	width:50px;
+	height:50px;
+	overflow: hidden;
+	margin-top:-14px;
+}
+
+
+
+.cart_product_info ul{
+	text-align:left;
+	line-height:12px;
+	list-style:none;
+}
+.cart_content  td{
+	text-overflow: ellipsis;
+	padding-top:20px;
+	text-align:center;
+}
+
+.cart_content  th{
+	text-align:center;
+}
+
+#product_show_dialog  .danjia{
+	color: #3c3c3c;
+	font-weight: 700;
+}
+
+#product_show_dialog  .danzong{
+	color: #f40;
+	font-weight: 700;
+}
+
+#product_show_dialog .cart_total_menu{
+	text-align:right;
+}
+
+
 
 
 

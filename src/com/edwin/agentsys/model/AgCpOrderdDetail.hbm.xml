@@ -16,5 +16,8 @@
         <property name="packageId" type="java.lang.Integer">
             <column name="package_id" />
         </property>
+        <property name="count" type="java.lang.Integer">
+            <column name="count" />
+        </property>
     </class>
 </hibernate-mapping>

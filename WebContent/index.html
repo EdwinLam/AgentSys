@@ -132,8 +132,16 @@
 			#end
 		</a>
 	</div>
-	<!-- 产品展示框-->
-	#include("showbox.html")
+	<!-- 各类弹出窗口-->
+	<div id="product_show_dialog">
+		<div class="close-layer">
+			<i></i>
+		</div>
+		<!-- 产品展示框-->
+		#include("showbox.html")
+		<!-- 购物车展示框-->
+		#include("cartlist.html")
+	</div>
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/main.js"></script>

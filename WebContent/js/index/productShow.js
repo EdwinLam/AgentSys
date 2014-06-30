@@ -34,6 +34,7 @@ $(document).ready(function() {
 	$(".close-layer i").click(function(){
 		$("body").css("overflow","auto");
 		$("#product_show_dialog").hide();
+		$(".showboxc").hide();
 	});
 	//限制购买数量只能输入数字
 	$("#buynum").mustInt().blur(function(){
@@ -108,4 +109,5 @@ function showProductDialog(id){
 	$("#imgVal").attr("src",prodcutEntity.img_url);
 	$("#hidden_packageId").val(prodcutEntity.packageId);
 	$("#product_show_dialog").show();
+	$("#productShowView").show();
 }
