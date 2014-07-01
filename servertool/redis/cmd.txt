@@ -1,0 +1,24 @@
+redis-server.exe redis.conf 
+redis-cli.exe -h 127.0.0.1 -p 6379 
+
+ ./redis-cli set mykey somevalue  
+$ ./redis-cli get mykey 
+
+
+redis-benchmark.exe：性能测试，用以模拟同时由N个客户端发送M个 SETs/GETs 查询 (类似于 Apache 的 ab 工具). 
+Java代码  收藏代码
+./redis-benchmark -n 100000 –c 50  
+    ====== SET ======  
+    100007 requests completed in 0.88 seconds （译者注：100004 查询完成于 1.14 秒 ）  
+50 parallel clients （译者注：50个并发客户端）  
+3 bytes payload （译者注：3字节有效载荷)  
+keep alive: 1 （译者注：保持1个连接)  
+58.50% <= 0 milliseconds（译者注：毫秒）  
+99.17% <= 1 milliseconds  
+99.58% <= 2 milliseconds  
+99.85% <= 3 milliseconds  
+99.90% <= 6 milliseconds  
+100.00% <= 9 milliseconds  
+114293.71 requests per second（译者注：每秒 114293.71 次查询）  
+
+Windows下测试并发客户端极限为60 
