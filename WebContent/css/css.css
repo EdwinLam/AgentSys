@@ -470,7 +470,6 @@ cursor: pointer;
 }
 
 #product_show_dialog .submit-btn-disabled  {
-
 	color:gray;
 display: inline-block;
 width: 120px;
@@ -496,67 +495,25 @@ cursor: pointer;
 	position: relative;
 	z-index: 1;
 }
-.item_count_reduce{
-		 cursor:pointer;
-		text-align: center;
-		display: block;
-		height: 28px;
-		width: 12px;
-		border: 1px solid #e5e5e5;
-		background: #f0f0f0;
-		text-align: center;
-		line-height: 28px;
-		color: #444;
-		position: absolute;
-		top: -1px;
-		left:39px;;
-		moz-user-select: -moz-none;
-		-moz-user-select: none;
-		-o-user-select:none;
-		-khtml-user-select:none;
-		-webkit-user-select:none;
-		-ms-user-select:none;
-		user-select:none;
 
-}
-
-
-.item_count_reduce a{
-
-text-decoration:none;
-}
-
-.item_count_add{
-	 cursor:pointer;
-	display: block;
-height: 28px;
-width: 12px;
-border: 1px solid #e5e5e5;
-background: #f0f0f0;
-text-align: center;
-line-height: 28px;
-color: #444;
-position: absolute;
-top: -1px;
-left:102px;;
-moz-user-select: -moz-none;
--moz-user-select: none;
--o-user-select:none;
--khtml-user-select:none;
--webkit-user-select:none;
--ms-user-select:none;
-user-select:none;
+.cantSelect{
+	moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select:none;
+	-khtml-user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
 }
 
 .item_text{
 	text-align:center;
 	width:35px;
-	display:block;
-	position:absolute;
-	top:-1px;
-	left:53px;
 }
 
+.pointer{
+	 cursor:pointer;
+}
 
 
 

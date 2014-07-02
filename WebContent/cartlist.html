@@ -1,5 +1,5 @@
 
-<div class="product_view showboxc" id="cartListShow">
+<div class="product_view showboxc cantSelect" id="cartListShow">
 	<div class="cart_top">
 		<span class="cart_top_span">购物车</span>
 	</div>
@@ -17,57 +17,35 @@
 						<th style="width:20%">操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td><input class="item_chk trisumup"  type="checkbox" value="123" checked/></td>
+				<tbody id="cartData">
+					<tr style="display:none" id="cartDataTp">
+						<td><input class="item_chk trisumup"  type="checkbox" value="@cartId" checked/></td>
 						<td>
 							<div class="cart_product_info">
 							<div class="cart_product_img">
-								<img src="image/product/12.jpg"/>
+								<img src="@img_url"/>
 								</div>
 								<ul >
-									<li><a href="javascript:;" >&nbsp;&nbsp;商品的标题</a></li>
+									<li><a href="javascript:;" >&nbsp;&nbsp;@name</a></li>
 								</ul>
 							</div>
 						</td>
-						<td class="danjia">10.0</td>
-						<td><div class="item_count">
-							<span class="item_count_reduce trisumup">-</span>
+						<td class="danjia">@price</td>
+						<td><div class="input-prepend input-append pointer">
+							<span class="add-on" onclick="cartReduceCount(this)">-</span>
 							<input type="text" value="1" class="item_text trisumup"/>
-							<input type="hidden" value="10" name="danjia"/>
-							<span class="item_count_add trisumup">+</span>
+							<span class="add-on" onclick="cartAddCount(this)">+</span>
 						</div></td>
-						<td class="danzong">20</td>
-						<td><a href="javascript:;" class="cartDelItem">删除</a></td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" class="item_chk trisumup" value="456" checked/></td>
-						<td>
-							<div class="cart_product_info">
-							<div class="cart_product_img">
-								<img src="image/product/12.jpg"/>
-								</div>
-								<ul >
-									<li><a href="javascript:;" >&nbsp;&nbsp;商品的标题</a></li>
-								</ul>
-							</div>
-						</td>
-						<td class="danjia">10.0</td>
-						<td><div class="item_count">
-							<span class="item_count_reduce trisumup">-</span>
-							<input type="text" value="1" class="item_text trisumup"/>
-							<input type="hidden" value="10" name="danjia"/>
-							<span class="item_count_add trisumup">+</span>
-						</div></td>
-						<td class="danzong">20</td>
-						<td><a href="javascript:;"  class="cartDelItem">删除</a></td>
+						<td class="danzong">@danzong</td>
+						<td><a href="javascript:;" class="cartDelItem btn" onclick="delCart(this)">删除</a></td>
 					</tr>
 				</tbody>
 			</table>
-			</div>
+	
 			<table class="table cart_total_menu">
-				<tr><td><span class="cartprice-sum">合计:</span><span class="cartprice" >¥0.00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="submit-btn">结算</span></td></tr>
+				<tr><td><input type="hidden"  id="total_price"/><span class="cartprice-sum">合计:</span><span class="cartprice" >¥0.00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="jsBtn" class="submit-btn">结算</span></td></tr>
 			</table>
 		</div>
 	</div>
+</div>
 </div>

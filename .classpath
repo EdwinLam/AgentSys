@@ -25,6 +25,9 @@
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
+		<accessrules>
+			<accessrule kind="accessible" pattern="**"/>
+		</accessrules>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Administrator/AgentSys/WebContent/WEB-INF/lib/antlr-2.7.7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Administrator/AgentSys/WebContent/WEB-INF/lib/aopalliance-1.0.jar"/>

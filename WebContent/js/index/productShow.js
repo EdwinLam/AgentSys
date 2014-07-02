@@ -36,30 +36,7 @@ $(document).ready(function() {
 		$("#product_show_dialog").hide();
 		$(".showboxc").hide();
 	});
-	//购物车那个数量计算
-	$(".item_text").mustInt().blur(function(){
-		if($(this).val()==""||$(this).val()==0){
-			$(this).val(1);
-		}
-	});
-	
 
-	$(".item_count_add").click(function(){
-		var $obj=$(this).siblings("input");
-		var num=$obj.val();
-		$obj.val((num*1+1*1));
-		 $obj.blur();
-	});
-	$(".item_count_reduce").click(function(){
-		var $obj=$(this).siblings("input");
-		var num=$obj.val();
-		$obj.val((num*1-1*1));
-		 $obj.blur();
-	});
-	$("#cartListShow").find(".trisumup").bind("click blur keyup",function(){
-		sumUpPrice();
-	});
-	
 	//限制购买数量只能输入数字
 	$("#buynum").mustInt().blur(function(){
 		if($(this).val()==""||$(this).val()==0){
@@ -120,21 +97,50 @@ function delCart($obj){
 	$obj.closest("tr").remove();
 }
 
+function cartAddCount(obj){
+	var $obj=$(obj).siblings("input");
+	var num=$obj.val();
+	$obj.val((num*1+1*1));
+	sumUpPrice();
+}
+
+function cartReduceCount(obj){
+	var $obj=$(obj).siblings("input");
+	var num=$obj.val();
+	num=num*1-1*1;
+	if(num>=0){
+		$obj.val(num);
+	}
+	sumUpPrice();
+}
+
+function toDecimal(x) {    
+
+    return x.toFixed(2);    
+}   
+
 /**
  * 计算购物车总价
  */
 function sumUpPrice(){
 	var totalPrice=0;
-	$("#cartListShow").find("tbody tr").each(function(){
+	$("#cartListShow").find("tbody .dataTr").each(function(){
 			var danjia=$(this).find(".danjia").html();
 			var count=$(this).find(".item_text").val();
-			var danzong=danjia*count;
+			var danzong= toDecimal(danjia*count);
 			$(this).find(".danzong").html(danzong);
 		 if($(this).find(".item_chk").prop("checked")){
-			totalPrice+=danzong;
+			totalPrice+=danzong*1;
 		 }
 	});
-	$("#cartListShow").find(".cartprice").html("¥"+totalPrice);
+	if(totalPrice>0){
+		$("#jsBtn").attr("class","submit-btn");
+		$("#jsBtn").attr("disabled",false);
+	}else{
+		$("#jsBtn").attr("class","submit-btn-disabled");
+		$("#jsBtn").attr("disabled",true);
+	}
+	$("#cartListShow").find(".cartprice").html("¥"+ toDecimal(totalPrice));
 }
 
 function addToCart(){
@@ -147,8 +153,70 @@ function addToCart(){
 			dataType : "json",
 			success : function(data) {
 				alert(data.msg);
-				if(data.isSuc=="true"){
-					$("#cart").html("<span>"+data.size+"</span>");
+				if(data.isSuc){
+					$("#cart span").html(data.size);
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+}
+
+
+function delCart(obj){
+	var cartId=$(obj).closest("tr").find(".item_chk").val();
+	  $.ajax({
+		  	async: false,
+			type : "post",
+			url : "/order.do?action=delCart_ajaxreq&cartId=" + cartId,
+			dataType : "json",
+			success : function(data) {
+				if(data.isSuc){
+					alert(data.msg);
+					$("#cart span").html(data.size);
+					$($(obj).closest("tr")).remove();
+					 sumUpPrice();
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+}
+
+function getMyCart(){
+	
+	  $.ajax({
+		  	async: false,
+			type : "post",
+			url : "/order.do?action=getMyCart_ajaxreq",
+			dataType : "json",
+			success : function(data) {
+				if(data.isSuc){
+					$("#cartData").find(".dataTr").remove();
+					$.each(data.cartInfoList,function(i,n){
+						var cartList=$("#cartDataTp").html();
+						cartList=cartList.replace(/@cartId/g, n.cartId);
+						cartList=cartList.replace(/@img_url/g, n.img_url);
+						cartList=cartList.replace(/@name/g, n.name);
+						cartList=cartList.replace(/@price/g, n.price);
+						cartList=cartList.replace(/@count/g, n.count);
+						cartList=cartList.replace(/@danzong/g, n.count*n.price);
+						$("#cartData").append("<tr class='dataTr'>"+cartList+"</tr>");
+					});
+					
+					sumUpPrice();
+					$("#cartData .dataTr .item_text").mustInt().blur(function(){
+						if($(this).val()==""||$(this).val()==0){
+							$(this).val(1);
+						}
+					});
+					$("#cartData .dataTr .trisumup").bind("click keyup blur",function(){
+						 sumUpPrice();
+					});
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {

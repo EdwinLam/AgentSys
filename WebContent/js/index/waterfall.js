@@ -127,6 +127,7 @@ $(function() {
  * @param id
  */
 function showCartListDialog(){
+	getMyCart();
 	$("body").css("overflow","hidden");
 	$("#product_show_dialog").show();
 	$("#cartListShow").show();

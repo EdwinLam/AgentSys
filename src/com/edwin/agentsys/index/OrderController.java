@@ -60,6 +60,26 @@ public class OrderController {
 		JsonView jsonView =  addToCartFun( userSessionBean, packageId, count);
 		return new ModelAndView(jsonView);
 	}
+	
+	
+	@RequestMapping(params = "action=delCart_ajaxreq")
+	public ModelAndView delCart(HttpServletRequest request,
+			HttpServletResponse response, int cartId)
+			throws Exception {
+		JsonView jsonView = new JsonView();
+		UserSessionBean userSessionBean = (UserSessionBean) request
+				.getSession().getAttribute(Constant.USER_SESSION);
+		Transaction tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpCartDAO.delete(agCpCartDAO.findById(cartId));
+		tr.commit();
+		HibernateSessionFactory.getSession().flush();
+		List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+		jsonView.setProperty("size", agcpCartList.size());
+		jsonView.setSuc(true);
+		jsonView.setMsg("删除成功!");
+		return new ModelAndView(jsonView);
+	}
 
 	/**
 	 * 读取我的购物车
@@ -72,7 +92,7 @@ public class OrderController {
 	 * @throws Exception
 	 */
 	@RequestMapping(params = "action=getMyCart_ajaxreq")
-	public ModelAndView getMyCart(HttpServletRequest request,int userId)
+	public ModelAndView getMyCart(HttpServletRequest request)
 			throws Exception {
 		JsonView jsonView = new JsonView();
 		UserSessionBean userSessionBean = (UserSessionBean) request
@@ -98,6 +118,8 @@ public class OrderController {
 			cartInfo.put("price", agCpPackage.getPrice() + "");
 			cartInfoList.add(cartInfo);
 		}
+		jsonView.setSuc(true);
+		jsonView.setMsg("成功获取!");
 		jsonView.setProperty("cartInfoList", cartInfoList);
 		return new ModelAndView(jsonView);
 	}
@@ -149,6 +171,7 @@ public class OrderController {
 		agCpOrderdDetail.setPackageId(packageId);
 		agCpOrderdDetailDAO.save(agCpOrderdDetail);
 		tr.commit();
+		HibernateSessionFactory.getSession().flush();
 		jsonView.setSuc(true);
 		jsonView.setMsg("购买成功!");
 		return new ModelAndView(jsonView);
@@ -173,6 +196,7 @@ public class OrderController {
 		agCpOrderDAO.save(agCpOrder);
 		AgCpOrderdDetail agCpOrderdDetail ;
 		tr.commit();
+		HibernateSessionFactory.getSession().flush();
 		//将各种购物车商品放入订购表
 		for(AgCpCart agCpCart:agcpCartList){
 			agCpOrderdDetail = new AgCpOrderdDetail();
@@ -237,6 +261,7 @@ public class OrderController {
 				.beginTransaction(); // 开始事务
 		agCpCartDAO.save(agCpCart);
 		tr.commit();
+		HibernateSessionFactory.getSession().flush();
 		LoggerUtil.info(userSessionBean.getName() + "("
 				+ userSessionBean.getAccount() + ")增加商品到购物车");
 		jsonView.setSuc(true);
@@ -244,6 +269,8 @@ public class OrderController {
 		jsonView.setProperty("size", agcpCartList.size()+1);
 		return jsonView;
 	}
+	
+	
 	
 	
 }
