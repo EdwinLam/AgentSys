@@ -36,12 +36,32 @@ $(document).ready(function() {
 		$("#product_show_dialog").hide();
 		$(".showboxc").hide();
 	});
+	//购物车那个数量计算
+	$(".item_text").mustInt().blur(function(){
+		if($(this).val()==""||$(this).val()==0){
+			$(this).val(1);
+		}
+	});
+	
 	//限制购买数量只能输入数字
 	$("#buynum").mustInt().blur(function(){
 		if($(this).val()==""||$(this).val()==0){
 			$(this).val(1);
 		}
 	});
+	$(".item_count_add").click(function(){
+		var $obj=$(this).siblings("input");
+		var num=$obj.val();
+		$obj.val((num*1+1*1));
+		 $obj.blur();
+	});
+	$(".item_count_reduce").click(function(){
+		var $obj=$(this).siblings("input");
+		var num=$obj.val();
+		$obj.val((num*1-1*1));
+		 $obj.blur();
+	});
+	
 	//控制数量的按钮
 	$("#buynumup").click(function(){
 		var num=$("#buynum").val();

@@ -5,7 +5,8 @@
 	</div>
 	<div class="product_view_frame">
 		<div class="cart_content">
-			<table class="table table-hover ">
+		<div style="min-height:400px;">
+			<table class="table table-hover  table-striped">
 				<thead>
 					<tr>
 						<th style="width:5%"><input type="checkbox"/></th>
@@ -30,7 +31,11 @@
 							</div>
 						</td>
 						<td class="danjia">10.0</td>
-						<td>2</td>
+						<td><div class="item_count">
+							<span class="item_count_reduce">-</span>
+							<input type="text" value="1" class="item_text"/>
+							<span class="item_count_add">+</span>
+						</div></td>
 						<td class="danzong">20</td>
 						<td>删除</td>
 					</tr>
@@ -47,16 +52,20 @@
 							</div>
 						</td>
 						<td class="danjia">10.0</td>
-						<td>2</td>
+						<td><div class="item_count">
+							<span class="item_count_reduce">-</span>
+							<input type="text" value="1" class="item_text"/>
+							<span class="item_count_add">+</span>
+						</div></td>
 						<td class="danzong">20</td>
 						<td>删除</td>
 					</tr>
 				</tbody>
 			</table>
+			</div>
 			<table class="table cart_total_menu">
-				<tr><td>合计<span class="cart_total_price">¥0.00</span><span class="jiesuanBtn">结算</span></td></tr>
+				<tr><td><span class="cartprice-sum">合计:</span><span class="cartprice">¥0.00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="submit-btn">结算</span></td></tr>
 			</table>
-
 		</div>
 	</div>
 </div>

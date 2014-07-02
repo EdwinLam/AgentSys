@@ -81,17 +81,9 @@ body {
 
 #cart span{
 	position:absolute;
-	top:2px;
-	right:2px;
-	font-size:14px;
-	 line-height:16px; 
-	 display:block;
-	 text-align:center;
-	width:16px;
-	height:16px;
-	border-radius:8px;
-	background-color: red;
-	color:#FFF; 
+	top:-4px;
+	right:-5px;
+	
 }
 
 .pricebox .num {
@@ -382,8 +374,8 @@ body {
 #product_show_dialog .cart_content {
 	overflow: hidden;
 	text-align: center;
-	margin-bottom: 20px;
-	min-height:560px;
+	margin-bottom: 5px;
+	min-height:400px;
 }
 
 .cart_product_info li a{
@@ -439,8 +431,130 @@ body {
 	font-weight: 700;
 }
 
-#product_show_dialog .cart_total_menu{
+#product_show_dialog .cart_total_menu td{
+	padding:0px;
+	margin:0px;
+	background: #e5e5e5;
 	text-align:right;
+}
+
+#product_show_dialog .cart_total_menu .cartprice {
+color: #f40;
+font-weight: 400;
+font-size: 18px;
+line-height: 48px;
+font-family: Arial;
+vertical-align: middle;
+}
+
+#product_show_dialog  .cartprice-sum {
+	height: 48px;
+	color: #3c3c3c;
+}
+
+#product_show_dialog .submit-btn {
+display: inline-block;
+width: 120px;
+height: 50px;
+line-height: 50px;
+background: #f40;
+text-align: center;
+font-family: 'Lantinghei SC','Microsoft Yahei';
+font-size: 20px;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+-ms-border-radius: 2px;
+border-radius: 2px;
+text-decoration: none;
+cursor: pointer;
+}
+
+#product_show_dialog .submit-btn-disabled  {
+
+	color:gray;
+display: inline-block;
+width: 120px;
+height: 50px;
+line-height: 50px;
+background: #e5e5e5;
+text-align: center;
+font-family: 'Lantinghei SC','Microsoft Yahei';
+font-size: 20px;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+-ms-border-radius: 2px;
+border-radius: 2px;
+text-decoration: none;
+cursor: pointer;
+}
+
+
+
+.item_count{
+	height: 30px;
+	width: 100%;
+	position: relative;
+	z-index: 1;
+}
+.item_count_reduce{
+		 cursor:pointer;
+		text-align: center;
+		display: block;
+		height: 28px;
+		width: 12px;
+		border: 1px solid #e5e5e5;
+		background: #f0f0f0;
+		text-align: center;
+		line-height: 28px;
+		color: #444;
+		position: absolute;
+		top: -1px;
+		left:39px;;
+		moz-user-select: -moz-none;
+		-moz-user-select: none;
+		-o-user-select:none;
+		-khtml-user-select:none;
+		-webkit-user-select:none;
+		-ms-user-select:none;
+		user-select:none;
+
+}
+
+
+.item_count_reduce a{
+
+text-decoration:none;
+}
+
+.item_count_add{
+	 cursor:pointer;
+	display: block;
+height: 28px;
+width: 12px;
+border: 1px solid #e5e5e5;
+background: #f0f0f0;
+text-align: center;
+line-height: 28px;
+color: #444;
+position: absolute;
+top: -1px;
+left:102px;;
+moz-user-select: -moz-none;
+-moz-user-select: none;
+-o-user-select:none;
+-khtml-user-select:none;
+-webkit-user-select:none;
+-ms-user-select:none;
+user-select:none;
+}
+
+.item_text{
+	text-align:center;
+	width:35px;
+	display:block;
+	position:absolute;
+	top:-1px;
+	left:53px;
 }
 
 
