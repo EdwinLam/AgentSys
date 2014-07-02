@@ -43,12 +43,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	//限制购买数量只能输入数字
-	$("#buynum").mustInt().blur(function(){
-		if($(this).val()==""||$(this).val()==0){
-			$(this).val(1);
-		}
-	});
+
 	$(".item_count_add").click(function(){
 		var $obj=$(this).siblings("input");
 		var num=$obj.val();
@@ -60,6 +55,16 @@ $(document).ready(function() {
 		var num=$obj.val();
 		$obj.val((num*1-1*1));
 		 $obj.blur();
+	});
+	$("#cartListShow").find(".trisumup").bind("click blur keyup",function(){
+		sumUpPrice();
+	});
+	
+	//限制购买数量只能输入数字
+	$("#buynum").mustInt().blur(function(){
+		if($(this).val()==""||$(this).val()==0){
+			$(this).val(1);
+		}
 	});
 	
 	//控制数量的按钮
@@ -93,7 +98,44 @@ $(document).ready(function() {
 		$("#addressinfo").attr("disabled",true);
 		$("#maBtn").show();
 	});
+	
+	//选择全部
+	$(".selAll").click(function(){
+		 selAll($(this));
+	});
+	
+	$(".cartDelItem").click(function(){
+		delCart($(this));
+	});
 });
+
+function selAll($obj){
+	$obj.closest("table").find(".item_chk").each(function(){
+	    $(this).prop("checked",$obj.prop("checked"));
+	  });
+	sumUpPrice();
+}
+
+function delCart($obj){
+	$obj.closest("tr").remove();
+}
+
+/**
+ * 计算购物车总价
+ */
+function sumUpPrice(){
+	var totalPrice=0;
+	$("#cartListShow").find("tbody tr").each(function(){
+			var danjia=$(this).find(".danjia").html();
+			var count=$(this).find(".item_text").val();
+			var danzong=danjia*count;
+			$(this).find(".danzong").html(danzong);
+		 if($(this).find(".item_chk").prop("checked")){
+			totalPrice+=danzong;
+		 }
+	});
+	$("#cartListShow").find(".cartprice").html("¥"+totalPrice);
+}
 
 function addToCart(){
 	var count=$("#buynum").val();
