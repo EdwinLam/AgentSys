@@ -2,67 +2,64 @@ package com.edwin.agentsys.model;
 
 import java.util.Date;
 
-
 /**
  * AgCpOrder entity. @author MyEclipse Persistence Tools
  */
 
-public class AgCpOrder  implements java.io.Serializable {
+public class AgCpOrder implements java.io.Serializable {
 
+	// Fields
 
-    // Fields    
+	private Integer id;
+	private Integer userId;
+	private Date createTime;
+	private Float totalPrice;
 
-     private Integer id;
-     private Integer userId;
-     private Date createTime;
+	// Constructors
 
+	/** default constructor */
+	public AgCpOrder() {
+	}
 
-    // Constructors
+	/** full constructor */
+	public AgCpOrder(Integer userId, Date createTime, Float totalPrice) {
+		this.userId = userId;
+		this.createTime = createTime;
+		this.totalPrice = totalPrice;
+	}
 
-    /** default constructor */
-    public AgCpOrder() {
-    }
+	// Property accessors
 
-    
-    /** full constructor */
-    public AgCpOrder(Integer userId, Date createTime) {
-        this.userId = userId;
-        this.createTime = createTime;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-   
-    // Property accessors
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
-    
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getUserId() {
+		return this.userId;
+	}
 
-    public Integer getUserId() {
-        return this.userId;
-    }
-    
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    public Date getCreateTime() {
-        return this.createTime;
-    }
-    
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-   
+	public Date getCreateTime() {
+		return this.createTime;
+	}
 
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
+	public Float getTotalPrice() {
+		return this.totalPrice;
+	}
 
-
-
-
-
+	public void setTotalPrice(Float totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 
 }

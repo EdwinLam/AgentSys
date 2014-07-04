@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -156,19 +155,24 @@ public class OrderController {
 		agCpOrder.setCreateTime(new Date());
 		agCpOrder.setUserId(userSessionBean.getId());
 		AgCpPackage agCpPackage=agCpPackageDAO.findById(packageId);
-		if(agCpPackage.getPrice()*count<Constant.MIN_ORDER_PRICE){
-			jsonView =  addToCartFun( userSessionBean, packageId, count);
-			if(jsonView.isSuc()){
-				jsonView.setMsg("未满"+Constant.MIN_ORDER_PRICE+"元，不能下订单，已加入购物车!");
-			}
-			return new ModelAndView(jsonView);
-		}
+		agCpOrder.setTotalPrice(agCpPackage.getPrice()*count);
+//		if(agCpPackage.getPrice()*count<Constant.MIN_ORDER_PRICE){
+//			jsonView =  addToCartFun( userSessionBean, packageId, count);
+//			if(jsonView.isSuc()){
+//				jsonView.setMsg("未满"+Constant.MIN_ORDER_PRICE+"元，不能下订单，已加入购物车!");
+//			}
+//			return new ModelAndView(jsonView);
+//		}
 		Transaction tr = HibernateSessionFactory.getSession()
 				.beginTransaction(); // 开始事务
 		agCpOrderDAO.save(agCpOrder);
 		tr.commit();
-		agCpOrderdDetail.setOrderId(agCpOrderdDetail.getId());
+		tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpOrderdDetail.setOrderId(agCpOrder.getId());
 		agCpOrderdDetail.setPackageId(packageId);
+		agCpOrderdDetail.setCount(count);
+		agCpOrderdDetail.setPrice(agCpPackage.getPrice());
 		agCpOrderdDetailDAO.save(agCpOrderdDetail);
 		tr.commit();
 		HibernateSessionFactory.getSession().flush();
@@ -178,15 +182,9 @@ public class OrderController {
 	}
 	
 	@RequestMapping(params = "action=ordercpcart_ajaxreq")
-	public ModelAndView orderCpByCart(HttpServletRequest request) throws Exception {
+	public ModelAndView orderCpByCart(HttpServletRequest request,int[] cartIds,int[] counts) throws Exception {
 		JsonView jsonView = new JsonView();
 		UserSessionBean userSessionBean = (UserSessionBean) request .getSession().getAttribute(Constant.USER_SESSION);
-		List<AgCpCart> agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
-		if( getTotalCartPrice(agcpCartList)<Constant.MIN_ORDER_PRICE){
-			jsonView.setMsg("未满"+Constant.MIN_ORDER_PRICE+"元，不能下订单!");
-			jsonView.setSuc(false);
-			return new ModelAndView(jsonView);
-		}
 		//下订单
 		AgCpOrder agCpOrder=new AgCpOrder();
 		agCpOrder.setCreateTime(new Date());
@@ -197,14 +195,28 @@ public class OrderController {
 		AgCpOrderdDetail agCpOrderdDetail ;
 		tr.commit();
 		HibernateSessionFactory.getSession().flush();
-		//将各种购物车商品放入订购表
-		for(AgCpCart agCpCart:agcpCartList){
+		tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		float total_price=0;
+		AgCpCart agCpCart;
+		AgCpPackage agCpPackage;
+		for(int i=0;i<cartIds.length;i++){
+			agCpCart=agCpCartDAO.findById(cartIds[i]);
+			agCpCart.getPackageId();
+			agCpPackage=agCpPackageDAO.findById(agCpCart.getPackageId());
 			agCpOrderdDetail = new AgCpOrderdDetail();
-			agCpOrderdDetail.setOrderId(agCpOrderdDetail.getId());
+			agCpOrderdDetail.setOrderId(agCpOrder.getId());
 			agCpOrderdDetail.setPackageId(agCpCart.getPackageId());
+			agCpOrderdDetail.setPrice(agCpPackage.getPrice());
+			agCpOrderdDetail.setCount(counts[i]);
+			total_price+=counts[i]*agCpPackage.getPrice();
 			agCpOrderdDetailDAO.save(agCpOrderdDetail);
+			agCpCartDAO.delete(agCpCart);
 		}
+		agCpOrder.setTotalPrice(total_price);
+		agCpOrderDAO.save(agCpOrder);
 		tr.commit();
+		HibernateSessionFactory.getSession().flush();
 		jsonView.setSuc(true);
 		jsonView.setMsg("购买成功!");
 		return new ModelAndView(jsonView);
@@ -251,11 +263,11 @@ public class OrderController {
 		AgCpCart agCpCart = new AgCpCart();
 		agCpCart.setPackageId(packageId);
 		agCpCart.setUserId(userSessionBean.getId());
-		if(	agCpCartDAO.findByExample(agCpCart).size()>0){
-			jsonView.setSuc(false);
-			jsonView.setMsg("该商品已添加到购物车,不能重复添加!");
-			return jsonView;
-		}
+//		if(	agCpCartDAO.findByExample(agCpCart).size()>0){
+//			jsonView.setSuc(false);
+//			jsonView.setMsg("该商品已添加到购物车,不能重复添加!");
+//			return jsonView;
+//		}
 		agCpCart.setCount(count);
 		Transaction tr = HibernateSessionFactory.getSession()
 				.beginTransaction(); // 开始事务

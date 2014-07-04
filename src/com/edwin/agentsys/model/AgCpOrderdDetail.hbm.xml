@@ -19,5 +19,8 @@
         <property name="count" type="java.lang.Integer">
             <column name="count" />
         </property>
+        <property name="price" type="java.lang.Float">
+            <column name="price" precision="11" scale="0" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -3,15 +3,13 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
-	<display-name>spring_test</display-name>
-
-	<!-- 配置文件位置，默认为/WEB-INF/applicationContext.xml -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
-	</context-param>
-
 	<!-- 字符集过滤器 -->
+	<context-param>
+    <param-name>contextConfigLocation </param-name>
+    <param-value>classpath:context-dispatcher.xml</param-value>
+</context-param>
+	
+	
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

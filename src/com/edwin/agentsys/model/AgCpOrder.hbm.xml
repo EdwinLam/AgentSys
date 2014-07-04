@@ -20,5 +20,8 @@
                 <comment>创建时间</comment>
             </column>
         </property>
+        <property name="totalPrice" type="java.lang.Float">
+            <column name="total_price" precision="11" scale="0" />
+        </property>
     </class>
 </hibernate-mapping>

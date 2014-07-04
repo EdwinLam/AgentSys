@@ -12,6 +12,7 @@ public class AgCpOrderdDetail implements java.io.Serializable {
 	private Integer orderId;
 	private Integer packageId;
 	private Integer count;
+	private Float price;
 
 	// Constructors
 
@@ -20,10 +21,12 @@ public class AgCpOrderdDetail implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AgCpOrderdDetail(Integer orderId, Integer packageId, Integer count) {
+	public AgCpOrderdDetail(Integer orderId, Integer packageId, Integer count,
+			Float price) {
 		this.orderId = orderId;
 		this.packageId = packageId;
 		this.count = count;
+		this.price = price;
 	}
 
 	// Property accessors
@@ -58,6 +61,14 @@ public class AgCpOrderdDetail implements java.io.Serializable {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public Float getPrice() {
+		return this.price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
 	}
 
 }

@@ -59,7 +59,7 @@ $(document).ready(function() {
 	});
 	
 	$("#buyBtn").click(function(){
-		alert("购买按钮");
+		addOrder();
 	});
 	$("#scartBtn").click(function(){
 		 addToCart();
@@ -164,6 +164,27 @@ function addToCart(){
 		});
 }
 
+function addOrder(){
+	var packageId=$("#hidden_packageId").val();
+	var count=$("#buynum").val();
+	  $.ajax({
+		  	async: false,
+			type : "post",
+			url : "/order.do?action=ordercp_ajaxreq&packageId=" + packageId+"&count="+count,
+			dataType : "json",
+			success : function(data) {
+				if(data.isSuc){
+					alert(data.msg);
+					location.reload();
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+}
+
 
 function delCart(obj){
 	var cartId=$(obj).closest("tr").find(".item_chk").val();
@@ -185,6 +206,35 @@ function delCart(obj){
 				return false;
 			}
 		});
+}
+
+function orderCart(){
+	var addUrl="";
+	$(".dataTr").each(function(){
+		var isCheck=$(this).find(".item_chk:checked").size()>0;
+		if(isCheck){
+			var cartId=$(this).find(".item_chk").val();
+			var count=$(this).find(".item_text").val();
+			addUrl+="&cartIds="+cartId+"&counts="+count;
+		}
+	});
+	  $.ajax({
+		  	async: false,
+			type : "post",
+			url : "/order.do?action=ordercpcart_ajaxreq"+addUrl,
+			dataType : "json",
+			success : function(data) {
+				if(data.isSuc){
+					alert(data.msg);
+					 location.reload();
+				}
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("服务器正在维护中...");
+				return false;
+			}
+		});
+
 }
 
 function getMyCart(){

@@ -25,6 +25,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 	public static final String ORDER_ID = "orderId";
 	public static final String PACKAGE_ID = "packageId";
 	public static final String COUNT = "count";
+	public static final String PRICE = "price";
 
 	public void save(AgCpOrderdDetail transientInstance) {
 		log.debug("saving AgCpOrderdDetail instance");
@@ -100,6 +101,10 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 
 	public List findByCount(Object count) {
 		return findByProperty(COUNT, count);
+	}
+
+	public List findByPrice(Object price) {
+		return findByProperty(PRICE, price);
 	}
 
 	public List findAll() {
