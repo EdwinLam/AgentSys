@@ -102,9 +102,6 @@ function getNewItems() {
 	});
 }
 
-function isLogin(){
-	
-}
 
 /**
  * 登出按钮
@@ -151,6 +148,8 @@ function showProductDialog(id){
 	$("#imgVal").attr("src",prodcutEntity.img_url);
 	$("#hidden_packageId").val(prodcutEntity.packageId);
 	$("#pin_view_layer").css("overflow","scroll");
+	$("#addressinfo").val($("#hidaddress").val());
+	$("#product_show_dialog").show();
 	$("#productShowView").show();
 }
 
