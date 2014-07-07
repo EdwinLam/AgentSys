@@ -4,35 +4,48 @@ var masNode = $('#masonry');
 var imagesLoading = false;
 var productInfo = [];
 
-function processNewItems(items) {
-	items.each(function() {
-				var $this = $(this);
-				var imgsNode = $this.find('.imgs');
-				var title = $this.find('.title').text();
-				var author = $this.find('.author').text();
-				title += '&nbsp;&nbsp;(' + author + ')';
-				var lightboxName = 'lightbox_'; // + imgNames[0];
-				var imgNames = imgsNode.find('input[type=hidden]').val()
-						.split(',');
-				jQuery
-						.each(
-								imgNames,
-								function(index, item) {
-									imgsNode
-											.append('<a href="http://fineui.com/case/images/large/'
-													+ item
-													+ '" data-lightbox="'
-													+ lightboxName
-													+ '" title="'
-													+ title
-													+ '"><img src="'
-													+ item
-													+ '" /></a>');
-								});
-			});
+/**
+ * 主页初始化函数
+ */
+function indexInit(){
+/*页面初始化*/
+	getNewItems();
+/*按钮事件绑定*/
+	//返回顶部按钮
+	$("#elevator").click(function(){topAni();});
+	//购物车按钮
+	$("#cart").click(function(){
+		showCartListDialog();
+	});
+	//登出按钮
+	$("#loginoutBtn").click(function(){
+		 loginout();
+	});
+/*滚动条监听*/
+	$(window).scroll(
+	   function() {
+		   //根据滚条条情况自动隐藏返回顶部按钮
+		   autoHideTopBtn();
+		   //滚动条拉倒最下时自动更新商品
+		   autoLoadProduct();
+	});
 }
 
 
+/**
+ * 购物车展示框
+ * @param id
+ */
+function showCartListDialog(){
+	getMyCart();
+	$("body").css("overflow","hidden");
+	$("#product_show_dialog").show();
+	$("#cartListShow").show();
+}
+
+/**
+ * 加载新的产品
+ */
 function getNewItems() {
 	$(".loading").show();
 	var newItemStr="";
@@ -89,50 +102,13 @@ function getNewItems() {
 	});
 }
 
-
-function topAni(){
-	$('html,body').animate({scrollTop:0}, 300);
-}
-
-$(function() {
-	getNewItems();
-	$("#elevator").click(function(){topAni();});
-	$(window).scroll(
-			function() {
-				if($(document).scrollTop()<200){
-					$("#elevator").css("opacity","0");
-				}else{
-					$("#elevator").css("opacity","1");
-				}
-				
-				if ($(document).height() - $(window).height()- $(document).scrollTop() < 10) {
-					if (!imagesLoading) {
-						imagesLoading=true;
-						 getNewItems();
-					}
-				}
-			});
-	$("#loginoutBtn").click(function(){
-		 loginout();
-	});
+function isLogin(){
 	
-	$("#cart").click(function(){
-		showCartListDialog();
-	});
-});
-
+}
 
 /**
- * 购物车展示框
- * @param id
+ * 登出按钮
  */
-function showCartListDialog(){
-	getMyCart();
-	$("body").css("overflow","hidden");
-	$("#product_show_dialog").show();
-	$("#cartListShow").show();
-}
-
 function loginout(){
 	  $.ajax({
 		  	async: false,
@@ -141,11 +117,57 @@ function loginout(){
 			dataType : "json",
 			success : function(data) {
 				alert(data.msg);
+				userInfo==null;
 				 location.reload();
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
 				return false;
 			}
 		});
+}
+
+/**
+ * 滚动条拉倒最下时自动更新商品
+ */
+function autoLoadProduct(){
+	if ($(document).height() - $(window).height()- $(document).scrollTop() < 10) {
+		if (!imagesLoading) {
+			imagesLoading=true;
+			 getNewItems();
+		}
+	}
+}
+
+/**
+ * 展示商品详情
+ * @param id
+ */
+function showProductDialog(id){
+	var prodcutEntity=productInfo[id];
+	$("body").css("overflow","hidden");
+	$("#priceVal").html(prodcutEntity.price);
+	$("#titleVal").html(prodcutEntity.name);
+	$("#introduceVal").html(prodcutEntity.introduce);
+	$("#imgVal").attr("src",prodcutEntity.img_url);
+	$("#hidden_packageId").val(prodcutEntity.packageId);
+	$("#pin_view_layer").css("overflow","scroll");
+	$("#productShowView").show();
+}
+
+/**
+ * 根据滚条条情况自动隐藏返回顶部按钮
+ */
+function autoHideTopBtn(){
+	if($(document).scrollTop()<200){
+		$("#elevator").css("opacity","0");
+	}else{
+		$("#elevator").css("opacity","1");
+	}
+}
+
+/**
+ * 页面返回顶部
+ */
+function topAni(){
+	$('html,body').animate({scrollTop:0}, 300);
 }

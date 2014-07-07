@@ -159,7 +159,9 @@ public class IndexController {
 			userSessionBean.setName(agQxUser.getName());
 			userSessionBean.setPhone(agQxUser.getPhone());
 			userSessionBean.setId(agQxUser.getId());
+			userSessionBean.setAddress(agQxUser.getAddress());
 			request.getSession().setAttribute(Constant.USER_SESSION, userSessionBean);
+			jsonView.setProperty("userInfo", userSessionBean);
 			jsonView.setProperty("isSuc", true);
 			jsonView.setProperty("msg", "登陆成功!");
 		}else{

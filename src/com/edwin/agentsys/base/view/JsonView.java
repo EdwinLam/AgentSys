@@ -17,7 +17,7 @@ import org.springframework.web.servlet.View;
  * 
  */
 public class JsonView implements View {
-
+	
 	private String msg;
 
 	private boolean isSuc = true;

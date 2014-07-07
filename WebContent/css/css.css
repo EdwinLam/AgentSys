@@ -1,7 +1,12 @@
 /*»ù´¡ÑùÊ½*/
+.hide{
+	display:none;
+}
+
 body {
 	font: 12px/1.125 Arial,Helvetica,sans-serif;
 }
+
 
 .fl {
 	float:left;

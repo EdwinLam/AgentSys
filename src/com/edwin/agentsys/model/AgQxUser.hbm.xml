@@ -24,7 +24,7 @@
             </column>
         </property>
         <property name="psw" type="java.lang.String">
-            <column name="psw" length="50">
+            <column name="psw" length="200">
                 <comment>密码</comment>
             </column>
         </property>
@@ -32,6 +32,9 @@
             <column name="role_id">
                 <comment>角色ID</comment>
             </column>
+        </property>
+        <property name="address" type="java.lang.String">
+            <column name="address" length="100" />
         </property>
     </class>
 </hibernate-mapping>

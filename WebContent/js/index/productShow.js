@@ -23,20 +23,6 @@
     }  
 
 $(document).ready(function() {
-	$("#pin_view_layer").css("overflow","scroll");
-	$(".close-layer").hover(function(){
-		$(this).find("i").css("background-position","0 -50px");
-	},
-	function(){
-		$(this).find("i").css("background-position","0 0");
-	}
-	);
-	$(".close-layer i").click(function(){
-		$("body").css("overflow","auto");
-		$("#product_show_dialog").hide();
-		$(".showboxc").hide();
-	});
-
 	//限制购买数量只能输入数字
 	$("#buynum").mustInt().blur(function(){
 		if($(this).val()==""||$(this).val()==0){
@@ -58,12 +44,7 @@ $(document).ready(function() {
 		$("#buynumdown").attr("disabled",num==1?true:false);
 	});
 	
-	$("#buyBtn").click(function(){
-		addOrder();
-	});
-	$("#scartBtn").click(function(){
-		 addToCart();
-	});
+
 	
 	$("#maBtn").click(function(){
 		$("#addressinfo").attr("disabled",false);
@@ -142,49 +123,6 @@ function sumUpPrice(){
 	}
 	$("#cartListShow").find(".cartprice").html("¥"+ toDecimal(totalPrice));
 }
-
-function addToCart(){
-	var count=$("#buynum").val();
-	var packageId=$("#buynum").val();
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/order.do?action=addToCart_ajaxreq&packageId=" + packageId+"&count="+count,
-			dataType : "json",
-			success : function(data) {
-				alert(data.msg);
-				if(data.isSuc){
-					$("#cart span").html(data.size);
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
-}
-
-function addOrder(){
-	var packageId=$("#hidden_packageId").val();
-	var count=$("#buynum").val();
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/order.do?action=ordercp_ajaxreq&packageId=" + packageId+"&count="+count,
-			dataType : "json",
-			success : function(data) {
-				if(data.isSuc){
-					alert(data.msg);
-					location.reload();
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
-}
-
 
 function delCart(obj){
 	var cartId=$(obj).closest("tr").find(".item_chk").val();
@@ -276,18 +214,3 @@ function getMyCart(){
 		});
 }
 
-/**
- * 展示商品详情
- * @param id
- */
-function showProductDialog(id){
-	var prodcutEntity=productInfo[id];
-	$("body").css("overflow","hidden");
-	$("#priceVal").html(prodcutEntity.price);
-	$("#titleVal").html(prodcutEntity.name);
-	$("#introduceVal").html(prodcutEntity.introduce);
-	$("#imgVal").attr("src",prodcutEntity.img_url);
-	$("#hidden_packageId").val(prodcutEntity.packageId);
-	$("#product_show_dialog").show();
-	$("#productShowView").show();
-}
