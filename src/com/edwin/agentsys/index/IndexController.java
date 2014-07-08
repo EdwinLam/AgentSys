@@ -111,7 +111,8 @@ public class IndexController {
 		}
 		AgQxUser agQxUser = new AgQxUser();
 		agQxUser.setAccount(registerVo.getPhone());
-		agQxUser.setPsw(MD5Util.Encrypt(registerVo.getPsw()));
+		//agQxUser.setPsw(MD5Util.Encrypt(registerVo.getPsw()));
+		agQxUser.setPsw(registerVo.getPsw());
 		agQxUser.setName(registerVo.getNick());
 		agQxUser.setPhone(registerVo.getPhone());
 		agQxUser.setRoleId(2);
@@ -157,7 +158,7 @@ public class IndexController {
 		}
 		AgQxUser agQxUser =(AgQxUser)userList.get(0);
 		//密码验证
-		if(MD5Util.validPassword(loginVo.getL_psw(), agQxUser.getPsw())){
+		if(loginVo.getL_psw().equals(agQxUser.getPsw())){
 			UserSessionBean userSessionBean=new UserSessionBean();
 			userSessionBean.setAccount(agQxUser.getAccount());
 			userSessionBean.setName(agQxUser.getName());
