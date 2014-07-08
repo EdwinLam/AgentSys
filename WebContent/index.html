@@ -68,7 +68,8 @@
 </head>
 
 <body>
-	<input id="hidaddress" type="hidden" value="$!address" />
+	<input id="hidaddress" type="hidden" value="$!hidaddress" />
+	<input id="hidphone" type="hidden" value="$!hidphone"/>
 	<div class="navbar navbar-inverse  navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
@@ -83,8 +84,8 @@
 							data-toggle="dropdown" href="#">$!userSessionBean.name<b
 								class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="#personalDialog" data-toggle="modal">个人中心</a></li>
-								<li><a href="#">我的订单</a></li>
+								<li><a href="javascript:;" id="personalBtn">个人中心</a></li>
+								<li><a href="#myOrderDialog"  data-toggle="modal">我的订单</a></li>
 								<li class="divider"></li>
 								<li><a href="javascript:;" id="loginoutBtn">退出</a></li>
 							</ul></li> #else
@@ -138,6 +139,8 @@
 	<div class="container">
 	<!-- 注册展示框-->
 	#include("register.html")
+	<!-- 我的订单-->
+	#include("myorder.html")
 	</div>
 	<div id="elevator_item">
 		<a id="elevator"  href="javascript:;"  title="回到顶部"></a>
@@ -171,6 +174,7 @@
 	<script src="js/index/index.js" type="text/javascript"></script>
 	<script src="js/index/productShow.js" type="text/javascript"></script>
 	<script src="js/index/login.js" type="text/javascript"></script>
+	<script src="js/index/personal.js" type="text/javascript"></script>
 	<script src="js/index/showBox.js" type="text/javascript"></script>
 	<script src="js/index/main.js" type="text/javascript"></script>
 </body>

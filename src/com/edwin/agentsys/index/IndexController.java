@@ -49,10 +49,12 @@ public class IndexController {
 		if(userSessionBean!=null){
 			List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
 			map.put("cartSize",agcpCartList.size());
-			map.put("address", userSessionBean.getAddress());
+			map.put("hidaddress", userSessionBean.getAddress());
+			map.put("hidphone", userSessionBean.getPhone());
 		}else{
 			map.put("cartSize",0);
-			map.put("address", "");
+			map.put("hidaddress", "");
+			map.put("hidphone", "");
 		}
 		return new ModelAndView("index",map);
 	}
