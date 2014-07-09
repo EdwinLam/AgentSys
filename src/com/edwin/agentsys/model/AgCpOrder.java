@@ -14,6 +14,9 @@ public class AgCpOrder implements java.io.Serializable {
 	private Integer userId;
 	private Date createTime;
 	private Float totalPrice;
+	private Integer status;
+	private String address;
+	private String phone;
 
 	// Constructors
 
@@ -22,10 +25,14 @@ public class AgCpOrder implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AgCpOrder(Integer userId, Date createTime, Float totalPrice) {
+	public AgCpOrder(Integer userId, Date createTime, Float totalPrice,
+			Integer status, String address, String phone) {
 		this.userId = userId;
 		this.createTime = createTime;
 		this.totalPrice = totalPrice;
+		this.status = status;
+		this.address = address;
+		this.phone = phone;
 	}
 
 	// Property accessors
@@ -60,6 +67,30 @@ public class AgCpOrder implements java.io.Serializable {
 
 	public void setTotalPrice(Float totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+
+	public Integer getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getAddress() {
+		return this.address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return this.phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }

@@ -25,6 +25,9 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 	// property constants
 	public static final String USER_ID = "userId";
 	public static final String TOTAL_PRICE = "totalPrice";
+	public static final String STATUS = "status";
+	public static final String ADDRESS = "address";
+	public static final String PHONE = "phone";
 
 	public void save(AgCpOrder transientInstance) {
 		log.debug("saving AgCpOrder instance");
@@ -98,6 +101,18 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 		return findByProperty(TOTAL_PRICE, totalPrice);
 	}
 
+	public List findByStatus(Object status) {
+		return findByProperty(STATUS, status);
+	}
+
+	public List findByAddress(Object address) {
+		return findByProperty(ADDRESS, address);
+	}
+
+	public List findByPhone(Object phone) {
+		return findByProperty(PHONE, phone);
+	}
+
 	public List findAll() {
 		log.debug("finding all AgCpOrder instances");
 		try {
@@ -143,4 +158,21 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
+	
+    public  List findByUserId(int userId,int offset,int pagesize){
+    	log.debug("finding by page");
+		try {
+			String queryString = "from AgCpOrder where userId=?";
+	         Query queryObject = getSession().createQuery(queryString);
+	         queryObject.setParameter(0, userId);
+	         if (offset != 0 && pagesize != 0) {
+	        	 queryObject.setFirstResult((offset - 1) * pagesize);
+	        	 queryObject.setMaxResults(pagesize);
+	            }
+			 return queryObject.list();
+		} catch (RuntimeException re) {
+			log.error("inding by page failed", re);
+			throw re;
+		}
+    }
 }

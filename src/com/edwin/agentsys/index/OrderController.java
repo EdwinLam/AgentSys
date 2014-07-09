@@ -1,5 +1,6 @@
 package com.edwin.agentsys.index;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -124,24 +125,39 @@ public class OrderController {
 	}
 	
 	@RequestMapping(params = "action=getMyOrder_ajaxreq")
-	public ModelAndView getMyOrder(HttpServletRequest request,int userId)
+	public ModelAndView getMyOrder(HttpServletRequest request,int page)
 			throws Exception {
 		JsonView jsonView = new JsonView();
 		UserSessionBean userSessionBean = (UserSessionBean) request
 				.getSession().getAttribute(Constant.USER_SESSION);
 		// 读出订单参数
+		List<Map<String,Object>> orderDetailList=new ArrayList<Map<String,Object>> ();
 		AgCpPackage agCpPackage;
 		AgCpProduct agCpProduct;
 		Map<String,String> productInfo;
-		List<AgCpOrder> agCpOrderList=agCpOrderDAO.findByUserId(userSessionBean.getId());
+		List<AgCpOrder> agCpOrderList=agCpOrderDAO.findByUserId(userSessionBean.getId(),page,Constant.MYORDER_PAGE_SIZE);
 		for (AgCpOrder agCpOrder:agCpOrderList) {
+			Map<String,Object> orderDetailItenMap = new HashMap<String,Object>();
+			orderDetailItenMap.put("orderid", agCpOrder.getId());
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			orderDetailItenMap.put("ordertime",  formatter.format(agCpOrder.getCreateTime()));
+			orderDetailItenMap.put("address", agCpOrder.getAddress());
+			orderDetailItenMap.put("phone", agCpOrder.getPhone());
+			
 			List<AgCpOrderdDetail> agCpOrderdDetailList=agCpOrderdDetailDAO.findByOrderId(agCpOrder.getId());
 			for(AgCpOrderdDetail agCpOrderdDetail:agCpOrderdDetailList){
 				productInfo=new HashMap<String,String>();
 				agCpPackage=agCpPackageDAO.findById(agCpOrderdDetail.getPackageId());
 				agCpProduct=agCpProductDAO.findById(agCpPackage.getProductId());
+				productInfo.put("price", agCpPackage.getPrice()+"");
+				productInfo.put("name", agCpProduct.getName());
+				productInfo.put("img_url",agCpProduct.getImgUrl());
+				orderDetailItenMap.put("productInfo", productInfo);
 			}
+			orderDetailList.add(orderDetailItenMap);
 		}
+		jsonView.setSuc(true);
+		jsonView.setProperty("orderDetailList", orderDetailList);
 		return new ModelAndView(jsonView);
 	}
 	
