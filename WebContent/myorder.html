@@ -26,14 +26,14 @@
 				      </tr>
 				   </thead>
 				   <tbody id="myOrderData">
-				      <tr id="myOrderDataTp">
+				      <tr id="myOrderDataTp" style="display:none">
 				         <td style="position:relative;"><span class="orderinfo">@orderid</span>
 				         <div  class="popover fade right in tiptool" style="top: 0px; left: 0px; display: none;position:absolute;min-width:400px;">
 				         	<div class="arrow"></div>
 				         	<div class="popover-content" >
 				         	<p><strong>收货地址:</strong>@address<br/>
 				         	<strong>联系电话:</strong>@phone<br/>
-				         	<strong>总价:</strong>@allprice<br/>
+				         	<strong>总价:</strong>@totalprice<br/>
 				         	</p>
 				         	</div>
 				         	</div>
@@ -42,14 +42,13 @@
 				         	<div  class="popover fade right in tiptool" style="top: 0px; left: 0px; display: none;position:absolute;">
 				         	<div class="arrow"></div>
 				         	<div class="popover-content">
-				         	<p><strong>商品名称:</strong>@name<br/>
-				         		<strong>购买数量:</strong>@count<br/>
-				         		<strong>单价:</strong>@price<br/>
+				         	<p><strong>商品名称:</strong><span class="o_name"></span><br/>
+				         		<strong>购买数量:</strong><span class="o_count"></span><br/>
+				         		<strong>单价:</strong><span class="o_price"></span><br/>
 				         	</p>
 				         	</div>
 				         	</div>
 				         	@imgList
-							<img class="listimg"  src="/image/product/1.jpg" />
 						</div></td>
 				        <td>@ordertime</td>
 				        <td>@statusName</td>

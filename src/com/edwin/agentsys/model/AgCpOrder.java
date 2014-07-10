@@ -11,6 +11,7 @@ public class AgCpOrder implements java.io.Serializable {
 	// Fields
 
 	private Integer id;
+	private String orderId;
 	private Integer userId;
 	private Date createTime;
 	private Float totalPrice;
@@ -25,8 +26,9 @@ public class AgCpOrder implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AgCpOrder(Integer userId, Date createTime, Float totalPrice,
-			Integer status, String address, String phone) {
+	public AgCpOrder(String orderId, Integer userId, Date createTime,
+			Float totalPrice, Integer status, String address, String phone) {
+		this.orderId = orderId;
 		this.userId = userId;
 		this.createTime = createTime;
 		this.totalPrice = totalPrice;
@@ -43,6 +45,14 @@ public class AgCpOrder implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getOrderId() {
+		return this.orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
 	}
 
 	public Integer getUserId() {

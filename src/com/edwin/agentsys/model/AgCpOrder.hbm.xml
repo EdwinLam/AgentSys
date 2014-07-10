@@ -10,6 +10,9 @@
             <column name="id" />
             <generator class="native" />
         </id>
+        <property name="orderId" type="java.lang.String">
+            <column name="order_id" length="50" />
+        </property>
         <property name="userId" type="java.lang.Integer">
             <column name="user_id">
                 <comment>用户id</comment>

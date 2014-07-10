@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.edwin.agentsys.base.Constant;
 import com.edwin.agentsys.base.LoggerUtil;
+import com.edwin.agentsys.base.Util;
 import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.UserSessionBean;
 import com.edwin.agentsys.model.AgCpCart;
@@ -143,8 +145,9 @@ public class OrderController {
 			orderDetailItenMap.put("ordertime",  formatter.format(agCpOrder.getCreateTime()));
 			orderDetailItenMap.put("address", agCpOrder.getAddress());
 			orderDetailItenMap.put("phone", agCpOrder.getPhone());
-			
+			orderDetailItenMap.put("totalprice", agCpOrder.getTotalPrice());
 			List<AgCpOrderdDetail> agCpOrderdDetailList=agCpOrderdDetailDAO.findByOrderId(agCpOrder.getId());
+			List<Map<String,String>> productInfoList=new ArrayList<Map<String,String>>();
 			for(AgCpOrderdDetail agCpOrderdDetail:agCpOrderdDetailList){
 				productInfo=new HashMap<String,String>();
 				agCpPackage=agCpPackageDAO.findById(agCpOrderdDetail.getPackageId());
@@ -152,11 +155,14 @@ public class OrderController {
 				productInfo.put("price", agCpPackage.getPrice()+"");
 				productInfo.put("name", agCpProduct.getName());
 				productInfo.put("img_url",agCpProduct.getImgUrl());
-				orderDetailItenMap.put("productInfo", productInfo);
+				productInfo.put("count",agCpOrderdDetail.getCount()+"");
+				productInfoList.add(productInfo);
 			}
+			orderDetailItenMap.put("productInfoList", productInfoList);
 			orderDetailList.add(orderDetailItenMap);
 		}
 		jsonView.setSuc(true);
+		jsonView.setMsg("获取我的订单成功!");
 		jsonView.setProperty("orderDetailList", orderDetailList);
 		return new ModelAndView(jsonView);
 	}
@@ -169,9 +175,11 @@ public class OrderController {
 		AgCpOrder agCpOrder=new AgCpOrder();
 		AgCpOrderdDetail agCpOrderdDetail = new AgCpOrderdDetail();
 		agCpOrder.setCreateTime(new Date());
+		agCpOrder.setOrderId(Util.getOrderNo());
 		agCpOrder.setUserId(userSessionBean.getId());
 		AgCpPackage agCpPackage=agCpPackageDAO.findById(packageId);
 		agCpOrder.setTotalPrice(agCpPackage.getPrice()*count);
+		
 //		if(agCpPackage.getPrice()*count<Constant.MIN_ORDER_PRICE){
 //			jsonView =  addToCartFun( userSessionBean, packageId, count);
 //			if(jsonView.isSuc()){
@@ -229,6 +237,7 @@ public class OrderController {
 			agCpOrderdDetailDAO.save(agCpOrderdDetail);
 			agCpCartDAO.delete(agCpCart);
 		}
+		agCpOrder.setOrderId(Util.getOrderNo());
 		agCpOrder.setTotalPrice(total_price);
 		agCpOrderDAO.save(agCpOrder);
 		tr.commit();
