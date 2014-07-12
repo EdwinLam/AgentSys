@@ -29,6 +29,7 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 	public static final String STATUS = "status";
 	public static final String ADDRESS = "address";
 	public static final String PHONE = "phone";
+	public static final String REMARK = "remark";
 
 	public void save(AgCpOrder transientInstance) {
 		log.debug("saving AgCpOrder instance");
@@ -118,6 +119,10 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 		return findByProperty(PHONE, phone);
 	}
 
+	public List findByRemark(Object remark) {
+		return findByProperty(REMARK, remark);
+	}
+
 	public List findAll() {
 		log.debug("finding all AgCpOrder instances");
 		try {
@@ -164,17 +169,21 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 		}
 	}
 	
-	  public  List findByUserId(int userId,int offset,int pagesize,int status){
+	  public  List findByUserId(int userId,int offset,int pagesize,int status,String orderNo){
 	    	log.debug("finding by page");
 			try {
-				String queryString = "from AgCpOrder where userId=? ";
+				String queryString = "from AgCpOrder where 1=1  ";
+				if(orderNo!=null&&!orderNo.equals("")){
+					queryString+=" and orderId='"+orderNo+"'";
+				}
+				if(userId!=-1	){
+					queryString+=" and userId="+userId;
+				}
 				if(status!=-1){
 					queryString+=" and status="+status;
 				}
 				queryString+=" order by create_time desc";
 		         Query queryObject = getSession().createQuery(queryString);
-		         queryObject.setParameter(0, userId);
-		     
 		         if (offset != 0 && pagesize != 0) {
 		        	 queryObject.setFirstResult((offset - 1) * pagesize);
 		        	 queryObject.setMaxResults(pagesize);
@@ -186,14 +195,19 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 			}
 	    }
 	  
-	  public Long getTotalCountByUserId(int userId,int status){
+	  public Long getTotalCountByUserId(int userId,int status,String orderNo){
 		  try {
-				String queryString = "select count(id) from AgCpOrder where userId=?";
+				String queryString = "select count(id) from AgCpOrder where 1=1 ";
+				if(orderNo!=null&&!orderNo.equals("")){
+					queryString+=" and orderId='"+orderNo+"'";
+				}
+				if(userId!=-1	){
+					queryString+=" and userId="+userId;
+				}
 				if(status!=-1){
 					queryString+=" and status="+status;
 				}
 		         Query queryObject = getSession().createQuery(queryString);
-		         queryObject.setParameter(0, userId);
 		         Long count =(Long)queryObject.uniqueResult();
 				 return count;
 			} catch (RuntimeException re) {

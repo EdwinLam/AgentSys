@@ -6,7 +6,14 @@ public class UserSessionBean {
 	private String name;
 	private String phone;
 	private String address;
+	private int roleType;
 
+	public int getRoleType() {
+		return roleType;
+	}
+	public void setRoleType(int roleType) {
+		this.roleType = roleType;
+	}
 	public int getId() {
 		return id;
 	}

@@ -35,5 +35,8 @@
         <property name="phone" type="java.lang.String">
             <column name="phone" length="50" />
         </property>
+        <property name="remark" type="java.lang.String">
+            <column name="remark" length="4000" />
+        </property>
     </class>
 </hibernate-mapping>

@@ -1,8 +1,33 @@
+ <!-- 订单详情提示框 -->
+ <div  class="popover fade right in tiptool" id="orderTipMenu" style="top: 0px; left: 0px; display: none;position:absolute;min-width:400px;">
+				         	<div class="arrow"></div>
+				         	<div class="popover-content" >
+				         	<p><strong>收货地址:</strong><span class="oAddress"></span><br/>
+				         	<strong>联系电话:</strong><span class="oPhone"></span><br/>
+				         	<strong>购买留言:</strong><span class="oMsg"></span><br/>
+				         	<strong>总价:</strong><span class="oTotalprice"></span><br/>
+				         	</p>
+			</div>
+</div>
+ <!-- 商品详情情提示框 -->
+<div class="popover fade right in tiptool"  id="orderProductMenu" style="top: 0px; left: 0px; display: none;position:absolute;">
+	<div class="arrow"></div>
+	<div class="popover-content">
+		<p>
+			<strong>商品名称:</strong><span class="o_name"></span><br /> <strong>购买数量:</strong><span
+				class="o_count"></span><br /> <strong>单价:</strong>
+				<span class="o_price"></span><br />
+				
+		</p>
+	</div>
+</div>
+
 <div id="myOrderDialog" class="modal hide fade in"
 			style="display: none; width:800px;left:42%;top:45%;max-height:600px;min-height:600px;">
 			<div class="modal-header">
 				<a class="close" data-dismiss="modal">×</a>
-				<h3>我的订单</h3>
+				<h3 id="FunOrderName">我的订单 </h3>
+			
 			</div>
 			<div class="modal-body" style="max-height:420px;min-height:420px;" >
 				<table class="table" style="margin-top:0px;">
@@ -27,27 +52,13 @@
 				   </thead>
 				   <tbody id="myOrderData">
 				      <tr id="myOrderDataTp" style="display:none">
-				         <td style="position:relative;"><span class="orderinfo">@orderid</span>
-				         <div  class="popover fade right in tiptool" style="top: 0px; left: 0px; display: none;position:absolute;min-width:400px;">
-				         	<div class="arrow"></div>
-				         	<div class="popover-content" >
-				         	<p><strong>收货地址:</strong>@address<br/>
-				         	<strong>联系电话:</strong>@phone<br/>
-				         	<strong>总价:</strong>@totalprice<br/>
-				         	</p>
-				         	</div>
-				         	</div>
+				         <td style="position:relative;">
+				         <span class="orderinfo" style="cursor:pointer">@orderid</span>
+				         <input type="hidden" value="@address"/>
+				          <input type="hidden" value="@phone"/>
+				          <input type="hidden" value="@totalprice"/>
 				         </td>
 				         <td  style="height:65px;"><div style="position:relative">
-				         	<div  class="popover fade right in tiptool" style="top: 0px; left: 0px; display: none;position:absolute;">
-				         	<div class="arrow"></div>
-				         	<div class="popover-content">
-				         	<p><strong>商品名称:</strong><span class="o_name"></span><br/>
-				         		<strong>购买数量:</strong><span class="o_count"></span><br/>
-				         		<strong>单价:</strong><span class="o_price"></span><br/>
-				         	</p>
-				         	</div>
-				         	</div>
 				         	@imgList
 						</div></td>
 				        <td>@ordertime</td>
@@ -61,10 +72,12 @@
 				<input type="hidden" id="oCurPage" value="1"/>
 				<input type="hidden" id="oLastPage" value="1"/>
 				<input type="hidden" id="oStatusVal" value="-1"/>
-				
 				<div style="float:left;" id="oPageArea">
-						
 				</div>
-				<a href="#" class="btn" data-dismiss="modal" id="">返回</a>
+				<div class="input-append input-prepend" style="margin-top:5px;">
+				  <span class="add-on">&nbsp;订单号:</span>
+				  <input class="span3" id="queryOrderId" type="text">
+				  <button class="btn" type="button" id="queryByBtn">搜索</button>
+				</div>
 			</div>
 		</div>
