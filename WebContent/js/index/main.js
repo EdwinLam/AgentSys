@@ -4,6 +4,15 @@ $(document).ready(function() {
 	loginInit();//登陆模块初始化
     showBoxInit();//商品展示框初始化
     personalInit();//个人中心初始化
+    $('#myOrderDialog').on("click",".oStatus",function(){
+    	var oStatusName=$(this).find("a").html();
+    	var oStatusVal=oStatusName=="全部"?"-1":oStatusName== "未处理"?"0":
+    		oStatusName== "处理中"?"1":oStatusName== "已处理"?"2":"-1";
+    	$("#oStatusVal").val(oStatusVal);
+    	$("#oStatusBtn").html(oStatusName);
+    	getMyOrder(1,oStatusVal,false);
+    });
+    
     $('#myOrderDialog').on('mouseenter mouseout', '.listimg', function() {
     	if(event.type=="mouseenter"||event.type=="mouseover"){
     		var tiptool=$(this).parent().find(".tiptool");
@@ -26,15 +35,53 @@ $(document).ready(function() {
     },function(){$(this).parent().find(".tiptool").hide();});
     
     $("#orderBtn").click(function(){
-    	 getMyOrder();
+    	 getMyOrder(1,-1,true);
+    });
+    
+    $("#oPageArea").on('click',".o_page",function(){
+    	var selVal=0;
+    	var oStatus=$("#oStatusVal").val();
+    	var curPage=$("#oCurPage").val();
+    	var oLastPage=$("#oLastPage").val();
+    	var clickVal=$(this).find("a").html();
+    	if(clickVal=="上一页"){
+    		if(curPage==1)
+    			return;
+    		else
+    			selVal=curPage*1-1;
+    	}else if(clickVal=="下一页"){
+    		if(curPage==oLastPage)
+    			return;
+    		else
+    			selVal=curPage*1+1;
+    	}else{
+    		selVal=clickVal;
+    	}
+    	console.log(selVal+"_"+oStatus);
+    	 getMyOrder(selVal,oStatus,false);
     });
 });
 
-function getMyOrder(){
+function getPageNav(curPage,pageSize,totalPage){
+	var pageSum=totalPage/pageSize;
+	var PageNavStr="<div class='pagination' style='margin:0;'><ul>";
+	PageNavStr+="<li class='o_page'><a href='#'>上一页</a></li>";
+	for(var i=0;i<pageSum;i++){
+		if(curPage==(i+1))
+			PageNavStr+="<li class='o_page active'><a href='#'>"+(i+1)+"</a><li>";
+		else
+			PageNavStr+="<li class='o_page'><a href='#'>"+(i+1)+"</a><li>";
+	}
+	PageNavStr+="<li class='o_page'><a href='#'>下一页</a></li>";
+	PageNavStr+="</ul></div>";
+	return PageNavStr;
+}
+
+function getMyOrder(cPage,oStatus,isOpen){
 	  $.ajax({
 		  	async: false,
 			type : "post",
-			url : "/order.do?action=getMyOrder_ajaxreq&page=1",
+			url : "/order.do?action=getMyOrder_ajaxreq&page="+cPage+"&status="+oStatus,
 			dataType : "json",
 			cache:false,
 			success : function(data) {
@@ -47,6 +94,7 @@ function getMyOrder(){
 						myOrdertList=myOrdertList.replace(/@phone/g, n.name);
 						myOrdertList=myOrdertList.replace(/@totalprice/g, n.totalprice);
 						myOrdertList=myOrdertList.replace(/@ordertime/g, n.ordertime);
+						myOrdertList=myOrdertList.replace(/@statusName/g, n.statusName);
 						var imgList="";
 						$.each(n.productInfoList,function(j,k){
 							imgList+="<img class='listimg'  src='"+k.img_url+"' />";
@@ -57,7 +105,11 @@ function getMyOrder(){
 						myOrdertList=myOrdertList.replace(/@imgList/g, imgList);
 						$("#myOrderData").append("<tr class='dataTr'>"+myOrdertList+"</tr>");
 					});
-					$('#myOrderDialog').modal('toggle');
+					$("#oCurPage").val(data.page);
+					$("#oLastPage").val(data.totalPage/data.pageSize);
+					$("#oPageArea").html(getPageNav(data.page,data.pageSize,data.totalPage));
+					if(isOpen)
+						$('#myOrderDialog').modal('toggle');
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {

@@ -1,25 +1,25 @@
 <div id="myOrderDialog" class="modal hide fade in"
-			style="display: none; width:800px;left:42%;">
+			style="display: none; width:800px;left:42%;top:45%;max-height:600px;min-height:600px;">
 			<div class="modal-header">
 				<a class="close" data-dismiss="modal">×</a>
 				<h3>我的订单</h3>
 			</div>
-			<div class="modal-body" >
+			<div class="modal-body" style="max-height:420px;min-height:420px;" >
 				<table class="table" style="margin-top:0px;">
 				   <thead>
 				      <tr>
-				         <th>订单号</th>
-				         <th>商品列表</th>
-				         <th>下单时间</th>
-				         <th style="position:relative;">
+				         <th style="width:30%">订单号</th>
+				         <th style="width:30%">商品列表</th>
+				         <th style="width:28%">下单时间</th>
+				         <th style="position:relative;" style="width:12%">
 				         		<div class="btn-group" style="position:absolute;top:1px;left:-18px;" >
-					                <button class="btn">处理状态</button>
+					                <button class="btn"  id="oStatusBtn" style="width:80px;">处理状态</button>
 					                <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-					                <ul class="dropdown-menu" style="min-width:100px;">
-					                  <li><a href="#">全部</a></li>
-					                  <li><a href="#">已处理</a></li>
-					                  <li><a href="#">待处理</a></li>
-					                  <li><a href="#">处理中</a></li>
+					                <ul class="dropdown-menu" style="min-width:100px;" >
+					                  <li class="oStatus"><a href="#">全部</a></li>
+					                  <li class="oStatus"><a href="#">未处理</a></li>
+					                  <li class="oStatus"><a href="#">处理中</a></li>
+					                  <li class="oStatus"><a href="#">已处理</a></li>
 					                </ul>
 					              </div>
 							</th>
@@ -38,7 +38,7 @@
 				         	</div>
 				         	</div>
 				         </td>
-				         <td  style="width:300px;height:65px;"><div style="position:relative">
+				         <td  style="height:65px;"><div style="position:relative">
 				         	<div  class="popover fade right in tiptool" style="top: 0px; left: 0px; display: none;position:absolute;">
 				         	<div class="arrow"></div>
 				         	<div class="popover-content">
@@ -58,7 +58,13 @@
 				</table>
 			</div>
 			<div class="modal-footer">
+				<input type="hidden" id="oCurPage" value="1"/>
+				<input type="hidden" id="oLastPage" value="1"/>
+				<input type="hidden" id="oStatusVal" value="-1"/>
 				
+				<div style="float:left;" id="oPageArea">
+						
+				</div>
 				<a href="#" class="btn" data-dismiss="modal" id="">返回</a>
 			</div>
 		</div>

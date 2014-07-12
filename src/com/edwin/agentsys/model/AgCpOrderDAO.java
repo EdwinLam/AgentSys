@@ -1,6 +1,6 @@
 package com.edwin.agentsys.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
@@ -163,12 +163,18 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 			throw re;
 		}
 	}
-	  public  List findByUserId(int userId,int offset,int pagesize){
+	
+	  public  List findByUserId(int userId,int offset,int pagesize,int status){
 	    	log.debug("finding by page");
 			try {
-				String queryString = "from AgCpOrder where userId=?";
+				String queryString = "from AgCpOrder where userId=? ";
+				if(status!=-1){
+					queryString+=" and status="+status;
+				}
+				queryString+=" order by create_time desc";
 		         Query queryObject = getSession().createQuery(queryString);
 		         queryObject.setParameter(0, userId);
+		     
 		         if (offset != 0 && pagesize != 0) {
 		        	 queryObject.setFirstResult((offset - 1) * pagesize);
 		        	 queryObject.setMaxResults(pagesize);
@@ -179,4 +185,20 @@ public class AgCpOrderDAO extends BaseHibernateDAO {
 				throw re;
 			}
 	    }
+	  
+	  public Long getTotalCountByUserId(int userId,int status){
+		  try {
+				String queryString = "select count(id) from AgCpOrder where userId=?";
+				if(status!=-1){
+					queryString+=" and status="+status;
+				}
+		         Query queryObject = getSession().createQuery(queryString);
+		         queryObject.setParameter(0, userId);
+		         Long count =(Long)queryObject.uniqueResult();
+				 return count;
+			} catch (RuntimeException re) {
+				throw re;
+			}
+		  
+	  }
 }

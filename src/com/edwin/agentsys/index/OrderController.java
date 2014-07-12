@@ -1,5 +1,6 @@
 package com.edwin.agentsys.index;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -127,7 +128,7 @@ public class OrderController {
 	}
 	
 	@RequestMapping(params = "action=getMyOrder_ajaxreq")
-	public ModelAndView getMyOrder(HttpServletRequest request,int page)
+	public ModelAndView getMyOrder(HttpServletRequest request,int page,int status)
 			throws Exception {
 		JsonView jsonView = new JsonView();
 		UserSessionBean userSessionBean = (UserSessionBean) request
@@ -137,15 +138,16 @@ public class OrderController {
 		AgCpPackage agCpPackage;
 		AgCpProduct agCpProduct;
 		Map<String,String> productInfo;
-		List<AgCpOrder> agCpOrderList=agCpOrderDAO.findByUserId(userSessionBean.getId(),page,Constant.MYORDER_PAGE_SIZE);
+		List<AgCpOrder> agCpOrderList=agCpOrderDAO.findByUserId(userSessionBean.getId(),page,Constant.MYORDER_PAGE_SIZE,status);
 		for (AgCpOrder agCpOrder:agCpOrderList) {
 			Map<String,Object> orderDetailItenMap = new HashMap<String,Object>();
-			orderDetailItenMap.put("orderid", agCpOrder.getId());
+			orderDetailItenMap.put("orderid", agCpOrder.getOrderId());
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			orderDetailItenMap.put("ordertime",  formatter.format(agCpOrder.getCreateTime()));
 			orderDetailItenMap.put("address", agCpOrder.getAddress());
 			orderDetailItenMap.put("phone", agCpOrder.getPhone());
 			orderDetailItenMap.put("totalprice", agCpOrder.getTotalPrice());
+			orderDetailItenMap.put("statusName",getStatusNameById(agCpOrder.getStatus()));
 			List<AgCpOrderdDetail> agCpOrderdDetailList=agCpOrderdDetailDAO.findByOrderId(agCpOrder.getId());
 			List<Map<String,String>> productInfoList=new ArrayList<Map<String,String>>();
 			for(AgCpOrderdDetail agCpOrderdDetail:agCpOrderdDetailList){
@@ -164,6 +166,9 @@ public class OrderController {
 		jsonView.setSuc(true);
 		jsonView.setMsg("获取我的订单成功!");
 		jsonView.setProperty("orderDetailList", orderDetailList);
+		jsonView.setProperty("totalPage", agCpOrderDAO.getTotalCountByUserId(userSessionBean.getId(),status));
+		jsonView.setProperty("page", page);
+		jsonView.setProperty("pageSize", Constant.MYORDER_PAGE_SIZE+"");
 		return new ModelAndView(jsonView);
 	}
 	
@@ -174,9 +179,10 @@ public class OrderController {
 		UserSessionBean userSessionBean = (UserSessionBean) request .getSession().getAttribute(Constant.USER_SESSION);
 		AgCpOrder agCpOrder=new AgCpOrder();
 		AgCpOrderdDetail agCpOrderdDetail = new AgCpOrderdDetail();
-		agCpOrder.setCreateTime(new Date());
+		agCpOrder.setCreateTime(new Timestamp(new Date().getTime()));
 		agCpOrder.setOrderId(Util.getOrderNo());
 		agCpOrder.setUserId(userSessionBean.getId());
+		agCpOrder.setStatus(0);
 		AgCpPackage agCpPackage=agCpPackageDAO.findById(packageId);
 		agCpOrder.setTotalPrice(agCpPackage.getPrice()*count);
 		
@@ -211,7 +217,7 @@ public class OrderController {
 		UserSessionBean userSessionBean = (UserSessionBean) request .getSession().getAttribute(Constant.USER_SESSION);
 		//下订单
 		AgCpOrder agCpOrder=new AgCpOrder();
-		agCpOrder.setCreateTime(new Date());
+		agCpOrder.setCreateTime(new Timestamp(new Date().getTime()));
 		agCpOrder.setUserId(userSessionBean.getId());
 		Transaction tr = HibernateSessionFactory.getSession()
 				.beginTransaction(); // 开始事务
@@ -239,6 +245,7 @@ public class OrderController {
 		}
 		agCpOrder.setOrderId(Util.getOrderNo());
 		agCpOrder.setTotalPrice(total_price);
+		agCpOrder.setStatus(0);
 		agCpOrderDAO.save(agCpOrder);
 		tr.commit();
 		HibernateSessionFactory.getSession().flush();
@@ -305,6 +312,21 @@ public class OrderController {
 		jsonView.setMsg("已添加到购物车!");
 		jsonView.setProperty("size", agcpCartList.size()+1);
 		return jsonView;
+	}
+	
+	private String getStatusNameById(Integer status){
+		if(status==null){
+			return "暂无状态";
+		}
+		if(status==0){
+			return "未处理";
+		}else if(status==1){
+			return "处理中";
+		}else if(status==2){
+			return "已处理";
+		}else{
+			return "NOT FOUND";
+		}
 	}
 	
 	

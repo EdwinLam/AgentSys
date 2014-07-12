@@ -1,6 +1,6 @@
 package com.edwin.agentsys.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  * AgCpOrder entity. @author MyEclipse Persistence Tools
@@ -13,7 +13,7 @@ public class AgCpOrder implements java.io.Serializable {
 	private Integer id;
 	private String orderId;
 	private Integer userId;
-	private Date createTime;
+	private Timestamp createTime;
 	private Float totalPrice;
 	private Integer status;
 	private String address;
@@ -26,7 +26,7 @@ public class AgCpOrder implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AgCpOrder(String orderId, Integer userId, Date createTime,
+	public AgCpOrder(String orderId, Integer userId, Timestamp createTime,
 			Float totalPrice, Integer status, String address, String phone) {
 		this.orderId = orderId;
 		this.userId = userId;
@@ -63,11 +63,11 @@ public class AgCpOrder implements java.io.Serializable {
 		this.userId = userId;
 	}
 
-	public Date getCreateTime() {
+	public Timestamp getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
 
