@@ -6,6 +6,8 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  	* A data access object (DAO) providing persistence and search support for AgCpProduct entities.
@@ -15,6 +17,8 @@ import org.slf4j.LoggerFactory;
 	 * @see com.edwin.agentsys.model.AgCpProduct
   * @author MyEclipse Persistence Tools 
  */
+@Scope("prototype")
+@Service("agCpProductDAO")
 public class AgCpProductDAO extends BaseHibernateDAO  {
 	     private static final Logger log = LoggerFactory.getLogger(AgCpProductDAO.class);
 		//property constants
@@ -178,4 +182,16 @@ public class AgCpProductDAO extends BaseHibernateDAO  {
 			throw re;
 		}
     }
+    
+    public Long getTotalCount(){
+		  try {
+				String queryString = "select count(id) from AgCpProduct ";
+		         Query queryObject = getSession().createQuery(queryString);
+		         Long count =(Long)queryObject.uniqueResult();
+				 return count;
+			} catch (RuntimeException re) {
+				throw re;
+			}
+		  
+	  }
 }

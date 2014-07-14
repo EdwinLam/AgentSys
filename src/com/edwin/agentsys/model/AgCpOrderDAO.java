@@ -7,6 +7,8 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -19,6 +21,8 @@ import org.slf4j.LoggerFactory;
  * @see com.edwin.agentsys.model.AgCpOrder
  * @author MyEclipse Persistence Tools
  */
+@Scope("prototype")
+@Service("agCpOrderDAO")
 public class AgCpOrderDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(AgCpOrderDAO.class);

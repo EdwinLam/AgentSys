@@ -29,7 +29,8 @@
 	      </props>
 	    </property>
    </bean>
-		
+	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+	
    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
 		<property name="cache" value="false"></property>
 		<property name="prefix" value=""></property>

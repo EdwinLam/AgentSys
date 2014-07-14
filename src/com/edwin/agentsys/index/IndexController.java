@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,12 +29,18 @@ import com.edwin.agentsys.model.AgQxUser;
 import com.edwin.agentsys.model.AgQxUserDAO;
 import com.edwin.agentsys.test.HibernateSessionFactory;
 
-
 @Controller
 @RequestMapping("/index.do")
 public class IndexController {
-	AgCpCartDAO agCpCartDAO = new AgCpCartDAO();
-
+	@Autowired
+	AgCpProductDAO agCpProductDAO;
+	@Autowired
+	AgCpCartDAO agCpCartDAO;
+	@Autowired
+	AgCpPackageDAO agCpPackageDao;
+	@Autowired
+	AgQxUserDAO agQxUserDAO;
+	
 	/**
 	 * 首页界面
 	 * @param response
@@ -70,8 +77,6 @@ public class IndexController {
 	@RequestMapping(params = "action=getproduct")
 	public ModelAndView getProdcut(HttpServletResponse response,int curPage) throws Exception {
 		JsonView jsonView=new JsonView();
-		AgCpProductDAO agCpProductDAO=new AgCpProductDAO();
-		AgCpPackageDAO agCpPackageDao=new AgCpPackageDAO();
 		List<Map<String,String>> productMapList=new ArrayList<Map<String,String>>();
 		AgCpProduct agCpProduct=null;
 		AgCpPackage agCpPackage=null;
@@ -116,7 +121,6 @@ public class IndexController {
 		agQxUser.setName(registerVo.getNick());
 		agQxUser.setPhone(registerVo.getPhone());
 		agQxUser.setRoleId(2);
-		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
 		if(agQxUserDAO.findByAccount(registerVo.getPhone()).size()>0||agQxUserDAO.findByName(registerVo.getNick()).size()>0){
 			jsonView.setProperty("isSuc", false);	
 			jsonView.setProperty("msg", "名称或号码已存在，请重新检查!");
@@ -149,7 +153,6 @@ public class IndexController {
 			jsonView.setProperty("msg", "参数异常!");
 			return new ModelAndView(jsonView);
 		}
-		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
 		List userList=agQxUserDAO.findByAccount(loginVo.getL_phone());
 		if(userList.size()==0){
 			jsonView.setProperty("isSuc", false);	

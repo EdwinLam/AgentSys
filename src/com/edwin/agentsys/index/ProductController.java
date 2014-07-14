@@ -36,8 +36,8 @@ import com.edwin.agentsys.model.AgCpProductDAO;
 import com.edwin.agentsys.test.HibernateSessionFactory;
 
 @Controller
-@RequestMapping("/order.do")
-public class OrderController {
+@RequestMapping("/product.do")
+public class ProductController {
 	@Autowired
 	AgCpCartDAO agCpCartDAO;
 	@Autowired
@@ -49,24 +49,29 @@ public class OrderController {
 	@Autowired
 	AgCpOrderdDetailDAO agCpOrderdDetailDAO;
 	
-
-	/**
-	 * 添加商品到购物车
-	 * 
-	 * @param request
-	 * @param response
-	 * @param packageId
-	 * @param count
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(params = "action=addToCart_ajaxreq")
-	public ModelAndView addToCart(HttpServletRequest request,
-			HttpServletResponse response, int packageId, int count)
+	@RequestMapping(params = "action=list_ajaxreq")
+	public ModelAndView list(HttpServletRequest request,
+			HttpServletResponse response,int page)
 			throws Exception {
-		UserSessionBean userSessionBean = (UserSessionBean) request
-				.getSession().getAttribute(Constant.USER_SESSION);
-		JsonView jsonView =  addToCartFun( userSessionBean, packageId, count);
+		JsonView jsonView = new JsonView();
+		List<Map> productInfoList=new ArrayList<Map>();
+		List<AgCpProduct> agCpProductList=agCpProductDAO.findByPage(page, Constant.LIST_PRODUCT_SIZE);
+		for(AgCpProduct agCpProduct:agCpProductList){
+			Map<String,String> productInfo=new HashMap<String,String>();
+			productInfo.put("id", agCpProduct.getId()+"");
+			productInfo.put("package_id", agCpProduct.getDefaultPackageId()+"");
+			productInfo.put("name", agCpProduct.getName());
+			productInfo.put("img_url", agCpProduct.getImgUrl());
+			productInfo.put("introduce", agCpProduct.getIntroduce());
+			
+			AgCpPackage agCpPackage=agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
+			productInfo.put("price", agCpPackage.getPrice()+"");
+			productInfoList.add(productInfo);
+		}
+		jsonView.setProperty("totalRecord",agCpProductDAO.getTotalCount());
+		jsonView.setProperty("productInfoList", productInfoList);
+		jsonView.setMsg("产品获取成功!");
+		jsonView.setSuc(true);
 		return new ModelAndView(jsonView);
 	}
 	

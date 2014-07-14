@@ -172,7 +172,6 @@ function getMyOrder(cPage,oStatus,isOpen,orderno){
 					$("#myOrderData").find(".dataTr").remove();
 					$.each(data.orderDetailList,function(i,n){
 						var myOrdertList=$("#myOrderDataTp").html();
-
 						myOrdertList=myOrdertList.replace(/@orderid/g, n.orderid);
 						myOrdertList=myOrdertList.replace(/@address/g, n.address);
 						myOrdertList=myOrdertList.replace(/@phone/g, n.phone);

@@ -1,0 +1,48 @@
+
+
+<div id="productMangeDialog" class="modal hide fade in"
+			style="display: none; width:800px;left:42%;top:45%;max-height:600px;min-height:600px;">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3 id="FunOrderName">商品管理 </h3>
+			
+			</div>
+			<div class="modal-body" style="max-height:420px;min-height:420px;" >
+				<table class="table" style="margin-top:0px;">
+				   <thead>
+				      <tr>
+				         <th style="width:30%">所属分类</th>
+				         <th style="width:30%">商品名</th>
+				         <th style="width:28%">售价</th>
+				         <th>
+				         	操作
+							</th>
+				      </tr>
+				   </thead>
+				   <tbody id="productData">
+				      <tr id="productDataTp" style="display:none">
+				         <td style="position:relative;">
+				         <span class="orderinfo" style="cursor:pointer">@typeName</span>
+				         <input type="hidden" value="@address"/>
+				         </td>
+				         <td>@name</td>
+				        <td>@price</td>
+				        <td><button class="btn" type="button" id="queryByBtn">编辑</button></td>
+				      </tr>
+				      <tr><td colspan="4"></td></tr>
+				   </tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" id="oCurPage" value="1"/>
+				<input type="hidden" id="oLastPage" value="1"/>
+				<input type="hidden" id="oStatusVal" value="-1"/>
+				<div style="float:left;" id="oPageArea">
+				</div>
+				<div class="input-append input-prepend" style="margin-top:5px;">
+				  <span class="add-on">&nbsp;商品名:</span>
+				  <input class="span3" id="queryOrderId" type="text">
+				  <button class="btn" type="button" id="queryByBtn">搜索</button>
+				</div>
+			</div>
+		</div>
