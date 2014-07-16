@@ -7,8 +7,32 @@
 				<h3 id="FunOrderName">商品管理 </h3>
 			
 			</div>
+
 			<div class="modal-body" style="max-height:420px;min-height:420px;" >
-				<table class="table" style="margin-top:0px;">
+				<div class="container" style="width:700px;">
+				  <div class="row">
+				    <div class="span4" >
+				     <img src="/image/product/1.jpg" class="img-rounded">
+				    </div>
+				    <div class="span4 "  >
+				     <form class="form-horizontal" style="margin-left: -170px;">
+						  <div class="control-group">
+						    <label class="control-label" for="inputEmail">名称</label>
+						    <div class="controls">
+						      <input type="text" id="pro_name" placeholder="Email">
+						    </div>
+						  </div>
+						    <div class="control-group">
+						    <label class="control-label" for="inputEmail">介绍</label>
+						    <div class="controls">
+						      <textarea></textarea>
+						    </div>
+						  </div>
+						</form>
+				    </div>
+				  </div>
+				</div>
+				<table class="table" style="margin-top:0px;display:none;">
 				   <thead>
 				      <tr>
 				         <th style="width:30%">所属分类</th>
@@ -34,15 +58,15 @@
 				</table>
 			</div>
 			<div class="modal-footer">
-				<input type="hidden" id="oCurPage" value="1"/>
-				<input type="hidden" id="oLastPage" value="1"/>
-				<input type="hidden" id="oStatusVal" value="-1"/>
-				<div style="float:left;" id="oPageArea">
+				<input type="hidden" id="pCurPage" value="1"/>
+				<input type="hidden" id="pLastPage" value="1"/>
+				<input type="hidden" id="pStatusVal" value="-1"/>
+				<div style="float:left;" id="pPageArea">
 				</div>
 				<div class="input-append input-prepend" style="margin-top:5px;">
 				  <span class="add-on">&nbsp;商品名:</span>
-				  <input class="span3" id="queryOrderId" type="text">
-				  <button class="btn" type="button" id="queryByBtn">搜索</button>
+				  <input class="span3" id="productNameTe" type="text">
+				  <button class="btn" type="button" id="pnqueryByBtn">搜索</button>
 				</div>
 			</div>
 		</div>

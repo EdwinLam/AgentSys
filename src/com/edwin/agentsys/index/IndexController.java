@@ -81,7 +81,7 @@ public class IndexController {
 		AgCpProduct agCpProduct=null;
 		AgCpPackage agCpPackage=null;
 		  Map<String,String> productInfo=null;
-		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(curPage, Constant.INDEX_PRODUCT_SIZE);
+		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(curPage, Constant.INDEX_PRODUCT_SIZE,"");
 		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
 			  productInfo=new HashMap<String,String>();
 			  agCpProduct  =   agCpProductList.get(i); 

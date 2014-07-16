@@ -30,5 +30,8 @@
                 <comment>默认对应的套餐ID</comment>
             </column>
         </property>
+        <property name="typeId" type="java.lang.Integer">
+            <column name="type_id" />
+        </property>
     </class>
 </hibernate-mapping>

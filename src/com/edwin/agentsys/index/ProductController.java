@@ -1,5 +1,6 @@
 package com.edwin.agentsys.index;
 
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,11 +52,12 @@ public class ProductController {
 	
 	@RequestMapping(params = "action=list_ajaxreq")
 	public ModelAndView list(HttpServletRequest request,
-			HttpServletResponse response,int page)
+			HttpServletResponse response,int page,String productName)
 			throws Exception {
+		productName=URLDecoder.decode(productName, "UTF-8");
 		JsonView jsonView = new JsonView();
 		List<Map> productInfoList=new ArrayList<Map>();
-		List<AgCpProduct> agCpProductList=agCpProductDAO.findByPage(page, Constant.LIST_PRODUCT_SIZE);
+		List<AgCpProduct> agCpProductList=agCpProductDAO.findByPage(page, Constant.LIST_PRODUCT_SIZE,productName);
 		for(AgCpProduct agCpProduct:agCpProductList){
 			Map<String,String> productInfo=new HashMap<String,String>();
 			productInfo.put("id", agCpProduct.getId()+"");
@@ -63,12 +65,15 @@ public class ProductController {
 			productInfo.put("name", agCpProduct.getName());
 			productInfo.put("img_url", agCpProduct.getImgUrl());
 			productInfo.put("introduce", agCpProduct.getIntroduce());
-			
+			productInfo.put("typeName", Constant.productType.get(agCpProduct.getTypeId()+""));
 			AgCpPackage agCpPackage=agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
 			productInfo.put("price", agCpPackage.getPrice()+"");
 			productInfoList.add(productInfo);
 		}
-		jsonView.setProperty("totalRecord",agCpProductDAO.getTotalCount());
+		jsonView.setProperty("page",page);
+		jsonView.setProperty("pageSize",Constant.LIST_PRODUCT_SIZE);
+		jsonView.setProperty("totalPage",agCpProductDAO.getTotalCount(productName));
+
 		jsonView.setProperty("productInfoList", productInfoList);
 		jsonView.setMsg("产品获取成功!");
 		jsonView.setSuc(true);
