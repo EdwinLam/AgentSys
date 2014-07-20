@@ -50,6 +50,102 @@ public class ProductController {
 	@Autowired
 	AgCpOrderdDetailDAO agCpOrderdDetailDAO;
 	
+	@RequestMapping(params = "action=getProductById_ajaxreq")
+	public ModelAndView getProductById(HttpServletRequest request,int id)
+			throws Exception {
+		JsonView jsonView = new JsonView();
+		AgCpProduct agCpProduct =agCpProductDAO.findById(id);
+		AgCpPackage agCpPackage =agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
+		jsonView.setSuc(true);
+		jsonView.setMsg("获取成功!");
+		jsonView.setProperty("type_id", agCpProduct.getTypeId());
+		jsonView.setProperty("id", agCpProduct.getId());
+		jsonView.setProperty("img_url", agCpProduct.getImgUrl());
+		jsonView.setProperty("introduce", agCpProduct.getIntroduce());
+		jsonView.setProperty("name", agCpProduct.getName());
+		jsonView.setProperty("price", agCpPackage.getPrice());
+		return new ModelAndView(jsonView);
+	}
+	
+	@RequestMapping(params = "action=mdfProduct_ajaxreq")
+	public ModelAndView mdfProduc(HttpServletRequest request,int id,float price,String introduce,String name,int type_id,String imgUrl)
+			throws Exception {
+		name=URLDecoder.decode(name, "UTF-8");
+		introduce=URLDecoder.decode(introduce, "UTF-8");
+		JsonView jsonView = new JsonView();
+		AgCpProduct agCpProduct =agCpProductDAO.findById(id);
+		AgCpPackage agCpPackage =agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
+		agCpProduct.setImgUrl(imgUrl);
+		agCpProduct.setIntroduce(introduce);
+		agCpProduct.setName(name);
+		agCpProduct.setTypeId(type_id);
+		agCpPackage.setPrice(price);
+		Transaction tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpProductDAO.save(agCpProduct);
+		agCpPackageDAO.save(agCpPackage);
+		tr.commit();
+		HibernateSessionFactory.getSession().flush();
+		jsonView.setSuc(true);
+		jsonView.setMsg("保存成功!");
+		return new ModelAndView(jsonView);
+	}
+	
+	@RequestMapping(params = "action=delProduct_ajaxreq")
+	public ModelAndView delProduc(HttpServletRequest request,int id)
+			throws Exception {
+		JsonView jsonView = new JsonView();
+		AgCpProduct agCpProduct =agCpProductDAO.findById(id);
+		AgCpPackage agCpPackage =agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
+		Transaction tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpProductDAO.delete(agCpProduct);
+		agCpPackageDAO.delete(agCpPackage);
+		tr.commit();
+		HibernateSessionFactory.getSession().flush();
+		jsonView.setSuc(true);
+		jsonView.setMsg("保存成功!");
+		return new ModelAndView(jsonView);
+	}
+	
+	@RequestMapping(params = "action=addProduct_ajaxreq")
+	public ModelAndView addProduc(HttpServletRequest request,float price,String introduce,String name,int type_id,String imgUrl)
+			throws Exception {
+		name=URLDecoder.decode(name, "UTF-8");
+		introduce=URLDecoder.decode(introduce, "UTF-8");
+		JsonView jsonView = new JsonView();
+		AgCpProduct agCpProduct =new AgCpProduct();
+		agCpProduct.setImgUrl(imgUrl);
+		agCpProduct.setIntroduce(introduce);
+		agCpProduct.setName(name);
+		agCpProduct.setTypeId(type_id);
+		Transaction tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpProductDAO.save(agCpProduct);
+		tr.commit();
+		HibernateSessionFactory.getSession().flush();
+		
+		AgCpPackage agCpPackage =new AgCpPackage();
+		agCpPackage.setName(name);
+		agCpPackage.setProductId(agCpProduct.getId());
+		agCpPackage.setPrice(price);
+		tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpPackageDAO.save(agCpPackage);
+		tr.commit();
+		HibernateSessionFactory.getSession().flush();
+		
+		tr = HibernateSessionFactory.getSession()
+				.beginTransaction(); // 开始事务
+		agCpProduct.setDefaultPackageId(agCpPackage.getId());
+		tr.commit();
+		HibernateSessionFactory.getSession().flush();
+		jsonView.setSuc(true);
+		jsonView.setMsg("保存成功!");
+		return new ModelAndView(jsonView);
+	}
+	
+	
 	@RequestMapping(params = "action=list_ajaxreq")
 	public ModelAndView list(HttpServletRequest request,
 			HttpServletResponse response,int page,String productName)
