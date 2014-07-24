@@ -66,9 +66,13 @@
 	text-align: right;
 }
 </style>
+
 </head>
 
 <body>
+	<div class="alert alert-error" style="position:fixed;left:5px;top:0px;width:95%;z-index:99999999;display:none;" id="globalAlert">
+		<span id="alertMsg"></span><button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
 	<input id="hidaddress" type="hidden" value="$!hidaddress" />
 	<input id="hidphone" type="hidden" value="$!hidphone"/>
 	<div class="navbar navbar-inverse  navbar-fixed-top">
@@ -80,10 +84,8 @@
 				</a> <a class="brand" href="#">EasyBuy</a>
 				<div class="nav-collapse">
 					<ul class="nav">
-						#if($!userSessionBean)
-						<li class="dropdown"><a class="dropdown-toggle"
-							data-toggle="dropdown" href="#">$!userSessionBean.name<b
-								class="caret"></b></a>
+						<li class="dropdown afterlogin" style="display:$!loginDis"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#"><span id="bar_login_name">$!userSessionBean.name</span><b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="javascript:;" id="personalBtn">个人中心</a></li>
 								<li><a href="javascript:;"  id="orderBtn">我的订单</a></li>
@@ -91,12 +93,13 @@
 								<li><a href="javascript:;" id="productManageBtn">商品管理</a></li>
 								<li class="divider"></li>
 								<li><a href="javascript:;" id="loginoutBtn">退出</a></li>
-							</ul></li> #else
-						<li class="active"><a data-toggle="modal"
+							</ul>
+						</li>
+						<li class="active beforelogin" style="display:$!unloginDis"><a data-toggle="modal"
 							href="#registerDialog" style="outline: none;"
 							id="registerinitBtn">注册</a></li>
-						<li><a target="_blank" data-toggle="modal"
-							style="outline: none;" href="#loginDialog">登录</a></li> #end
+						<li class="beforelogin" style="display:$!unloginDis"><a target="_blank" data-toggle="modal"
+							style="outline: none;" href="#loginDialog">登录</a></li>
 					</ul>
 				</div>
 			</div>
@@ -111,12 +114,12 @@
 	</div>
 	<div class="container"	 style="height:36px;">
       <ul class="breadcrumb"  style="float:left;margin-left:38px;">
-         <li class="active">全部<span class="divider">/</span></li>
-         <li><a href="#">食品副食</a> <span class="divider">/</span></li>
-  		<li><a href="#">酒水饮料</a> <span class="divider">/</span></li>
-  		<li><a href="#">美容护理</a> <span class="divider">/</span></li>
-  		<li><a href="#">日用百货</a> <span class="divider">/</span></li>
-  		<li><a href="#">进口商品</a> </li>
+         <li class="active" ><a onClick="changeType(this,0)">全部</a><span class="divider">/</span></li>
+         <li><a href="javascript:;"  onClick="changeType(this,1)">食品副食</a> <span class="divider">/</span></li>
+  		<li><a href="javascript:;"  onClick="changeType(this,2)">酒水饮料</a> <span class="divider">/</span></li>
+  		<li><a href="javascript:;" onClick="changeType(this,3)">美容护理</a> <span class="divider">/</span></li>
+  		<li><a href="javascript:;" onClick="changeType(this,4)">日用百货</a> <span class="divider">/</span></li>
+  		<li><a href="javascript:;" onClick="changeType(this,5)">进口商品</a> </li>
       </ul>
 		</div>
 	<!--banner结束-->
@@ -171,13 +174,13 @@
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="js/index/base.js" type="text/javascript"></script>	
 	<script src="js/main.js"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="js/jquery.validate.min.js" type="text/javascript"></script>
 	<script src="js/messages_cn.js" type="text/javascript"></script>
-	<script src="js/register/registerValidateRule.js"
-		type="text/javascript"></script>
+	<script src="js/register/registerValidateRule.js" type="text/javascript"></script>
 	<script src="js/index/index.js" type="text/javascript"></script>
 	<script src="js/index/productShow.js" type="text/javascript"></script>
 	<script src="js/index/login.js" type="text/javascript"></script>
@@ -185,6 +188,13 @@
 	<script src="js/index/showBox.js" type="text/javascript"></script>
 	<script src="js/index/myorder.js" type="text/javascript"></script>
 	<script src="js/index/main.js" type="text/javascript"></script>	
+	<script>
+		var userInfo=[];
+		userInfo.name='$!userSessionBean.name';
+		userInfo.address='$!userSessionBean.address';
+		userInfo.phone='$!userSessionBean.phone';
+	</script>
+	
 	
 </body>
 </html>

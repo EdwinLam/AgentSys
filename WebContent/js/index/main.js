@@ -1,3 +1,4 @@
+
 /*初始化*/
 $(document).ready(function() {
 	indexInit();//首页模块初始化

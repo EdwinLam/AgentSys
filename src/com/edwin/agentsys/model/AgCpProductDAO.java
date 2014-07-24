@@ -163,12 +163,15 @@ public class AgCpProductDAO extends BaseHibernateDAO {
 		}
 	}
 	
-    public  List findByPage(int offset,int pagesize,String productName){
+    public  List findByPage(int offset,int pagesize,String productName,int typeId){
     	log.debug("finding by page");
 		try {
 			String queryString = "from AgCpProduct where 1=1 ";
 			if(productName!=null&&!productName.equals("")){
 				queryString+=" and name like '%"+productName+"%'";
+			}
+			if(typeId!=0){
+				queryString+=" and typeId="+typeId;
 			}
 	         Query queryObject = getSession().createQuery(queryString);
 	         if (offset != 0 && pagesize != 0) {

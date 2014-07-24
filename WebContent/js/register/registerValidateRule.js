@@ -46,11 +46,15 @@ $(document).ready(function() {
 					data: {nick:$("#nick").val(), phone:$("#phone").val(),psw:$("#psw").val()},
 					dataType : "json",
 					success : function(data) {
-						alert(data.msg);
+						if(data.isSuc){
+							base.sAlert(data.msg,3);
+						}else{
+							base.eAlert(data.msg,3);
+						}
 						$("#registerDialog").modal('hide');
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						alert("服务器正在维护中...");
+						base.eAlert("服务器没有响应...",3);
 						return false;
 					}
 				});

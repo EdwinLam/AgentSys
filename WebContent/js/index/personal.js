@@ -1,14 +1,13 @@
 function personalInit(){
 	$("#personalBtn").click(function(){
-		$("#p_phone").val($("#hidphone").val());
-		$("#p_address").val($("#hidaddress").val());
+		$("#p_phone").val(userInfo.phone);
+		$("#p_address").val(userInfo.address);
 		$('#personalDialog').modal('toggle');
 	});	
 	$("#mdfPBtn").click(function(){
 		$("#personalForm").submit();
 	});
 	
-	//登陆模块
 	$("#personalForm").validate({
 		errorClass:"help-inline",
 		errorElement:"span",
@@ -19,8 +18,13 @@ function personalInit(){
 					data: {address:$("#p_address").val()},
 					dataType : "json",
 					success : function(data) {
-						alert(data.msg);
-						 location.reload();
+						if(data.isSuc){
+							base.sAlert(data.msg,3);
+							$('#personalDialog').modal('toggle');
+							 userInfo.address=$("#p_address").val();
+						}else{
+							base.eAlert(data.msg,3);
+						}
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						return false;

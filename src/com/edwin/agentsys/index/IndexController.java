@@ -53,12 +53,17 @@ public class IndexController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		UserSessionBean userSessionBean=(UserSessionBean)request.getSession().getAttribute(Constant.USER_SESSION);
 		map.put("userSessionBean", userSessionBean);
+		
 		if(userSessionBean!=null){
+			map.put("loginDis", "");
+			map.put("unloginDis", "none");
 			List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
 			map.put("cartSize",agcpCartList.size());
 			map.put("hidaddress", userSessionBean.getAddress());
 			map.put("hidphone", userSessionBean.getPhone());
 		}else{
+			map.put("loginDis", "none");
+			map.put("unloginDis", "");
 			map.put("cartSize",0);
 			map.put("hidaddress", "");
 			map.put("hidphone", "");
@@ -75,13 +80,13 @@ public class IndexController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "action=getproduct")
-	public ModelAndView getProdcut(HttpServletResponse response,int curPage) throws Exception {
+	public ModelAndView getProdcut(HttpServletResponse response,int curPage,int typeId) throws Exception {
 		JsonView jsonView=new JsonView();
 		List<Map<String,String>> productMapList=new ArrayList<Map<String,String>>();
 		AgCpProduct agCpProduct=null;
 		AgCpPackage agCpPackage=null;
 		  Map<String,String> productInfo=null;
-		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(curPage, Constant.INDEX_PRODUCT_SIZE,"");
+		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(curPage, Constant.INDEX_PRODUCT_SIZE,"",typeId);
 		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
 			  productInfo=new HashMap<String,String>();
 			  agCpProduct  =   agCpProductList.get(i); 
@@ -131,7 +136,7 @@ public class IndexController {
 		 tr.commit();   //提交事务  
 		HibernateSessionFactory.getSession().flush();
 		jsonView.setProperty("isSuc", true);
-		jsonView.setProperty("msg", "注册成功!");
+		jsonView.setProperty("msg", "注册成功!请点击登陆按钮进行登陆!");
 		return new ModelAndView(jsonView);
 	}
 	

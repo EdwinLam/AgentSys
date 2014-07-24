@@ -153,7 +153,7 @@ public class ProductController {
 		productName=URLDecoder.decode(productName, "UTF-8");
 		JsonView jsonView = new JsonView();
 		List<Map> productInfoList=new ArrayList<Map>();
-		List<AgCpProduct> agCpProductList=agCpProductDAO.findByPage(page, Constant.LIST_PRODUCT_SIZE,productName);
+		List<AgCpProduct> agCpProductList=agCpProductDAO.findByPage(page, Constant.LIST_PRODUCT_SIZE,productName,0);
 		for(AgCpProduct agCpProduct:agCpProductList){
 			Map<String,String> productInfo=new HashMap<String,String>();
 			productInfo.put("id", agCpProduct.getId()+"");

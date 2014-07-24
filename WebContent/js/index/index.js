@@ -3,6 +3,7 @@ var isInit=true;
 var masNode = $('#masonry');
 var imagesLoading = false;
 var productInfo = [];
+var typeId=0;
 
 /**
  * 主页初始化函数
@@ -31,12 +32,32 @@ function indexInit(){
 	});
 }
 
+function changeType(obj,type_id){
+	typeId=type_id;
+	if(!$(obj).hasClass("active")){
+		curPage = 1;
+		masNode.html("");
+		masNode.masonry('destroy');
+		masNode.masonry({
+			itemSelector : '.thumbnail',
+			isFitWidth : true
+		});
+		$(obj).parent().parent().find(".active").removeClass("active");
+		$(obj).addClass("active");
+		getNewItems();
+	}
+}
+
 
 /**
  * 购物车展示框
  * @param id
  */
 function showCartListDialog(){
+	if(userInfo==null){
+		base.eAlert("登陆后才能使用购物车功能! ",3);
+		return;
+	}
 	getMyCart();
 	$("body").css("overflow","hidden");
 	$("#product_show_dialog").show();
@@ -51,7 +72,7 @@ function getNewItems() {
 	var newItemStr="";
 	$.ajax({
 		type : "post",
-		url : "/index.do?action=getproduct&curPage=" + curPage,
+		url : "/index.do?action=getproduct&curPage=" + curPage+"&typeId="+typeId,
 		dataType : "json",
 		success : function(data) {
 			var productData = data.productData;
@@ -113,9 +134,10 @@ function loginout(){
 			url : "/index.do?action=loginout",
 			dataType : "json",
 			success : function(data) {
-				alert(data.msg);
-				userInfo==null;
-				 location.reload();
+				base.sAlert(data.msg,3);
+				userInfo=null;
+				$(".afterlogin").hide();
+				$(".beforelogin").show();
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				return false;

@@ -1,3 +1,5 @@
+
+
 /**
  * 登陆窗口初始化函数
  */
@@ -17,8 +19,15 @@ function loginInit(){
 					data: {l_phone:$("#l_phone").val(), l_psw:$("#l_psw").val()},
 					dataType : "json",
 					success : function(data) {
-						alert(data.msg);
-						 location.reload();
+						if(data.isSuc){
+							userInfo=data.userInfo;
+							base.sAlert(data.msg,3);
+							$(".beforelogin").hide();
+							$("#bar_login_name").html(userInfo.name);
+							$(".afterlogin").show();
+							$('#loginDialog').modal('toggle');
+						}else
+							base.eAlert(data.msg,3);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						return false;
