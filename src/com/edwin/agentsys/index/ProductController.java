@@ -1,5 +1,6 @@
 package com.edwin.agentsys.index;
 
+import java.io.File;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,7 @@ public class ProductController {
 	@Autowired
 	AgCpOrderdDetailDAO agCpOrderdDetailDAO;
 	
+	Session session= HibernateSessionFactory.getSession();
 	@RequestMapping(params = "action=getProductById_ajaxreq")
 	public ModelAndView getProductById(HttpServletRequest request,int id)
 			throws Exception {
@@ -60,7 +63,11 @@ public class ProductController {
 		jsonView.setMsg("获取成功!");
 		jsonView.setProperty("type_id", agCpProduct.getTypeId());
 		jsonView.setProperty("id", agCpProduct.getId());
-		jsonView.setProperty("img_url", agCpProduct.getImgUrl());
+		File f=new File(request.getSession().getServletContext().getRealPath("/") +agCpProduct.getImgUrl());
+		if(!f.exists()){
+			jsonView.setProperty("img_url", File.separator+ "image"+File.separator+"product"+File.separator+"default.jpg");
+		}else
+			jsonView.setProperty("img_url", agCpProduct.getImgUrl());
 		jsonView.setProperty("introduce", agCpProduct.getIntroduce());
 		jsonView.setProperty("name", agCpProduct.getName());
 		jsonView.setProperty("price", agCpPackage.getPrice());
@@ -70,22 +77,31 @@ public class ProductController {
 	@RequestMapping(params = "action=mdfProduct_ajaxreq")
 	public ModelAndView mdfProduc(HttpServletRequest request,int id,float price,String introduce,String name,int type_id,String imgUrl)
 			throws Exception {
-		name=URLDecoder.decode(name, "UTF-8");
-		introduce=URLDecoder.decode(introduce, "UTF-8");
 		JsonView jsonView = new JsonView();
+		
 		AgCpProduct agCpProduct =agCpProductDAO.findById(id);
+		List<AgCpProduct> tmpList=agCpProductDAO.findByName(name);
+		if(tmpList.size()>0&&tmpList.get(0).getId()!=agCpProduct.getId()){
+			jsonView.setMsg("已存在产品名["+name+"]的产品");
+			jsonView.setSuc(false);
+			return new ModelAndView(jsonView);
+		}
+		if(imgUrl==""){
+			jsonView.setMsg("请上传一张预览图!");
+			jsonView.setSuc(false);
+			return new ModelAndView(jsonView);
+		}
 		AgCpPackage agCpPackage =agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
 		agCpProduct.setImgUrl(imgUrl);
 		agCpProduct.setIntroduce(introduce);
 		agCpProduct.setName(name);
 		agCpProduct.setTypeId(type_id);
 		agCpPackage.setPrice(price);
-		Transaction tr = HibernateSessionFactory.getSession()
-				.beginTransaction(); // 开始事务
+		Transaction tr =session.beginTransaction(); // 开始事务
 		agCpProductDAO.save(agCpProduct);
 		agCpPackageDAO.save(agCpPackage);
 		tr.commit();
-		HibernateSessionFactory.getSession().flush();
+		session.flush();
 		jsonView.setSuc(true);
 		jsonView.setMsg("保存成功!");
 		return new ModelAndView(jsonView);
@@ -97,14 +113,13 @@ public class ProductController {
 		JsonView jsonView = new JsonView();
 		AgCpProduct agCpProduct =agCpProductDAO.findById(id);
 		AgCpPackage agCpPackage =agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
-		Transaction tr = HibernateSessionFactory.getSession()
-				.beginTransaction(); // 开始事务
+		Transaction tr = session.beginTransaction(); // 开始事务
 		agCpProductDAO.delete(agCpProduct);
 		agCpPackageDAO.delete(agCpPackage);
 		tr.commit();
-		HibernateSessionFactory.getSession().flush();
+		session.flush();
 		jsonView.setSuc(true);
-		jsonView.setMsg("保存成功!");
+		jsonView.setMsg("删除成功!");
 		return new ModelAndView(jsonView);
 	}
 	
@@ -114,32 +129,39 @@ public class ProductController {
 		name=URLDecoder.decode(name, "UTF-8");
 		introduce=URLDecoder.decode(introduce, "UTF-8");
 		JsonView jsonView = new JsonView();
+		if(agCpProductDAO.findByName(name).size()>0){
+			jsonView.setMsg("已存在产品名["+name+"]的产品");
+			jsonView.setSuc(false);
+			return new ModelAndView(jsonView);
+		}
+		if(imgUrl==""){
+			jsonView.setMsg("请上传一张预览图!");
+			jsonView.setSuc(false);
+			return new ModelAndView(jsonView);
+		}
+		Transaction tr = session.beginTransaction(); // 开始事务
 		AgCpProduct agCpProduct =new AgCpProduct();
 		agCpProduct.setImgUrl(imgUrl);
 		agCpProduct.setIntroduce(introduce);
 		agCpProduct.setName(name);
 		agCpProduct.setTypeId(type_id);
-		Transaction tr = HibernateSessionFactory.getSession()
-				.beginTransaction(); // 开始事务
 		agCpProductDAO.save(agCpProduct);
 		tr.commit();
-		HibernateSessionFactory.getSession().flush();
+		session.flush();
 		
 		AgCpPackage agCpPackage =new AgCpPackage();
 		agCpPackage.setName(name);
 		agCpPackage.setProductId(agCpProduct.getId());
 		agCpPackage.setPrice(price);
-		tr = HibernateSessionFactory.getSession()
-				.beginTransaction(); // 开始事务
+		tr =session.beginTransaction(); // 开始事务
 		agCpPackageDAO.save(agCpPackage);
 		tr.commit();
-		HibernateSessionFactory.getSession().flush();
+		session.flush();
 		
-		tr = HibernateSessionFactory.getSession()
-				.beginTransaction(); // 开始事务
+		tr =session.beginTransaction(); // 开始事务
 		agCpProduct.setDefaultPackageId(agCpPackage.getId());
 		tr.commit();
-		HibernateSessionFactory.getSession().flush();
+		session.flush();
 		jsonView.setSuc(true);
 		jsonView.setMsg("保存成功!");
 		return new ModelAndView(jsonView);
@@ -150,7 +172,6 @@ public class ProductController {
 	public ModelAndView list(HttpServletRequest request,
 			HttpServletResponse response,int page,String productName)
 			throws Exception {
-		productName=URLDecoder.decode(productName, "UTF-8");
 		JsonView jsonView = new JsonView();
 		List<Map> productInfoList=new ArrayList<Map>();
 		List<AgCpProduct> agCpProductList=agCpProductDAO.findByPage(page, Constant.LIST_PRODUCT_SIZE,productName,0);

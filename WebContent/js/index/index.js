@@ -36,12 +36,9 @@ function changeType(obj,type_id){
 	typeId=type_id;
 	if(!$(obj).hasClass("active")){
 		curPage = 1;
-		masNode.html("");
 		masNode.masonry('destroy');
-		masNode.masonry({
-			itemSelector : '.thumbnail',
-			isFitWidth : true
-		});
+		 isInit=true;
+		 productInfo = [];
 		$(obj).parent().parent().find(".active").removeClass("active");
 		$(obj).addClass("active");
 		getNewItems();
@@ -68,6 +65,7 @@ function showCartListDialog(){
  * 加载新的产品
  */
 function getNewItems() {
+	if(isInit)	masNode.html("");
 	$(".loading").show();
 	var newItemStr="";
 	$.ajax({
@@ -103,7 +101,7 @@ function getNewItems() {
 						isInit=false;
 						masNode.masonry({
 							itemSelector : '.thumbnail',
-							isFitWidth : true
+							isFitWidth : true,
 						});
 					}else{
 						masNode.masonry('appended', items);

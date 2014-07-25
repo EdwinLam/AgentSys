@@ -57,6 +57,28 @@ Base.prototype = {
 					$("#globalAlert").hide();
 				});
 			}
+		},
+		doReq:function(url,params,fun){
+			 var context=this;
+			  $.ajax({
+				  	async: false,
+				  	data:params,
+					type : "post",
+					url : url,
+					dataType : "json",
+					cache:false,
+					success :function(data){
+						if(data.status=="403"){
+							context.eAlert("您登陆已超时请重新登陆");
+						}else{
+							fun.call(this,data);
+						}
+					},
+					error : function(XMLHttpRequest, textStatus, errorThrown) {
+						context.eAlert("服务器连接异常..");
+						return false;
+					}
+				});
 		}
 };
 

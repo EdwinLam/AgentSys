@@ -16,12 +16,36 @@ $(document).ready(function() {
 		var price=$("#pp_price").val();
 		var introduce=	$("#pp_introduce").val();
 		var img_url=$("#detail_img").attr("src");
-    	savePProductById(name,introduce,price,type_id,img_url);
+		if(name==""){
+			base.eAlert("名称不能为空!",3);
+			return;
+		}
+		if(price==""){
+			base.eAlert("请输入价格!",3);
+			return;
+		}
+		if(img_url==""){
+			base.eAlert("请上传预览图!",3);
+			return;
+		}
+    	savePProduct(name,introduce,price,type_id,img_url);
     });
     $("#ppMdfBtn").click(function(){
     	var id=$("#pp_id").val();
     	var type_id=$("#pp_type_id").val();
 		var name=$("#pp_name").val();
+		if(name==""){
+			base.eAlert("名称不能为空!",3);
+			return;
+		}
+		if(price==""){
+			base.eAlert("请输入价格!",3);
+			return;
+		}
+		if(img_url==""){
+			base.eAlert("请上传预览图!",3);
+			return;
+		}
 		var price=$("#pp_price").val();
 		var introduce=	$("#pp_introduce").val();
 		var img_url=$("#detail_img").attr("src");
@@ -34,7 +58,7 @@ $(document).ready(function() {
 		$("#pp_price").val("");
 		$("#pp_introduce").val("");
 		$("#pp_id").val("");
-		$("#detail_img").attr("src","");
+		$("#detail_img").attr("src","\\image\\product\\default.jpg");
     	$("#productMangeDialog").css("min-height","400px");
     	$("#productMangeDialog").css("max-height","400px");
     	$("#productMangeDialog").css("overflow","hidden");
@@ -80,7 +104,7 @@ $(document).ready(function() {
     	$(".listArea").hide();
     	$(".editMode").show();
     	$(".addMode").hide();
-    	getPProductById($(this).next("input").val());
+    	getPProductById($(this).parent().find("input").val());
     });
     
     
@@ -89,11 +113,7 @@ $(document).ready(function() {
     });
     
     $("#pReBtn").click(function(){
-    	$("#productMangeDialog").css("min-height","600px");
-    	$("#productMangeDialog").css("max-height","600px");
-    	$("#productMangeDialog").css("overflow","auto");
-    	$(".editArea").hide();
-    	$(".listArea").show();
+    	 reToList();
     });
     
     $("#uploadify").uploadify({
@@ -128,127 +148,133 @@ $(document).ready(function() {
     });
 });
 
+/**
+ * 返回产品列表
+ */
+function reToList(){
+	$("#productMangeDialog").css("min-height","600px");
+	$("#productMangeDialog").css("max-height","600px");
+	$("#productMangeDialog").css("overflow","auto");
+	$(".editArea").hide();
+	$(".listArea").show();
+}
 
+
+/**
+ * 修改产品ID
+ * @param id
+ * @param name
+ * @param introduce
+ * @param price
+ * @param type_id
+ * @param img_url
+ */
 function mdfPProductById(id,name,introduce,price,type_id,img_url){
-	alert(id);
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			data:{"imgUrl":img_url},
-			url : "/product.do?action=mdfProduct_ajaxreq&id="+id
-			+"&name="+encodeURIComponent(encodeURIComponent(name))+"&introduce="+encodeURIComponent(encodeURIComponent(introduce))
-			+"&price="+price+"&type_id="+type_id,
-			dataType : "json",
-			cache:false,
-			success : function(data) {
-				alert( JSON.stringify(data));
-				if(data.isSuc){
-					alert(data.msg);
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
+	base.doReq("/product.do", {
+		"action" : "mdfProduct_ajaxreq",
+		"id" : id,
+		"name":name,
+		"introduce":introduce,
+		"price":price,
+		"type_id":type_id,
+		"imgUrl":img_url
+	}, function(data) {
+		if (data.isSuc) {
+			base.sAlert(data.msg,3);
+			reToList();
+			 getPProduct(1,"");
+		}else{
+			base.eAlert(data.msg,3);
+		}
+	});
+}
+
+/**
+ * 新增产品
+ * @param name
+ * @param introduce
+ * @param price
+ * @param type_id
+ * @param img_url
+ */
+function savePProduct(name,introduce,price,type_id,img_url){
+		base.doReq("/product.do", {
+			"action" : "addProduct_ajaxreq",
+			"name":name,
+			"introduce":introduce,
+			"price":price,
+			"type_id":type_id,
+			"imgUrl":img_url
+		},function(data){
+			if (data.isSuc) {
+				base.sAlert(data.msg,3);
+				reToList();
+			}else{
+				base.eAlert(data.msg,3);
 			}
 		});
 }
 
-function savePProductById(name,introduce,price,type_id,img_url){
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			data:{"imgUrl":img_url},
-			url : "/product.do?action=addProduct_ajaxreq"
-			+"&name="+encodeURIComponent(encodeURIComponent(name))+"&introduce="+encodeURIComponent(encodeURIComponent(introduce))
-			+"&price="+price+"&type_id="+type_id,
-			dataType : "json",
-			cache:false,
-			success : function(data) {
-				alert( JSON.stringify(data));
-				if(data.isSuc){
-					alert(data.msg);
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
-}
-
+/**
+ * 删除产品
+ * @param id
+ */
 function delPProductById(id){
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/product.do?action=delProduct_ajaxreq&id="+id,
-			dataType : "json",
-			cache:false,
-			success : function(data) {
-				alert( JSON.stringify(data));
-				if(data.isSuc){
-					alert(data.msg);
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
+	base.doReq("/product.do", {
+		"action" : "delProduct_ajaxreq",
+		"id":id
+	},function(data){
+		if (data.isSuc) {
+			base.sAlert(data.msg,3);
+			reToList();
+			getPProduct(1,"");
+		}else{
+			base.eAlert(data.msg,3);
+		}
+	});
 }
 
+/**
+ * 产品详细信息
+ * @param id
+ */
 function getPProductById(id){
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/product.do?action=getProductById_ajaxreq&id="+id,
-			dataType : "json",
-			cache:false,
-			success : function(data) {
-				alert( JSON.stringify(data));
-				if(data.isSuc){
-					$("#pp_type_id").val(data.type_id);
-					$("#pp_name").val(data.name);
-					$("#pp_price").val(data.price);
-					$("#pp_introduce").val(data.introduce);
-					$("#pp_id").val(data.id);
-					$("#detail_img").attr("src",data.img_url);
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
+	base.doReq("/product.do",{"action":"getProductById_ajaxreq","id":id},
+		function(data){
+			if(data.isSuc){
+				$("#pp_type_id").val(data.type_id);
+				$("#pp_name").val(data.name);
+				$("#pp_price").val(data.price);
+				$("#pp_introduce").val(data.introduce);
+				$("#pp_id").val(data.id);
+				$("#detail_img").attr("src",data.img_url);
+		}
+	});
 }
 
 function getPProduct(cPage,productName){
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/product.do?action=list_ajaxreq&page="+cPage+"&productName="+encodeURIComponent(encodeURIComponent(productName)),
-			dataType : "json",
-			cache:false,
-			success : function(data) {
-				if(data.isSuc){
-					$("#productData").find(".dataTr").remove();
-					$.each(data.productInfoList,function(i,n){
-						var productTmp=$("#productDataTp").html();
-						productTmp=productTmp.replace(/@typeName/g, n.typeName);
-						productTmp=productTmp.replace(/@name/g, n.name);
-						productTmp=productTmp.replace(/@price/g, n.price);
-						productTmp=productTmp.replace(/@id/g, n.id);
-						$("#productData").append("<tr class='dataTr'>"+productTmp+"</tr>");
-					});
-				}
-				$("#pCurPage").val(data.page);
-				$("#pLastPage").val(Math.ceil(data.totalPage/data.pageSize));
-				$("#pPageArea").html(getPageNavP(data.page,data.pageSize,data.totalPage));
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
+		base.doReq("/product.do", {
+		"action" : "list_ajaxreq",
+		"page" : cPage,
+		"productName" : productName
+	}, function(data) {
+		if (data.isSuc) {
+			$("#productData").find(".dataTr").remove();
+			$.each(data.productInfoList, function(i, n) {
+				var productTmp = $("#productDataTp").html();
+				productTmp = productTmp.replace(/@typeName/g, n.typeName);
+				productTmp = productTmp.replace(/@name/g, n.name);
+				productTmp = productTmp.replace(/@price/g, n.price);
+				productTmp = productTmp.replace(/@id/g, n.id);
+				$("#productData").append(
+						"<tr class='dataTr'>" + productTmp + "</tr>");
+			});
+		}
+		$("#pCurPage").val(data.page);
+		$("#pLastPage").val(Math.ceil(data.totalPage / data.pageSize));
+		$("#pPageArea").html(
+				getPageNavP(data.page, data.pageSize, data.totalPage));
+	});
 }
 
 function getPageNavP(curPage,pageSize,totalPage){
