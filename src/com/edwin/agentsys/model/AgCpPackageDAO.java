@@ -3,11 +3,15 @@ package com.edwin.agentsys.model;
 import java.util.List;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import com.edwin.agentsys.test.HibernateSessionFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -29,33 +33,40 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 	public static final String NAME = "name";
 	public static final String PRICE = "price";
 	public static final String PRODUCT_ID = "productId";
-
+	private static Session session= HibernateSessionFactory.getSession();
+	
 	public void save(AgCpPackage transientInstance) {
 		log.debug("saving AgCpPackage instance");
 		try {
-			getSession().save(transientInstance);
+			Transaction tr =session.beginTransaction(); // 开始事务
+			session.save(transientInstance);
 			log.debug("save successful");
+			tr.commit();
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			throw re;
 		}
+		session.flush();
 	}
 
 	public void delete(AgCpPackage persistentInstance) {
 		log.debug("deleting AgCpPackage instance");
 		try {
-			getSession().delete(persistentInstance);
+			Transaction tr =session.beginTransaction(); // 开始事务
+			session.delete(persistentInstance);
 			log.debug("delete successful");
+			tr.commit();
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
 		}
+		session.flush();
 	}
 
 	public AgCpPackage findById(java.lang.Integer id) {
 		log.debug("getting AgCpPackage instance with id: " + id);
 		try {
-			AgCpPackage instance = (AgCpPackage) getSession().get(
+			AgCpPackage instance = (AgCpPackage) session.get(
 					"com.edwin.agentsys.model.AgCpPackage", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -67,7 +78,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 	public List findByExample(AgCpPackage instance) {
 		log.debug("finding AgCpPackage instance by example");
 		try {
-			List results = getSession()
+			List results = session
 					.createCriteria("com.edwin.agentsys.model.AgCpPackage")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
@@ -85,7 +96,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from AgCpPackage as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -110,7 +121,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 		log.debug("finding all AgCpPackage instances");
 		try {
 			String queryString = "from AgCpPackage";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -121,7 +132,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 	public AgCpPackage merge(AgCpPackage detachedInstance) {
 		log.debug("merging AgCpPackage instance");
 		try {
-			AgCpPackage result = (AgCpPackage) getSession().merge(
+			AgCpPackage result = (AgCpPackage) session.merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -134,7 +145,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 	public void attachDirty(AgCpPackage instance) {
 		log.debug("attaching dirty AgCpPackage instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -145,7 +156,7 @@ public class AgCpPackageDAO extends BaseHibernateDAO {
 	public void attachClean(AgCpPackage instance) {
 		log.debug("attaching clean AgCpPackage instance");
 		try {
-			getSession().buildLockRequest(LockOptions.NONE).lock(instance);
+			session.buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

@@ -89,7 +89,7 @@ function cartReduceCount(obj){
 	var $obj=$(obj).siblings("input");
 	var num=$obj.val();
 	num=num*1-1*1;
-	if(num>=0){
+	if(num>=1){
 		$obj.val(num);
 	}
 	sumUpPrice();
@@ -124,29 +124,33 @@ function sumUpPrice(){
 	$("#cartListShow").find(".cartprice").html("¥"+ toDecimal(totalPrice));
 }
 
+/**
+ * 购物车删除商品
+ * @param obj
+ */
 function delCart(obj){
 	var cartId=$(obj).closest("tr").find(".item_chk").val();
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/order.do?action=delCart_ajaxreq&cartId=" + cartId,
-			dataType : "json",
-			success : function(data) {
-				if(data.isSuc){
-					alert(data.msg);
-					$("#cart span").html(data.size);
-					$($(obj).closest("tr")).remove();
-					 sumUpPrice();
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
+	 base.doReq("/order.do?action=delCart_ajaxreq",{"cartId":cartId}, function(data) {
+			if(data.isSuc){
+				base.sAlert(data.msg);
+				$("#cart span").html(data.size);
+				$($(obj).closest("tr")).remove();
+				 sumUpPrice();
+			}else{
+				base.eAlert(data.msg);
 			}
-		});
+	 });
 }
 
 function orderCart(){
+	if($("#cartAddrss").val()==""){
+		base.eAlert("请填写收货地址!");
+		return false;
+	}
+	if($("#cartPhone").val()==""){
+		base.eAlert("请填写联系电话!");
+		return false;
+	}
 	var addUrl="";
 	$(".dataTr").each(function(){
 		var isCheck=$(this).find(".item_chk:checked").size()>0;
@@ -156,61 +160,53 @@ function orderCart(){
 			addUrl+="&cartIds="+cartId+"&counts="+count;
 		}
 	});
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/order.do?action=ordercpcart_ajaxreq"+addUrl,
-			dataType : "json",
-			success : function(data) {
-				if(data.isSuc){
-					alert(data.msg);
-					 location.reload();
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
-			}
-		});
+	 base.doReq( "/order.do?action=ordercpcart_ajaxreq"+addUrl,{
+		 "phone":$("#cartPhone").val(),
+		 "address":$("#cartPhone").val(),
+		 "msg":$("cartMsg").html()
+	 },function(data) {
+			if(data.isSuc){
+				$("#cart span").html(data.size);
+				base.sAlert(data.msg);
+				sumUpPrice();
+				$(".dataTr").each(function(){
+					var isCheck=$(this).find(".item_chk:checked").size()>0;
+					if(isCheck){
+						$(this).remove();
+					}
+				});
 
+			}else{
+				base.eAlert(data.msg);
+			}
+	});
 }
 
 function getMyCart(){
-	
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/order.do?action=getMyCart_ajaxreq",
-			dataType : "json",
-			success : function(data) {
-				if(data.isSuc){
-					$("#cartData").find(".dataTr").remove();
-					$.each(data.cartInfoList,function(i,n){
-						var cartList=$("#cartDataTp").html();
-						cartList=cartList.replace(/@cartId/g, n.cartId);
-						cartList=cartList.replace(/@img_url/g, n.img_url);
-						cartList=cartList.replace(/@name/g, n.name);
-						cartList=cartList.replace(/@price/g, n.price);
-						cartList=cartList.replace(/@count/g, n.count);
-						cartList=cartList.replace(/@danzong/g, n.count*n.price);
-						$("#cartData").append("<tr class='dataTr'>"+cartList+"</tr>");
-					});
-					
-					sumUpPrice();
-					$("#cartData .dataTr .item_text").mustInt().blur(function(){
-						if($(this).val()==""||$(this).val()==0){
-							$(this).val(1);
-						}
-					});
-					$("#cartData .dataTr .trisumup").bind("click keyup blur",function(){
-						 sumUpPrice();
-					});
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
+	  base.doReq( "/order.do?action=getMyCart_ajaxreq",{},function(data) {
+			if(data.isSuc){
+				$("#cartData").find(".dataTr").remove();
+				$.each(data.cartInfoList,function(i,n){
+					var cartList=$("#cartDataTp").html();
+					cartList=cartList.replace(/@cartId/g, n.cartId);
+					cartList=cartList.replace(/@img_url/g, n.img_url);
+					cartList=cartList.replace(/@name/g, n.name);
+					cartList=cartList.replace(/@price/g, n.price);
+					cartList=cartList.replace(/@count/g, n.count);
+					cartList=cartList.replace(/@danzong/g, n.count*n.price);
+					$("#cartData").append("<tr class='dataTr'>"+cartList+"</tr>");
+				});
+				sumUpPrice();
+				$("#cartData .dataTr .item_text").mustInt().blur(function(){
+					if($(this).val()==""||$(this).val()==0){
+						$(this).val(1);
+					}
+				});
+				$("#cartData .dataTr .trisumup").bind("click keyup blur",function(){
+					 sumUpPrice();
+				});
 			}
 		});
+	
 }
 

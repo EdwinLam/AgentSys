@@ -99,7 +99,7 @@
 							href="#registerDialog" style="outline: none;"
 							id="registerinitBtn">注册</a></li>
 						<li class="beforelogin" style="display:$!unloginDis"><a target="_blank" data-toggle="modal"
-							style="outline: none;" href="#loginDialog">登录</a></li>
+							style="outline: none;" href="#loginDialog" id="showLoginBtn">登录</a></li>
 					</ul>
 				</div>
 			</div>
@@ -114,7 +114,7 @@
 	</div>
 	<div class="container"	 style="height:36px;">
       <ul class="breadcrumb"  style="float:left;margin-left:38px;">
-         <li class="active" ><a onClick="changeType(this,0)">全部</a><span class="divider">/</span></li>
+         <li class="active" ><a href="javascript:;" onClick="changeType(this,0)">全部</a><span class="divider">/</span></li>
          <li><a href="javascript:;"  onClick="changeType(this,1)">食品副食</a> <span class="divider">/</span></li>
   		<li><a href="javascript:;"  onClick="changeType(this,2)">酒水饮料</a> <span class="divider">/</span></li>
   		<li><a href="javascript:;" onClick="changeType(this,3)">美容护理</a> <span class="divider">/</span></li>
@@ -149,7 +149,8 @@
 	#include("myorder.html")
 	<!--商品管理-->
 	#include("productManage.html")
-	
+	<!-- 商品展示框 -->
+	#include("showbox.html")
 	</div>
 	<div id="elevator_item">
 		<a id="elevator"  href="javascript:;"  title="回到顶部"></a>
@@ -167,7 +168,6 @@
 			<i></i>
 		</div>
 		<!-- 产品展示框-->
-		#include("showbox.html")
 		<!-- 购物车展示框-->
 		#include("cartlist.html")
 	</div>
@@ -187,9 +187,11 @@
 	<script src="js/index/personal.js" type="text/javascript"></script>
 	<script src="js/index/showBox.js" type="text/javascript"></script>
 	<script src="js/index/myorder.js" type="text/javascript"></script>
-	<script src="js/index/main.js" type="text/javascript"></script>	
+	<script src="js/index/main.js" type="text/javascript"></script>
+	<!-- 保存服务器的值 -->
 	<script>
-		var userInfo=[];
+		var userName="$!userSessionBean.name";
+		var userInfo=userName==null||userName==""?null:[];
 		userInfo.name='$!userSessionBean.name';
 		userInfo.address='$!userSessionBean.address';
 		userInfo.phone='$!userSessionBean.phone';

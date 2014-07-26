@@ -39,6 +39,7 @@ public class ActionFilter implements Filter {
 			if(isAjax){
 				// 返回JSON结果
 				JSONObject result = new JSONObject();
+				result.put("status", "403");
 				result.put("isSuc", "false");
 				result.put("msg", "您还没有登录!");
 				response.setCharacterEncoding("UTF-8");

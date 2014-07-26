@@ -1,4 +1,14 @@
 
+function refreshPage(){
+	 getPProduct(1,"");
+	curPage = 1;
+	masNode.masonry('destroy');
+	 isInit=true;
+	 productInfo = [];
+	 typeId=0;
+	getNewItems();
+}
+
 /*初始化*/
 $(document).ready(function() {
 	indexInit();//首页模块初始化
@@ -182,7 +192,7 @@ function mdfPProductById(id,name,introduce,price,type_id,img_url){
 		if (data.isSuc) {
 			base.sAlert(data.msg,3);
 			reToList();
-			 getPProduct(1,"");
+			refreshPage();
 		}else{
 			base.eAlert(data.msg,3);
 		}
@@ -209,6 +219,7 @@ function savePProduct(name,introduce,price,type_id,img_url){
 			if (data.isSuc) {
 				base.sAlert(data.msg,3);
 				reToList();
+				refreshPage();
 			}else{
 				base.eAlert(data.msg,3);
 			}
@@ -227,7 +238,7 @@ function delPProductById(id){
 		if (data.isSuc) {
 			base.sAlert(data.msg,3);
 			reToList();
-			getPProduct(1,"");
+			refreshPage();
 		}else{
 			base.eAlert(data.msg,3);
 		}

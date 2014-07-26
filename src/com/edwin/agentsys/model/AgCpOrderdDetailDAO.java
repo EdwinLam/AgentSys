@@ -3,11 +3,15 @@ package com.edwin.agentsys.model;
 import java.util.List;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import com.edwin.agentsys.test.HibernateSessionFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -30,33 +34,40 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 	public static final String PACKAGE_ID = "packageId";
 	public static final String COUNT = "count";
 	public static final String PRICE = "price";
+    private static Session session= HibernateSessionFactory.getSession();
 
 	public void save(AgCpOrderdDetail transientInstance) {
 		log.debug("saving AgCpOrderdDetail instance");
 		try {
-			getSession().save(transientInstance);
+			Transaction tr =session.beginTransaction(); // 开始事务
+			session.save(transientInstance);
+			tr.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			throw re;
 		}
+		session.flush();
 	}
 
 	public void delete(AgCpOrderdDetail persistentInstance) {
 		log.debug("deleting AgCpOrderdDetail instance");
+		Transaction tr =session.beginTransaction(); 
 		try {
-			getSession().delete(persistentInstance);
+			session.delete(persistentInstance);
 			log.debug("delete successful");
+			tr.commit();
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
 		}
+		session.flush();
 	}
 
 	public AgCpOrderdDetail findById(java.lang.Integer id) {
 		log.debug("getting AgCpOrderdDetail instance with id: " + id);
 		try {
-			AgCpOrderdDetail instance = (AgCpOrderdDetail) getSession().get(
+			AgCpOrderdDetail instance = (AgCpOrderdDetail) session.get(
 					"com.edwin.agentsys.model.AgCpOrderdDetail", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -68,7 +79,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 	public List findByExample(AgCpOrderdDetail instance) {
 		log.debug("finding AgCpOrderdDetail instance by example");
 		try {
-			List results = getSession()
+			List results = session
 					.createCriteria("com.edwin.agentsys.model.AgCpOrderdDetail")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
@@ -86,7 +97,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from AgCpOrderdDetail as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -115,7 +126,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 		log.debug("finding all AgCpOrderdDetail instances");
 		try {
 			String queryString = "from AgCpOrderdDetail";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -126,7 +137,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 	public AgCpOrderdDetail merge(AgCpOrderdDetail detachedInstance) {
 		log.debug("merging AgCpOrderdDetail instance");
 		try {
-			AgCpOrderdDetail result = (AgCpOrderdDetail) getSession().merge(
+			AgCpOrderdDetail result = (AgCpOrderdDetail) session.merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -139,7 +150,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 	public void attachDirty(AgCpOrderdDetail instance) {
 		log.debug("attaching dirty AgCpOrderdDetail instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -150,7 +161,7 @@ public class AgCpOrderdDetailDAO extends BaseHibernateDAO {
 	public void attachClean(AgCpOrderdDetail instance) {
 		log.debug("attaching clean AgCpOrderdDetail instance");
 		try {
-			getSession().buildLockRequest(LockOptions.NONE).lock(instance);
+			session.buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

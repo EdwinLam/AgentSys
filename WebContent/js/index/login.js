@@ -9,7 +9,7 @@ function loginInit(){
 	});
 	
 	//登陆模块
-	$("#loginForm").validate({
+	var validator=$("#loginForm").validate({
 		errorClass:"help-inline",
 		errorElement:"span",
 		submitHandler:function(form){
@@ -26,6 +26,8 @@ function loginInit(){
 							$("#bar_login_name").html(userInfo.name);
 							$(".afterlogin").show();
 							$('#loginDialog').modal('toggle');
+							$("#cart span").show();
+							$("#cart span").html(data.cartSize);
 						}else
 							base.eAlert(data.msg,3);
 					},
@@ -67,6 +69,14 @@ function loginInit(){
 				minlength : jQuery.format("密码不能小于{0}个字 符")
 			}
 		}
+	});
+	
+	$("#showLoginBtn").click(function(){
+		validator.resetForm();
+		$("#loginForm .control-group").removeClass("error");
+		$("#loginForm .control-group").removeClass("success");
+		$("#loginForm input[type='text']").val("");
+		$("#loginForm input[type='password']").val("");
 	});
 }
 

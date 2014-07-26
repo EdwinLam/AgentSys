@@ -3,11 +3,14 @@ package com.edwin.agentsys.model;
 import java.util.List;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import com.edwin.agentsys.test.HibernateSessionFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -32,11 +35,12 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public static final String PSW = "psw";
 	public static final String ROLE_ID = "roleId";
 	public static final String ADDRESS = "address";
+	private static Session session= HibernateSessionFactory.getSession();
 
 	public void save(AgQxUser transientInstance) {
 		log.debug("saving AgQxUser instance");
 		try {
-			getSession().save(transientInstance);
+			session.save(transientInstance);
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
@@ -47,7 +51,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public void delete(AgQxUser persistentInstance) {
 		log.debug("deleting AgQxUser instance");
 		try {
-			getSession().delete(persistentInstance);
+			session.delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -58,7 +62,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public AgQxUser findById(java.lang.Integer id) {
 		log.debug("getting AgQxUser instance with id: " + id);
 		try {
-			AgQxUser instance = (AgQxUser) getSession().get(
+			AgQxUser instance = (AgQxUser) session.get(
 					"com.edwin.agentsys.model.AgQxUser", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -70,7 +74,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public List findByExample(AgQxUser instance) {
 		log.debug("finding AgQxUser instance by example");
 		try {
-			List results = getSession()
+			List results = session
 					.createCriteria("com.edwin.agentsys.model.AgQxUser")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
@@ -88,7 +92,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from AgQxUser as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -125,7 +129,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 		log.debug("finding all AgQxUser instances");
 		try {
 			String queryString = "from AgQxUser";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -136,7 +140,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public AgQxUser merge(AgQxUser detachedInstance) {
 		log.debug("merging AgQxUser instance");
 		try {
-			AgQxUser result = (AgQxUser) getSession().merge(detachedInstance);
+			AgQxUser result = (AgQxUser) session.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -148,7 +152,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public void attachDirty(AgQxUser instance) {
 		log.debug("attaching dirty AgQxUser instance");
 		try {
-			getSession().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -159,7 +163,7 @@ public class AgQxUserDAO extends BaseHibernateDAO {
 	public void attachClean(AgQxUser instance) {
 		log.debug("attaching clean AgQxUser instance");
 		try {
-			getSession().buildLockRequest(LockOptions.NONE).lock(instance);
+			session.buildLockRequest(LockOptions.NONE).lock(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

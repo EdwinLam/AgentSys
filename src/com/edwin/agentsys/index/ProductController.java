@@ -52,7 +52,6 @@ public class ProductController {
 	@Autowired
 	AgCpOrderdDetailDAO agCpOrderdDetailDAO;
 	
-	Session session= HibernateSessionFactory.getSession();
 	@RequestMapping(params = "action=getProductById_ajaxreq")
 	public ModelAndView getProductById(HttpServletRequest request,int id)
 			throws Exception {
@@ -97,11 +96,9 @@ public class ProductController {
 		agCpProduct.setName(name);
 		agCpProduct.setTypeId(type_id);
 		agCpPackage.setPrice(price);
-		Transaction tr =session.beginTransaction(); // 开始事务
 		agCpProductDAO.save(agCpProduct);
 		agCpPackageDAO.save(agCpPackage);
-		tr.commit();
-		session.flush();
+		
 		jsonView.setSuc(true);
 		jsonView.setMsg("保存成功!");
 		return new ModelAndView(jsonView);
@@ -113,11 +110,8 @@ public class ProductController {
 		JsonView jsonView = new JsonView();
 		AgCpProduct agCpProduct =agCpProductDAO.findById(id);
 		AgCpPackage agCpPackage =agCpPackageDAO.findById(agCpProduct.getDefaultPackageId());
-		Transaction tr = session.beginTransaction(); // 开始事务
 		agCpProductDAO.delete(agCpProduct);
 		agCpPackageDAO.delete(agCpPackage);
-		tr.commit();
-		session.flush();
 		jsonView.setSuc(true);
 		jsonView.setMsg("删除成功!");
 		return new ModelAndView(jsonView);
@@ -139,29 +133,21 @@ public class ProductController {
 			jsonView.setSuc(false);
 			return new ModelAndView(jsonView);
 		}
-		Transaction tr = session.beginTransaction(); // 开始事务
 		AgCpProduct agCpProduct =new AgCpProduct();
 		agCpProduct.setImgUrl(imgUrl);
 		agCpProduct.setIntroduce(introduce);
 		agCpProduct.setName(name);
 		agCpProduct.setTypeId(type_id);
 		agCpProductDAO.save(agCpProduct);
-		tr.commit();
-		session.flush();
 		
 		AgCpPackage agCpPackage =new AgCpPackage();
 		agCpPackage.setName(name);
 		agCpPackage.setProductId(agCpProduct.getId());
 		agCpPackage.setPrice(price);
-		tr =session.beginTransaction(); // 开始事务
 		agCpPackageDAO.save(agCpPackage);
-		tr.commit();
-		session.flush();
-		
-		tr =session.beginTransaction(); // 开始事务
+
 		agCpProduct.setDefaultPackageId(agCpPackage.getId());
-		tr.commit();
-		session.flush();
+
 		jsonView.setSuc(true);
 		jsonView.setMsg("保存成功!");
 		return new ModelAndView(jsonView);

@@ -207,7 +207,7 @@ body {
 
 
 
-#product_show_dialog .shoptitle {/*产品标题*/
+.shoptitle {/*产品标题*/
 	text-align:left;
 	overflow: hidden;
 	color: #333;
@@ -219,7 +219,7 @@ body {
 }
 
 
-#product_show_dialog .shoptitleline {/*产品标题下划线*/
+.shoptitleline {/*产品标题下划线*/
 	width: 100%;
 	height: 6px;
 	background: url(/image/index/productline.png) repeat-x;
@@ -252,19 +252,18 @@ body {
 	margin-top: -8px;
 }
 
-#product_show_dialog  .pricein {/*产品价格*/
-	padding: 0 5px;
+.pricein {/*产品价格*/
 	color: #fc3c75;
 	font: 700 30px/36px verdana,arial;
 }
 
-#product_show_dialog .unit {/*产品价格符号*/
+.unit {/*产品价格符号*/
 		font: 400 14px/36px 'Microsoft YaHei',STXihei,MingLiu;
 		color: #aaa;
 }
 
 
-#product_show_dialog  .shopnum {/*产品购买数量*/
+  .shopnum {/*产品购买数量*/
 	-moz-user-select: none; -khtml-user-select: none; user-select: none;
 	text-align:left;
 	position: relative;
@@ -274,7 +273,7 @@ body {
 	padding-top:3px;
 }
 
-#product_show_dialog  .buy-num {
+ .buy-num {
 	background-image: url(/image/index/buyinfo.png);
 	background-repeat: no-repeat;
 	background-position: -104px -8px;
@@ -288,26 +287,26 @@ body {
 	color: #333;
 }
 
-#product_show_dialog  .num-add {
+ .num-add {
 	background-position: -104px -48px;
-	top: 2px;;
+	top: 1px;;
 }
 
- #product_show_dialog  .num-reduce {
+.num-reduce {
 	background-position: -104px -88px;
-	top: 22px;
+	top: 18px;
 }
 
-#product_show_dialog  .shop-goods-num-btn {
+.shop-goods-num-btn {
 		position: absolute;
 		cursor: pointer;
 		display: block;
 		width: 22px;
 		height: 17px;
-		right: 0;
+		right: 5px;
 }
 
-#product_show_dialog  .shop-goods-icons {
+.shop-goods-icons {
 	background-image: url(/image/index/buyinfo.png);
 	_background-image: url(/image/index/buyinfo.png);
 	background-repeat: no-repeat;

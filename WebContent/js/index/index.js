@@ -56,6 +56,8 @@ function showCartListDialog(){
 		return;
 	}
 	getMyCart();
+	$("#cartPhone").val(userInfo.phone);
+	$("#cartAddress").val(userInfo.address);
 	$("body").css("overflow","hidden");
 	$("#product_show_dialog").show();
 	$("#cartListShow").show();
@@ -136,6 +138,7 @@ function loginout(){
 				userInfo=null;
 				$(".afterlogin").hide();
 				$(".beforelogin").show();
+				$("#cart span").hide();
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				return false;
@@ -161,16 +164,17 @@ function autoLoadProduct(){
  */
 function showProductDialog(id){
 	var prodcutEntity=productInfo[id];
-	$("body").css("overflow","hidden");
+	$("#productShowDialog").modal();
+//	$("body").css("overflow","hidden");
 	$("#priceVal").html(prodcutEntity.price);
 	$("#titleVal").html(prodcutEntity.name);
 	$("#introduceVal").html(prodcutEntity.introduce);
 	$("#imgVal").attr("src",prodcutEntity.img_url);
-	$("#hidden_packageId").val(prodcutEntity.packageId);
-	$("#pin_view_layer").css("overflow","scroll");
-	$("#addressinfo").val($("#hidaddress").val());
-	$("#product_show_dialog").show();
-	$("#productShowView").show();
+    $("#hidden_packageId").val(prodcutEntity.packageId);
+//	$("#pin_view_layer").css("overflow","scroll");
+//	$("#addressinfo").val($("#hidaddress").val());
+//	$("#product_show_dialog").show();
+//	$("#productShowView").show();
 }
 
 /**

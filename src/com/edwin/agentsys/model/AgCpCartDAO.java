@@ -3,11 +3,15 @@ package com.edwin.agentsys.model;
 import java.util.List;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import com.edwin.agentsys.test.HibernateSessionFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -29,33 +33,39 @@ public class AgCpCartDAO extends BaseHibernateDAO {
 	public static final String USER_ID = "userId";
 	public static final String PACKAGE_ID = "packageId";
 	public static final String COUNT = "count";
-
+	private static Session session= HibernateSessionFactory.getSession();
 	public void save(AgCpCart transientInstance) {
 		log.debug("saving AgCpCart instance");
 		try {
-			getSession().save(transientInstance);
+			Transaction tr =session.beginTransaction(); // 开始事务
+			session.save(transientInstance);
+			tr.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			throw re;
 		}
+		session.flush();
 	}
 
 	public void delete(AgCpCart persistentInstance) {
 		log.debug("deleting AgCpCart instance");
 		try {
-			getSession().delete(persistentInstance);
+			Transaction tr =session.beginTransaction(); // 开始事务
+			session.delete(persistentInstance);
+			tr.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			throw re;
 		}
+		session.flush();
 	}
 
 	public AgCpCart findById(java.lang.Integer id) {
 		log.debug("getting AgCpCart instance with id: " + id);
 		try {
-			AgCpCart instance = (AgCpCart) getSession().get(
+			AgCpCart instance = (AgCpCart) session.get(
 					"com.edwin.agentsys.model.AgCpCart", id);
 			return instance;
 		} catch (RuntimeException re) {
@@ -67,7 +77,7 @@ public class AgCpCartDAO extends BaseHibernateDAO {
 	public List findByExample(AgCpCart instance) {
 		log.debug("finding AgCpCart instance by example");
 		try {
-			List results = getSession()
+			List results = session
 					.createCriteria("com.edwin.agentsys.model.AgCpCart")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: "
@@ -85,7 +95,7 @@ public class AgCpCartDAO extends BaseHibernateDAO {
 		try {
 			String queryString = "from AgCpCart as model where model."
 					+ propertyName + "= ?";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -110,7 +120,7 @@ public class AgCpCartDAO extends BaseHibernateDAO {
 		log.debug("finding all AgCpCart instances");
 		try {
 			String queryString = "from AgCpCart";
-			Query queryObject = getSession().createQuery(queryString);
+			Query queryObject = session.createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);

@@ -69,6 +69,9 @@ Base.prototype = {
 					cache:false,
 					success :function(data){
 						if(data.status=="403"){
+							userInfo=null;
+							$(".afterlogin").hide();
+							$(".beforelogin").show();
 							context.eAlert("您登陆已超时请重新登陆");
 						}else{
 							fun.call(this,data);

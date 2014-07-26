@@ -6,7 +6,7 @@
 	<div class="product_view_frame">
 		<div class="cart_content">
 		<div style="min-height:400px;">
-			<table class="table table-hover  table-striped">
+			<table class="table table-hover  table-striped" >
 				<thead>
 					<tr>
 						<th style="width:5%"><input class="selAll" type="checkbox" checked/></th>
@@ -41,10 +41,36 @@
 					</tr>
 				</tbody>
 			</table>
-	
+			<table class="table cart_total_menu">
+				<tr>
+				<td style="width:10%">
+					联系手机:
+				</td>
+				<td style="text-align:left;">
+				&nbsp;	&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"  id="cartPhone"  class="input-xxlarge"/>
+				</td>
+				</tr>
+				<tr>
+				<tr>
+				<td style="width:10%">
+					收货地址:
+				</td>
+				<td style="text-align:left;">
+				&nbsp;	&nbsp;&nbsp;&nbsp;&nbsp;<input type="text"  class="input-xxlarge" id="cartAddress"/>
+				</td></tr>
+				<tr>
+				<td style="width:10%">
+					购买留言:
+				</td>
+				<td style="text-align:left;">
+				&nbsp;	&nbsp;&nbsp;&nbsp;
+				<textarea  rows="4"style="width:816px;height:100px;" id="cartMsg"></textarea>
+				</td></tr>
+			</table>
 			<table class="table cart_total_menu">
 				<tr><td><input type="hidden"  id="total_price"/><span class="cartprice-sum">合计:</span><span class="cartprice" >¥0.00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="jsBtn" class="submit-btn" onclick="orderCart()">结算</span></td></tr>
 			</table>
+
 		</div>
 	</div>
 </div>

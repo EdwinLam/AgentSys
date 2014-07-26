@@ -28,9 +28,7 @@ public class UserController {
 		request.getSession().setAttribute(Constant.USER_SESSION, userSessionBean);
 		AgQxUser agQxUser = agQxUserDAO.findById(userSessionBean.getId());
 		agQxUser.setAddress(address);
-		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务
 		agQxUserDAO.save(agQxUser);
-		 tr.commit();   //提交事务  
 		HibernateSessionFactory.getSession().flush();
 		jsonView.setProperty("isSuc", true);
 		jsonView.setProperty("msg", "修改成功!");

@@ -3,11 +3,15 @@ package com.edwin.agentsys.model;
 import java.util.List;
 import org.hibernate.LockOptions;
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+
+import com.edwin.agentsys.test.HibernateSessionFactory;
 
 /**
  	* A data access object (DAO) providing persistence and search support for AgCpPackageProduct entities.
@@ -24,6 +28,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
 		//property constants
 	public static final String PACKAGE_ID = "packageId";
 	public static final String PRODUCT_ID = "productId";
+	private static Session session= HibernateSessionFactory.getSession();
 
 
 
@@ -31,29 +36,35 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
     public void save(AgCpPackageProduct transientInstance) {
         log.debug("saving AgCpPackageProduct instance");
         try {
-            getSession().save(transientInstance);
+        	Transaction tr =session.beginTransaction(); // 开始事务
+            session.save(transientInstance);
             log.debug("save successful");
+            tr.commit();
         } catch (RuntimeException re) {
             log.error("save failed", re);
             throw re;
         }
+        session.flush();
     }
     
 	public void delete(AgCpPackageProduct persistentInstance) {
         log.debug("deleting AgCpPackageProduct instance");
         try {
-            getSession().delete(persistentInstance);
+        	Transaction tr =session.beginTransaction(); // 开始事务
+            session.delete(persistentInstance);
             log.debug("delete successful");
+            tr.commit();
         } catch (RuntimeException re) {
             log.error("delete failed", re);
             throw re;
         }
+        session.flush();
     }
     
     public AgCpPackageProduct findById( java.lang.Integer id) {
         log.debug("getting AgCpPackageProduct instance with id: " + id);
         try {
-            AgCpPackageProduct instance = (AgCpPackageProduct) getSession()
+            AgCpPackageProduct instance = (AgCpPackageProduct) session
                     .get("com.edwin.agentsys.model.AgCpPackageProduct", id);
             return instance;
         } catch (RuntimeException re) {
@@ -66,7 +77,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
     public List findByExample(AgCpPackageProduct instance) {
         log.debug("finding AgCpPackageProduct instance by example");
         try {
-            List results = getSession()
+            List results = session
                     .createCriteria("com.edwin.agentsys.model.AgCpPackageProduct")
                     .add(Example.create(instance))
             .list();
@@ -84,7 +95,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
       try {
          String queryString = "from AgCpPackageProduct as model where model." 
          						+ propertyName + "= ?";
-         Query queryObject = getSession().createQuery(queryString);
+         Query queryObject = session.createQuery(queryString);
 		 queryObject.setParameter(0, value);
 		 return queryObject.list();
       } catch (RuntimeException re) {
@@ -110,7 +121,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
 		log.debug("finding all AgCpPackageProduct instances");
 		try {
 			String queryString = "from AgCpPackageProduct";
-	         Query queryObject = getSession().createQuery(queryString);
+	         Query queryObject = session.createQuery(queryString);
 			 return queryObject.list();
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -121,7 +132,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
     public AgCpPackageProduct merge(AgCpPackageProduct detachedInstance) {
         log.debug("merging AgCpPackageProduct instance");
         try {
-            AgCpPackageProduct result = (AgCpPackageProduct) getSession()
+            AgCpPackageProduct result = (AgCpPackageProduct) session
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -134,7 +145,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
     public void attachDirty(AgCpPackageProduct instance) {
         log.debug("attaching dirty AgCpPackageProduct instance");
         try {
-            getSession().saveOrUpdate(instance);
+            session.saveOrUpdate(instance);
             log.debug("attach successful");
         } catch (RuntimeException re) {
             log.error("attach failed", re);
@@ -145,7 +156,7 @@ public class AgCpPackageProductDAO extends BaseHibernateDAO  {
     public void attachClean(AgCpPackageProduct instance) {
         log.debug("attaching clean AgCpPackageProduct instance");
         try {
-                      	getSession().buildLockRequest(LockOptions.NONE).lock(instance);
+                      	session.buildLockRequest(LockOptions.NONE).lock(instance);
           	            log.debug("attach successful");
         } catch (RuntimeException re) {
             log.error("attach failed", re);

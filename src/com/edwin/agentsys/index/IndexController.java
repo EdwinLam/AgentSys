@@ -53,7 +53,6 @@ public class IndexController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		UserSessionBean userSessionBean=(UserSessionBean)request.getSession().getAttribute(Constant.USER_SESSION);
 		map.put("userSessionBean", userSessionBean);
-		
 		if(userSessionBean!=null){
 			map.put("loginDis", "");
 			map.put("unloginDis", "none");
@@ -131,10 +130,7 @@ public class IndexController {
 			jsonView.setProperty("msg", "名称或号码已存在，请重新检查!");
 			return new ModelAndView(jsonView);
 		}
-		Transaction tr = HibernateSessionFactory.getSession().beginTransaction(); //开始事务  
 		agQxUserDAO.save(agQxUser);
-		 tr.commit();   //提交事务  
-		HibernateSessionFactory.getSession().flush();
 		jsonView.setProperty("isSuc", true);
 		jsonView.setProperty("msg", "注册成功!请点击登陆按钮进行登陆!");
 		return new ModelAndView(jsonView);
@@ -174,6 +170,8 @@ public class IndexController {
 			userSessionBean.setId(agQxUser.getId());
 			userSessionBean.setAddress(agQxUser.getAddress());
 			request.getSession().setAttribute(Constant.USER_SESSION, userSessionBean);
+			List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+			jsonView.setProperty("cartSize",agcpCartList.size());
 			jsonView.setProperty("userInfo", userSessionBean);
 			jsonView.setProperty("isSuc", true);
 			jsonView.setProperty("msg", "登陆成功!");
