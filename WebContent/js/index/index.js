@@ -170,7 +170,7 @@ function showProductDialog(id){
 	$("#titleVal").html(prodcutEntity.name);
 	$("#introduceVal").html(prodcutEntity.introduce);
 	$("#imgVal").attr("src",prodcutEntity.img_url);
-    $("#hidden_packageId").val(prodcutEntity.packageId);
+    $("#hidden_productId").val(prodcutEntity.packageId);
 //	$("#pin_view_layer").css("overflow","scroll");
 //	$("#addressinfo").val($("#hidaddress").val());
 //	$("#product_show_dialog").show();

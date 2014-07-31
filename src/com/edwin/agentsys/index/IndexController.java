@@ -5,41 +5,36 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.edwin.agentsys.base.Constant;
 import com.edwin.agentsys.base.LoggerUtil;
-import com.edwin.agentsys.base.MD5Util;
 import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.UserSessionBean;
 import com.edwin.agentsys.index.vo.LoginVo;
 import com.edwin.agentsys.index.vo.RegisterVo;
-import com.edwin.agentsys.model.AgCpCartDAO;
-import com.edwin.agentsys.model.AgCpPackage;
-import com.edwin.agentsys.model.AgCpPackageDAO;
-import com.edwin.agentsys.model.AgCpProduct;
-import com.edwin.agentsys.model.AgCpProductDAO;
-import com.edwin.agentsys.model.AgQxUser;
-import com.edwin.agentsys.model.AgQxUserDAO;
-import com.edwin.agentsys.test.HibernateSessionFactory;
+import com.edwin.agentsys.model.Cart;
+import com.edwin.agentsys.model.Product;
+import com.edwin.agentsys.model.User;
+import com.edwin.agentsys.service.CartService;
+import com.edwin.agentsys.service.ProductService;
+import com.edwin.agentsys.service.UserService;
 
 @Controller
 @RequestMapping("/index.do")
 public class IndexController {
-	@Autowired
-	AgCpProductDAO agCpProductDAO;
-	@Autowired
-	AgCpCartDAO agCpCartDAO;
-	@Autowired
-	AgCpPackageDAO agCpPackageDao;
-	@Autowired
-	AgQxUserDAO agQxUserDAO;
+	@Resource(name="userService")
+	UserService userService;
+	@Resource(name="cartService")
+	CartService cartService;
+	@Resource(name="productService")
+	ProductService productService;
+
 	
 	/**
 	 * 首页界面
@@ -56,8 +51,8 @@ public class IndexController {
 		if(userSessionBean!=null){
 			map.put("loginDis", "");
 			map.put("unloginDis", "none");
-			List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
-			map.put("cartSize",agcpCartList.size());
+			List<Cart> CartList = cartService.findByUserId(userSessionBean.getId());
+			map.put("cartSize",CartList.size());
 			map.put("hidaddress", userSessionBean.getAddress());
 			map.put("hidphone", userSessionBean.getPhone());
 		}else{
@@ -77,28 +72,12 @@ public class IndexController {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "action=getproduct")
 	public ModelAndView getProdcut(HttpServletResponse response,int curPage,int typeId) throws Exception {
 		JsonView jsonView=new JsonView();
 		List<Map<String,String>> productMapList=new ArrayList<Map<String,String>>();
-		AgCpProduct agCpProduct=null;
-		AgCpPackage agCpPackage=null;
-		  Map<String,String> productInfo=null;
-		List<AgCpProduct> agCpProductList =agCpProductDAO.findByPage(curPage, Constant.INDEX_PRODUCT_SIZE,"",typeId);
-		  for(int    i=0;    i<agCpProductList.size();    i++)    {   
-			  productInfo=new HashMap<String,String>();
-			  agCpProduct  =   agCpProductList.get(i); 
-			  agCpPackage=agCpPackageDao.findById(agCpProduct.getDefaultPackageId());
-			  productInfo.put("id", agCpProduct.getId()+"");
-			  productInfo.put("name", agCpProduct.getName());
-			  productInfo.put("price", agCpPackage.getPrice()+"");
-			  productInfo.put("img_url", agCpProduct.getImgUrl()+"");
-			  productInfo.put("introduce", agCpProduct.getIntroduce()+"");
-			  productInfo.put("packageId", agCpPackage.getId()+"");
-			  productMapList.add(productInfo);
-		   }
-		  jsonView.setProperty("productData", productMapList);
+		List<Product> productList =productService.indexFind(curPage, Constant.INDEX_PRODUCT_SIZE, typeId,null);
+		  jsonView.setProperty("productData", productList);
 		return new ModelAndView(jsonView);
 	}
 	
@@ -118,19 +97,19 @@ public class IndexController {
 			jsonView.setProperty("msg", "参数异常!");
 			return new ModelAndView(jsonView);
 		}
-		AgQxUser agQxUser = new AgQxUser();
-		agQxUser.setAccount(registerVo.getPhone());
+		User user = new User();
+		user.setAccount(registerVo.getPhone());
 		//agQxUser.setPsw(MD5Util.Encrypt(registerVo.getPsw()));
-		agQxUser.setPsw(registerVo.getPsw());
-		agQxUser.setName(registerVo.getNick());
-		agQxUser.setPhone(registerVo.getPhone());
-		agQxUser.setRoleId(2);
-		if(agQxUserDAO.findByAccount(registerVo.getPhone()).size()>0||agQxUserDAO.findByName(registerVo.getNick()).size()>0){
+		user.setPsw(registerVo.getPsw());
+		user.setName(registerVo.getNick());
+		user.setPhone(registerVo.getPhone());
+		user.setRole_id(2);
+		if(userService.findByPhone(registerVo.getPhone()).size()>0){
 			jsonView.setProperty("isSuc", false);	
 			jsonView.setProperty("msg", "名称或号码已存在，请重新检查!");
 			return new ModelAndView(jsonView);
 		}
-		agQxUserDAO.save(agQxUser);
+		userService.insertUser(user);
 		jsonView.setProperty("isSuc", true);
 		jsonView.setProperty("msg", "注册成功!请点击登陆按钮进行登陆!");
 		return new ModelAndView(jsonView);
@@ -154,24 +133,24 @@ public class IndexController {
 			jsonView.setProperty("msg", "参数异常!");
 			return new ModelAndView(jsonView);
 		}
-		List userList=agQxUserDAO.findByAccount(loginVo.getL_phone());
+		List userList=userService.findByPhone(loginVo.getL_phone());
 		if(userList.size()==0){
 			jsonView.setProperty("isSuc", false);	
 			jsonView.setProperty("msg", "账号或者密码错误!");
 			return new ModelAndView(jsonView);
 		}
-		AgQxUser agQxUser =(AgQxUser)userList.get(0);
+		User user =(User)userList.get(0);
 		//密码验证
-		if(loginVo.getL_psw().equals(agQxUser.getPsw())){
+		if(loginVo.getL_psw().equals(user.getPsw())){
 			UserSessionBean userSessionBean=new UserSessionBean();
-			userSessionBean.setAccount(agQxUser.getAccount());
-			userSessionBean.setName(agQxUser.getName());
-			userSessionBean.setPhone(agQxUser.getPhone());
-			userSessionBean.setId(agQxUser.getId());
-			userSessionBean.setAddress(agQxUser.getAddress());
+			userSessionBean.setAccount(user.getAccount());
+			userSessionBean.setName(user.getName());
+			userSessionBean.setPhone(user.getPhone());
+			userSessionBean.setId((int)user.getId());
+			userSessionBean.setAddress(user.getAddress());
 			request.getSession().setAttribute(Constant.USER_SESSION, userSessionBean);
-			List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
-			jsonView.setProperty("cartSize",agcpCartList.size());
+			List<Cart> CartList = cartService.findByUserId(userSessionBean.getId());
+			jsonView.setProperty("cartSize",CartList.size());
 			jsonView.setProperty("userInfo", userSessionBean);
 			jsonView.setProperty("isSuc", true);
 			jsonView.setProperty("msg", "登陆成功!");
@@ -187,8 +166,7 @@ public class IndexController {
 	public ModelAndView checkPhone(String phone) throws Exception {
 		JsonView jsonView=new JsonView();
 		LoggerUtil.info("注册用户号码唯一性检查");
-		AgQxUserDAO agQxUserDAO = new AgQxUserDAO();
-		if(agQxUserDAO.findByAccount(phone).size()>0){
+		if(userService.findByPhone(phone).size()>0){
 			jsonView.setProperty("isExist", "1"); 
 		}else{
 			jsonView.setProperty("isExist", "0"); 

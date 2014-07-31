@@ -3,12 +3,6 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
-	<!-- 字符集过滤器 -->
-	<context-param>
-    <param-name>contextConfigLocation </param-name>
-    <param-value>classpath:context-dispatcher.xml</param-value>
-</context-param>
-	
 	
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
@@ -23,7 +17,11 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- 上下文Spring监听器 -->
+  <!-- Spring Listener -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring.xml</param-value>
+	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -35,7 +33,7 @@
 		<!-- 配置文件 -->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:context-dispatcher.xml</param-value>
+			<param-value>classpath:spring.xml</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>

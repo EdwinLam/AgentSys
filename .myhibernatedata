@@ -1,6 +1,6 @@
 #MyEclipse Hibernate Properties
-#Tue Jul 15 23:37:42 CST 2014
-genBasicCompId=false
+#Wed Jul 30 21:14:03 CST 2014
+genBasicCompId=true
 sessionFactoryName=com.edwin.agentsys.test.HibernateSessionFactory
 profile=
 daoSFId=
@@ -14,8 +14,7 @@ keyGenerator=native
 genVersionTag=false
 sessionFactoryId=
 basePersistenceClass=
-genAnnotations=false
+genAnnotations=true
 reSettingsFile=/AgentSys/hibernate.reveng.xml
-configFile=/AgentSys/src/hibernate.cfg.xml
+configFile=/AgentSys/src/com/edwin/agentsys/hibernate.cfg.xml
 createConfigFile=true
-baseDaoClass=com.edwin.agentsys.model.BaseHibernateDAO

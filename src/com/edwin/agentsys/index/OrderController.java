@@ -7,14 +7,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,31 +20,26 @@ import com.edwin.agentsys.base.LoggerUtil;
 import com.edwin.agentsys.base.Util;
 import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.UserSessionBean;
-import com.edwin.agentsys.model.AgCpCart;
-import com.edwin.agentsys.model.AgCpCartDAO;
-import com.edwin.agentsys.model.AgCpOrder;
-import com.edwin.agentsys.model.AgCpOrderDAO;
-import com.edwin.agentsys.model.AgCpOrderdDetail;
-import com.edwin.agentsys.model.AgCpOrderdDetailDAO;
-import com.edwin.agentsys.model.AgCpPackage;
-import com.edwin.agentsys.model.AgCpPackageDAO;
-import com.edwin.agentsys.model.AgCpProduct;
-import com.edwin.agentsys.model.AgCpProductDAO;
-import com.edwin.agentsys.test.HibernateSessionFactory;
+import com.edwin.agentsys.model.Cart;
+import com.edwin.agentsys.model.Order;
+import com.edwin.agentsys.model.OrderDetail;
+import com.edwin.agentsys.model.Product;
+import com.edwin.agentsys.service.CartService;
+import com.edwin.agentsys.service.OrderDetailService;
+import com.edwin.agentsys.service.OrderService;
+import com.edwin.agentsys.service.ProductService;
 
 @Controller
 @RequestMapping("/order.do")
 public class OrderController {
-	@Autowired
-	AgCpCartDAO agCpCartDAO;
-	@Autowired
-	AgCpPackageDAO agCpPackageDAO;
-	@Autowired
-	AgCpProductDAO agCpProductDAO;
-	@Autowired
-	AgCpOrderDAO agCpOrderDAO;
-	@Autowired
-	AgCpOrderdDetailDAO agCpOrderdDetailDAO;
+	@Resource(name="cartService")
+	CartService cartService;
+	@Resource(name="productService")
+	ProductService productService;
+	@Resource(name="orderService")
+	OrderService orderService;
+	@Resource(name="orderDetailService")
+	OrderDetailService orderDetailService;
 	
 	/**
 	 * 添加商品到购物车
@@ -78,8 +69,8 @@ public class OrderController {
 		JsonView jsonView = new JsonView();
 		UserSessionBean userSessionBean = (UserSessionBean) request
 				.getSession().getAttribute(Constant.USER_SESSION);
-		agCpCartDAO.delete(agCpCartDAO.findById(cartId));
-		List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+		cartService.deleteById(cartId);
+		List agcpCartList = cartService.findByUserId(userSessionBean.getId());
 		jsonView.setProperty("size", agcpCartList.size());
 		jsonView.setSuc(true);
 		jsonView.setMsg("删除成功!");
@@ -103,24 +94,21 @@ public class OrderController {
 		UserSessionBean userSessionBean = (UserSessionBean) request
 				.getSession().getAttribute(Constant.USER_SESSION);
 		// 读出购物车参数
-		List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+		List<Cart> cartList = cartService.findByUserId(userSessionBean.getId());
 		List<Map<String, String>> cartInfoList = new ArrayList<Map<String, String>>();
 		Map<String, String> cartInfo = null;
-		AgCpCart agcpCart = null;
-		AgCpPackage agCpPackage = null;
-		AgCpProduct agCpProduct = null;
-		for (int i = 0; i < agcpCartList.size(); i++) {
-			agcpCart = (AgCpCart) agcpCartList.get(i);
-			agCpPackage = agCpPackageDAO.findById(agcpCart.getPackageId());
-			agCpProduct = agCpProductDAO.findById(agCpPackage.getProductId());
+		Cart cart = null;
+		Product product = null;
+		for (int i = 0; i < cartList.size(); i++) {
+			cart = cartList.get(i);
+			product = productService.findById(cart.getProduct_id());
 			cartInfo = new HashMap<String, String>();
-			cartInfo.put("cartId", agcpCart.getId() + "");
-			cartInfo.put("packageId", agcpCart.getPackageId() + "");
-			cartInfo.put("count", agcpCart.getCount() + "");
-			cartInfo.put("img_url", agCpProduct.getImgUrl());
-			cartInfo.put("name", agCpProduct.getName());
-			cartInfo.put("introduce", agCpProduct.getIntroduce());
-			cartInfo.put("price", agCpPackage.getPrice() + "");
+			cartInfo.put("cartId", cart.getId() + "");
+			cartInfo.put("count",cart.getCount()+"");
+			cartInfo.put("img_url", product.getImg_url());
+			cartInfo.put("name", product.getName());
+			cartInfo.put("introduce", product.getIntroduce());
+			cartInfo.put("price",product.getPrice()+"");
 			cartInfoList.add(cartInfo);
 		}
 		jsonView.setSuc(true);
@@ -139,30 +127,28 @@ public class OrderController {
 		// 读出订单参数
 		int sUserId=userSessionBean.getRoleType()==1?-1:userSessionBean.getId();
 		List<Map<String,Object>> orderDetailList=new ArrayList<Map<String,Object>> ();
-		AgCpPackage agCpPackage;
-		AgCpProduct agCpProduct;
+		Product product;
 		Map<String,String> productInfo;
-		List<AgCpOrder> agCpOrderList=agCpOrderDAO.findByUserId(sUserId,page,Constant.MYORDER_PAGE_SIZE,status,orderNo);
-		for (AgCpOrder agCpOrder:agCpOrderList) {
+		List<Order> orderList=orderService.orderFind(sUserId,page,Constant.MYORDER_PAGE_SIZE,status,orderNo);
+		for (Order order:orderList) {
 			Map<String,Object> orderDetailItenMap = new HashMap<String,Object>();
-			orderDetailItenMap.put("orderid", agCpOrder.getOrderId());
-			orderDetailItenMap.put("id", agCpOrder.getId());
+			orderDetailItenMap.put("orderNo", order.getOrderNo());
+			orderDetailItenMap.put("id", order.getId());
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			orderDetailItenMap.put("ordertime",  formatter.format(agCpOrder.getCreateTime()));
-			orderDetailItenMap.put("address", agCpOrder.getAddress());
-			orderDetailItenMap.put("phone", agCpOrder.getPhone());
-			orderDetailItenMap.put("totalprice", agCpOrder.getTotalPrice());
-			orderDetailItenMap.put("statusval",agCpOrder.getStatus());
-			List<AgCpOrderdDetail> agCpOrderdDetailList=agCpOrderdDetailDAO.findByOrderId(agCpOrder.getId());
+			orderDetailItenMap.put("ordertime",  formatter.format(order.getCreateTime()));
+			orderDetailItenMap.put("address", order.getAddress());
+			orderDetailItenMap.put("phone", order.getPhone());
+			orderDetailItenMap.put("totalprice", order.getTotal_price());
+			orderDetailItenMap.put("statusval",order.getStatus());
+			List<OrderDetail> OrderDetailList=orderDetailService.findByOrderId((int)order.getId());
 			List<Map<String,String>> productInfoList=new ArrayList<Map<String,String>>();
-			for(AgCpOrderdDetail agCpOrderdDetail:agCpOrderdDetailList){
+			for(OrderDetail orderDetail:OrderDetailList){
 				productInfo=new HashMap<String,String>();
-				agCpPackage=agCpPackageDAO.findById(agCpOrderdDetail.getPackageId());
-				agCpProduct=agCpProductDAO.findById(agCpPackage.getProductId());
-				productInfo.put("price", agCpPackage.getPrice()+"");
-				productInfo.put("name", agCpProduct.getName());
-				productInfo.put("img_url",agCpProduct.getImgUrl());
-				productInfo.put("count",agCpOrderdDetail.getCount()+"");
+				product=productService.findById(orderDetail.getProductId());
+				productInfo.put("price", product.getPrice()+"");
+				productInfo.put("name", product.getName());
+				productInfo.put("img_url",product.getImg_url());
+				productInfo.put("count",orderDetail.getCount()+"");
 				productInfoList.add(productInfo);
 			}
 			orderDetailItenMap.put("productInfoList", productInfoList);
@@ -171,7 +157,7 @@ public class OrderController {
 		jsonView.setSuc(true);
 		jsonView.setMsg("获取我的订单成功!");
 		jsonView.setProperty("orderDetailList", orderDetailList);
-		jsonView.setProperty("totalPage", agCpOrderDAO.getTotalCountByUserId(sUserId,status,orderNo));
+		jsonView.setProperty("totalPage", orderService.orderSumUp(sUserId, status, orderNo));
 		jsonView.setProperty("roletype", userSessionBean.getRoleType());
 		jsonView.setProperty("page", page);
 		jsonView.setProperty("pageSize", Constant.MYORDER_PAGE_SIZE+"");
@@ -188,81 +174,47 @@ public class OrderController {
 			jsonView.setMsg("您不能执行该操作!");
 			return new ModelAndView(jsonView);
 		}
-		AgCpOrder agCpOrder= (AgCpOrder)agCpOrderDAO.findById(orderId);
-		agCpOrder.setStatus(flag);
-		agCpOrderDAO.save(agCpOrder);
+		Order order= (Order)orderService.findById(orderId);
+		order.setStatus(flag);
+		orderService.updateOrder(order);
 		jsonView.setSuc(true);
 		jsonView.setMsg("修改状态成功成功!");
 		return new ModelAndView(jsonView);
 	}
 	
 	
-	@RequestMapping(params = "action=ordercp_ajaxreq")
-	public ModelAndView orderCp(HttpServletRequest request,int packageId,int count) throws Exception {
-		JsonView jsonView = new JsonView();
-		UserSessionBean userSessionBean = (UserSessionBean) request .getSession().getAttribute(Constant.USER_SESSION);
-		AgCpOrder agCpOrder=new AgCpOrder();
-		AgCpOrderdDetail agCpOrderdDetail = new AgCpOrderdDetail();
-		agCpOrder.setCreateTime(new Timestamp(new Date().getTime()));
-		agCpOrder.setOrderId(Util.getOrderNo());
-		agCpOrder.setUserId(userSessionBean.getId());
-		agCpOrder.setStatus(0);
-		AgCpPackage agCpPackage=agCpPackageDAO.findById(packageId);
-		agCpOrder.setTotalPrice(agCpPackage.getPrice()*count);
-		
-//		if(agCpPackage.getPrice()*count<Constant.MIN_ORDER_PRICE){
-//			jsonView =  addToCartFun( userSessionBean, packageId, count);
-//			if(jsonView.isSuc()){
-//				jsonView.setMsg("未满"+Constant.MIN_ORDER_PRICE+"元，不能下订单，已加入购物车!");
-//			}
-//			return new ModelAndView(jsonView);
-//		}
-		agCpOrderDAO.save(agCpOrder);
-		
-		agCpOrderdDetail.setOrderId(agCpOrder.getId());
-		agCpOrderdDetail.setPackageId(packageId);
-		agCpOrderdDetail.setCount(count);
-		agCpOrderdDetail.setPrice(agCpPackage.getPrice());
-		agCpOrderdDetailDAO.save(agCpOrderdDetail);
-		jsonView.setSuc(true);
-		jsonView.setMsg("购买成功!");
-		return new ModelAndView(jsonView);
-	}
-	
 	@RequestMapping(params = "action=ordercpcart_ajaxreq")
 	public ModelAndView orderCpByCart(HttpServletRequest request,int[] cartIds,int[] counts,String phone,String address,String msg) throws Exception {
 		JsonView jsonView = new JsonView();
 		UserSessionBean userSessionBean = (UserSessionBean) request .getSession().getAttribute(Constant.USER_SESSION);
 		//下订单
-		AgCpOrder agCpOrder=new AgCpOrder();
-		agCpOrder.setCreateTime(new Timestamp(new Date().getTime()));
-		agCpOrder.setUserId(userSessionBean.getId());
-		agCpOrder.setPhone(phone);
-		agCpOrder.setAddress(address);
-		agCpOrder.setRemark(msg);
-		agCpOrderDAO.save(agCpOrder);
-		AgCpOrderdDetail agCpOrderdDetail ;
+		Order order=new Order();
+		 order.setCreateTime(new Timestamp(new Date().getTime()));
+		 order.setUserId(userSessionBean.getId());
+		 order.setPhone(phone);
+		 order.setAddress(address);
+		 order.setRemark(msg);
+		 orderService.insertOrder(order);
+		OrderDetail orderDetail ;
+		Product product;
 		float total_price=0;
-		AgCpCart agCpCart;
-		AgCpPackage agCpPackage;
+		Cart cart;
 		for(int i=0;i<cartIds.length;i++){
-			agCpCart=agCpCartDAO.findById(cartIds[i]);
-			agCpCart.getPackageId();
-			agCpPackage=agCpPackageDAO.findById(agCpCart.getPackageId());
-			agCpOrderdDetail = new AgCpOrderdDetail();
-			agCpOrderdDetail.setOrderId(agCpOrder.getId());
-			agCpOrderdDetail.setPackageId(agCpCart.getPackageId());
-			agCpOrderdDetail.setPrice(agCpPackage.getPrice());
-			agCpOrderdDetail.setCount(counts[i]);
-			total_price+=counts[i]*agCpPackage.getPrice();
-			agCpOrderdDetailDAO.save(agCpOrderdDetail);
-			agCpCartDAO.delete(agCpCart);
+			cart=cartService.findById(cartIds[i]);
+			product=productService.findById(cart.getId());
+			orderDetail = new OrderDetail();
+			orderDetail.setOrderId((int)order.getId());
+			orderDetail.setProductId(cart.getProduct_id());
+			orderDetail.setCount(counts[i]);
+			total_price+=counts[i]*product.getPrice();
+			orderDetailService.insertOrderDetail(orderDetail);
+			cartService.deleteById(cart.getId());
 		}
-		agCpOrder.setOrderId(Util.getOrderNo());
-		agCpOrder.setTotalPrice(total_price);
-		agCpOrder.setStatus(0);
-		agCpOrderDAO.save(agCpOrder);
-		List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+		order.setOrderNo(Util.getOrderNo());
+		order.setTotal_price(total_price);
+		order.setStatus(0);
+		orderService.updateOrder(order);
+		List agcpCartList = cartService.findByUserId(userSessionBean.getId());
 		jsonView.setProperty("size", agcpCartList.size());
 		jsonView.setSuc(true);
 		jsonView.setMsg("生成订单成功!");
@@ -272,21 +224,7 @@ public class OrderController {
 	
 //*****************************************************************************************************************
 	
-	/**
-	 * 获取购物车总价格
-	 * @param agcpCartList
-	 * @return
-	 */
-	public float getTotalCartPrice(List<AgCpCart> agcpCartList){
-		float totalprice=0;
-		AgCpPackage agCpPackage;
-		for(AgCpCart agCpCart:agcpCartList){
-			agCpPackage=agCpPackageDAO.findById(agCpCart.getPackageId());
-			totalprice+=agCpPackage.getPrice()*agCpCart.getCount();
-		}
-		return totalprice;
-	}
-	
+
 	/**
 	 * 添加商品到购物车
 	 * @param userSessionBean
@@ -294,30 +232,21 @@ public class OrderController {
 	 * @param count
 	 * @return
 	 */
-	public JsonView addToCartFun(UserSessionBean userSessionBean,int packageId,int count){
+	public JsonView addToCartFun(UserSessionBean userSessionBean,int product_id,int count){
 		JsonView jsonView = new JsonView();
-		if (packageId <= 0 && count <= 0) {
-			jsonView.setSuc(false);
-			jsonView.setMsg("参数异常!");
-			return jsonView;
-		}
-		List agcpCartList = agCpCartDAO.findByUserId(userSessionBean.getId());
+
+		List agcpCartList = cartService.findByUserId(userSessionBean.getId());
 		if(agcpCartList.size()>=Constant.CART_SIZE){
 			jsonView.setSuc(false);
 			jsonView.setMsg("购物车最多放"+Constant.CART_SIZE+"件商品!");
 			return jsonView;
 		}
 		
-		AgCpCart agCpCart = new AgCpCart();
-		agCpCart.setPackageId(packageId);
-		agCpCart.setUserId(userSessionBean.getId());
-		if(	agCpCartDAO.findByExample(agCpCart).size()>0){
-			jsonView.setSuc(false);
-			jsonView.setMsg("该商品已添加到购物车,不能重复添加!");
-			return jsonView;
-		}
-		agCpCart.setCount(count);
-		agCpCartDAO.save(agCpCart);
+		Cart cart = new Cart();
+		cart.setProduct_id(product_id);
+		cart.setUserId(userSessionBean.getId());
+		cart.setCount(count);
+		cartService.insertCart(cart);
 		LoggerUtil.info(userSessionBean.getName() + "("
 				+ userSessionBean.getAccount() + ")增加商品到购物车");
 		jsonView.setSuc(true);

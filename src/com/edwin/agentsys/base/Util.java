@@ -2,11 +2,15 @@ package com.edwin.agentsys.base;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.Query;
+
 public class Util {
+	
 	/**
 	 * 获取用户IP
 	 */
