@@ -161,43 +161,34 @@ function flagOrder(orderId,status,objt){
 }
 
 function getMyOrder(cPage,oStatus,isOpen,orderno){
-	  $.ajax({
-		  	async: false,
-			type : "post",
-			url : "/order.do?action=getMyOrder_ajaxreq&page="+cPage+"&status="+oStatus+"&orderNo="+orderno,
-			dataType : "json",
-			cache:false,
-			success : function(data) {
-				if(data.isSuc){
-					$("#myOrderData").find(".dataTr").remove();
-					$.each(data.orderDetailList,function(i,n){
-						var myOrdertList=$("#myOrderDataTp").html();
-						myOrdertList=myOrdertList.replace(/@orderid/g, n.orderid);
-						myOrdertList=myOrdertList.replace(/@address/g, n.address);
-						myOrdertList=myOrdertList.replace(/@phone/g, n.phone);
-						myOrdertList=myOrdertList.replace(/@totalprice/g, n.totalprice);
-						myOrdertList=myOrdertList.replace(/@ordertime/g, n.ordertime);
-						myOrdertList=myOrdertList.replace(/@statusName/g, getStatusMenu(data.roletype,n.statusval,n.id));
-						var imgList="";
-						$.each(n.productInfoList,function(j,k){
-							imgList+="<img class='listimg'  src='"+k.img_url+"' style='cursor:pointer'/>";
-							imgList+="<input type='hidden'  value='"+k.name+"'  style='cursor:pointer'/>";
-							imgList+="<input type='hidden'  value='"+k.count+"'  style='cursor:pointer'/>";
-							imgList+="<input type='hidden'  value='"+k.price+"'  style='cursor:pointer'/>";
-						});
-						myOrdertList=myOrdertList.replace(/@imgList/g, imgList);
-						$("#myOrderData").append("<tr class='dataTr'>"+myOrdertList+"</tr>");
+		base.doReq("/order.do?action=getMyOrder_ajaxreq",{"page":cPage,"status":oStatus,"orderNo":orderno},function(data){
+			if(data.isSuc){
+				$("#myOrderData").find(".dataTr").remove();
+				$.each(data.orderDetailList,function(i,n){
+					var myOrdertList=$("#myOrderDataTp").html();
+					myOrdertList=myOrdertList.replace(/@orderid/g, n.orderid);
+					myOrdertList=myOrdertList.replace(/@address/g, n.address);
+					myOrdertList=myOrdertList.replace(/@phone/g, n.phone);
+					myOrdertList=myOrdertList.replace(/@totalprice/g, n.totalprice);
+					myOrdertList=myOrdertList.replace(/@ordertime/g, n.ordertime);
+					myOrdertList=myOrdertList.replace(/@statusName/g, getStatusMenu(data.roletype,n.statusval,n.id));
+					var imgList="";
+					$.each(n.productInfoList,function(j,k){
+						imgList+="<img class='listimg'  src='"+k.img_url+"' style='cursor:pointer'/>";
+						imgList+="<input type='hidden'  value='"+k.name+"'  style='cursor:pointer'/>";
+						imgList+="<input type='hidden'  value='"+k.count+"'  style='cursor:pointer'/>";
+						imgList+="<input type='hidden'  value='"+k.price+"'  style='cursor:pointer'/>";
 					});
-					$("#oCurPage").val(data.page);
-					$("#oLastPage").val(Math.ceil(data.totalPage/data.pageSize));
-					$("#oPageArea").html(getPageNav(data.page,data.pageSize,data.totalPage));
-					if(isOpen)
-						$('#myOrderDialog').modal('toggle');
-				}
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("服务器正在维护中...");
-				return false;
+					myOrdertList=myOrdertList.replace(/@imgList/g, imgList);
+					$("#myOrderData").append("<tr class='dataTr'>"+myOrdertList+"</tr>");
+				});
+				$("#oCurPage").val(data.page);
+				$("#oLastPage").val(Math.ceil(data.totalPage/data.pageSize));
+				$("#oPageArea").html(getPageNav(data.page,data.pageSize,data.totalPage));
+				if(isOpen)
+					$('#myOrderDialog').modal('toggle');
+			}else{
+				base.eAlert(data.msg,3);
 			}
 		});
 }

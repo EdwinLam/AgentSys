@@ -28,9 +28,9 @@ function showBoxInit(){
 	 */
 	function addToCart(){
 		var count=$("#buynum").val();
-		var packageId=$("#hidden_packageId").val();
+		var productId=$("#hidden_productId").val();
 		base.doReq("/order.do?action=addToCart_ajaxreq",{
-			"packageId" : packageId,
+			"product_id" : productId,
 			"count" : count
 		}, function(data) {
 			if(data.isSuc){

@@ -53,11 +53,11 @@ public class OrderController {
 	 */
 	@RequestMapping(params = "action=addToCart_ajaxreq")
 	public ModelAndView addToCart(HttpServletRequest request,
-			HttpServletResponse response, int packageId, int count)
+			HttpServletResponse response, int product_id, int count)
 			throws Exception {
 		UserSessionBean userSessionBean = (UserSessionBean) request
 				.getSession().getAttribute(Constant.USER_SESSION);
-		JsonView jsonView =  addToCartFun( userSessionBean, packageId, count);
+		JsonView jsonView =  addToCartFun( userSessionBean, product_id, count);
 		return new ModelAndView(jsonView);
 	}
 	
@@ -201,7 +201,7 @@ public class OrderController {
 		Cart cart;
 		for(int i=0;i<cartIds.length;i++){
 			cart=cartService.findById(cartIds[i]);
-			product=productService.findById(cart.getId());
+			product=productService.findById(cart.getProduct_id());
 			orderDetail = new OrderDetail();
 			orderDetail.setOrderId((int)order.getId());
 			orderDetail.setProductId(cart.getProduct_id());
@@ -234,9 +234,8 @@ public class OrderController {
 	 */
 	public JsonView addToCartFun(UserSessionBean userSessionBean,int product_id,int count){
 		JsonView jsonView = new JsonView();
-
-		List agcpCartList = cartService.findByUserId(userSessionBean.getId());
-		if(agcpCartList.size()>=Constant.CART_SIZE){
+		List cartList = cartService.findByUserId(userSessionBean.getId());
+		if(cartList.size()>=Constant.CART_SIZE){
 			jsonView.setSuc(false);
 			jsonView.setMsg("购物车最多放"+Constant.CART_SIZE+"件商品!");
 			return jsonView;
@@ -251,7 +250,7 @@ public class OrderController {
 				+ userSessionBean.getAccount() + ")增加商品到购物车");
 		jsonView.setSuc(true);
 		jsonView.setMsg("已添加商品["+userSessionBean.getName()+"]到购物车!");
-		jsonView.setProperty("size", agcpCartList.size()+1);
+		jsonView.setProperty("size", cartList.size()+1);
 		return jsonView;
 	}
 	

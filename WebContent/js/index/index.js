@@ -165,16 +165,12 @@ function autoLoadProduct(){
 function showProductDialog(id){
 	var prodcutEntity=productInfo[id];
 	$("#productShowDialog").modal();
-//	$("body").css("overflow","hidden");
 	$("#priceVal").html(prodcutEntity.price);
 	$("#titleVal").html(prodcutEntity.name);
 	$("#introduceVal").html(prodcutEntity.introduce);
 	$("#imgVal").attr("src",prodcutEntity.img_url);
-    $("#hidden_productId").val(prodcutEntity.packageId);
-//	$("#pin_view_layer").css("overflow","scroll");
-//	$("#addressinfo").val($("#hidaddress").val());
-//	$("#product_show_dialog").show();
-//	$("#productShowView").show();
+    $("#hidden_productId").val(prodcutEntity.id);
+;
 }
 
 /**

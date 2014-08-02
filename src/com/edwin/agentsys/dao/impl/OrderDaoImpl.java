@@ -65,7 +65,7 @@ public class OrderDaoImpl implements OrderDao {
 	
 	@Override
 	public List<Order> orderFind(int userId,final int offset,final int pageSize,int status,String orderNo){
-		String sql="from product where 1=1 ";
+		String sql="from Order where 1=1 ";
 		if(status!=0){
 			sql+=" and status="+status;
 		}
@@ -88,7 +88,7 @@ public class OrderDaoImpl implements OrderDao {
 	}
 	
 	public int orderSumUp(int userId,int status,String orderNo){
-		String sql="from order where 1=1 ";
+		String sql="from Order where 1=1 ";
 		if(status!=0){
 			sql+=" and status="+status;
 		}

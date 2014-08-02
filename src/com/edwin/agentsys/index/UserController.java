@@ -12,7 +12,6 @@ import com.edwin.agentsys.base.view.JsonView;
 import com.edwin.agentsys.index.bean.UserSessionBean;
 import com.edwin.agentsys.model.User;
 import com.edwin.agentsys.service.UserService;
-import com.edwin.agentsys.test.HibernateSessionFactory;
 
 @Controller
 @RequestMapping("/user.do")
@@ -28,7 +27,6 @@ public class UserController {
 		User user = userService.findById(userSessionBean.getId());
 		user.setAddress(address);
 		userService.updateUser(user);
-		HibernateSessionFactory.getSession().flush();
 		jsonView.setProperty("isSuc", true);
 		jsonView.setProperty("msg", "修改成功!");
 		return new ModelAndView(jsonView);
