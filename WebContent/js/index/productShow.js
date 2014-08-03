@@ -162,8 +162,8 @@ function orderCart(){
 	});
 	 base.doReq( "/order.do?action=ordercpcart_ajaxreq"+addUrl,{
 		 "phone":$("#cartPhone").val(),
-		 "address":$("#cartPhone").val(),
-		 "msg":$("cartMsg").html()
+		 "address":$("#cartAddress").val(),
+		 "msg":$("#cartMsg").val()
 	 },function(data) {
 			if(data.isSuc){
 				$("#cart span").html(data.size);

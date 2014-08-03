@@ -17,5 +17,7 @@ public interface ProductDao {
 	public Product findById(long id);
 	
 	public List<Product> indexFind(int offset,int pageSize,int typeId,String name);
+	
+	public int indexFindTotal(int typeId,String name);
 
 }

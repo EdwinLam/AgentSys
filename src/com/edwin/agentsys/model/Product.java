@@ -34,6 +34,17 @@ public class Product{
 	
 	@Column(name="price")
 	private float price;
+	
+	@Column(name="del")
+	private int del;
+
+	public int getDel() {
+		return del;
+	}
+
+	public void setDel(int del) {
+		this.del = del;
+	}
 
 	public long getId() {
 		return id;
@@ -82,6 +93,8 @@ public class Product{
 	public void setPrice(float price) {
 		this.price = price;
 	}
+	
+	
 	
    
 

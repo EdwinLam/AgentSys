@@ -43,7 +43,6 @@
 					                <ul class="dropdown-menu" style="min-width:100px;" >
 					                  <li class="oStatus"><a href="#">全部</a></li>
 					                  <li class="oStatus"><a href="#">未处理</a></li>
-					                  <li class="oStatus"><a href="#">处理中</a></li>
 					                  <li class="oStatus"><a href="#">已处理</a></li>
 					                </ul>
 					              </div>
@@ -53,10 +52,11 @@
 				   <tbody id="myOrderData">
 				      <tr id="myOrderDataTp" style="display:none">
 				         <td style="position:relative;">
-				         <span class="orderinfo" style="cursor:pointer">@orderid</span>
+				         <span class="orderinfo" style="cursor:pointer">@orderNo</span>
 				         <input type="hidden" value="@address"/>
 				          <input type="hidden" value="@phone"/>
 				          <input type="hidden" value="@totalprice"/>
+				          <input type="hidden" value="@msg"/>
 				         </td>
 				         <td  style="height:65px;"><div style="position:relative">
 				         	@imgList
@@ -72,6 +72,7 @@
 				<input type="hidden" id="oCurPage" value="1"/>
 				<input type="hidden" id="oLastPage" value="1"/>
 				<input type="hidden" id="oStatusVal" value="-1"/>
+				
 				<div style="float:left;" id="oPageArea">
 				</div>
 				<div class="input-append input-prepend" style="margin-top:5px;">

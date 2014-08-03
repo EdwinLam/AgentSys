@@ -140,6 +140,7 @@ public class OrderController {
 			orderDetailItenMap.put("phone", order.getPhone());
 			orderDetailItenMap.put("totalprice", order.getTotal_price());
 			orderDetailItenMap.put("statusval",order.getStatus());
+			orderDetailItenMap.put("msg", order.getRemark());
 			List<OrderDetail> OrderDetailList=orderDetailService.findByOrderId((int)order.getId());
 			List<Map<String,String>> productInfoList=new ArrayList<Map<String,String>>();
 			for(OrderDetail orderDetail:OrderDetailList){
@@ -253,22 +254,6 @@ public class OrderController {
 		jsonView.setProperty("size", cartList.size()+1);
 		return jsonView;
 	}
-	
-	private String getStatusNameById(Integer status){
-		if(status==null){
-			return "暂无状态";
-		}
-		if(status==0){
-			return "未处理";
-		}else if(status==1){
-			return "处理中";
-		}else if(status==2){
-			return "已处理";
-		}else{
-			return "NOT FOUND";
-		}
-	}
-	
 	
 	
 	

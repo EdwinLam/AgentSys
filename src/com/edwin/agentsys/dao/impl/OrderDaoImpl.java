@@ -66,19 +66,20 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public List<Order> orderFind(int userId,final int offset,final int pageSize,int status,String orderNo){
 		String sql="from Order where 1=1 ";
-		if(status!=0){
+		if(status!=-1){
 			sql+=" and status="+status;
 		}
-		if(userId!=0){
+		if(userId!=-1){
 			sql+=" and user_id="+userId;
 		}
 		if(orderNo!=null&&!orderNo.equals("")){
-			sql+=" and orderNo="+orderNo;	
+			sql+=" and orderNo='"+orderNo+"'";	
 		}
+		sql+=" order by create_time desc ";
 		final String dealSql=sql;
         List list = template.executeFind(new HibernateCallback() {  
             public Object doInHibernate(Session session) throws HibernateException, SQLException {  
-                List result = session.createQuery(dealSql).setFirstResult(offset)  
+                List result = session.createQuery(dealSql).setFirstResult((offset-1)*pageSize)  
                                 .setMaxResults(pageSize)  
                                 .list();  
                 return result;  
@@ -89,14 +90,14 @@ public class OrderDaoImpl implements OrderDao {
 	
 	public int orderSumUp(int userId,int status,String orderNo){
 		String sql="from Order where 1=1 ";
-		if(status!=0){
+		if(status!=-1){
 			sql+=" and status="+status;
 		}
-		if(userId!=0){
+		if(userId!=-1){
 			sql+=" and user_id="+userId;
 		}
 		if(orderNo!=null&&!orderNo.equals("")){
-			sql+=" and orderNo="+orderNo;	
+			sql+=" and orderNo='"+orderNo+"'";	
 		}
 		List<Order> list=template.find ( sql );
 		return list.size();

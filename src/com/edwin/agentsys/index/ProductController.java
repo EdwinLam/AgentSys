@@ -67,7 +67,7 @@ public class ProductController {
 		product.setName(name);
 		product.setType_id(type_id);
 		product.setPrice(price);
-		
+		productService.updateProduct(product);
 		
 		jsonView.setSuc(true);
 		jsonView.setMsg("保存成功!");
@@ -78,7 +78,9 @@ public class ProductController {
 	public ModelAndView delProduc(HttpServletRequest request,int id)
 			throws Exception {
 		JsonView jsonView = new JsonView();
-		productService.deleteById(id);
+		Product  p=productService.findById(id);
+		p.setDel(1);
+		productService.updateProduct(p);
 		jsonView.setSuc(true);
 		jsonView.setMsg("删除成功!");
 		return new ModelAndView(jsonView);
@@ -101,6 +103,7 @@ public class ProductController {
 		product.setIntroduce(introduce);
 		product.setName(name);
 		product.setType_id(type_id);
+		product.setPrice(price);
 		productService.insertProduct(product);
 		jsonView.setSuc(true);
 		jsonView.setMsg("保存成功!");
@@ -127,7 +130,7 @@ public class ProductController {
 		}
 		jsonView.setProperty("page",page);
 		jsonView.setProperty("pageSize",Constant.LIST_PRODUCT_SIZE);
-		jsonView.setProperty("totalPage","10");
+		jsonView.setProperty("totalPage",productService.indexFindTotal(0, productName));
 
 		jsonView.setProperty("productInfoList", productInfoList);
 		jsonView.setMsg("产品获取成功!");

@@ -47,4 +47,9 @@ public class ProductService {
 	public  List<Product> indexFind(int offset,int pageSize,int typeId,String name){
 		return dao.indexFind(offset, pageSize, typeId,name);
 	}
+	
+	@Transactional
+	public int indexFindTotal(int typeId,String name){
+		return dao.indexFindTotal(typeId, name);
+	}
 	}

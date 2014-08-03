@@ -12,6 +12,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Component;
 
 import com.edwin.agentsys.dao.ProductDao;
+import com.edwin.agentsys.model.Order;
 import com.edwin.agentsys.model.Product;
 
 
@@ -63,7 +64,7 @@ public class ProductDaoImpl implements ProductDao {
 	
 	@Override
 	public List<Product> indexFind(final int offset,final int pageSize,int typeId,String name){
-		String sql="from Product where 1=1 ";
+		String sql="from Product where del=0 ";
 		if(typeId!=0){
 			sql+=" and type_id="+typeId;
 		}
@@ -80,5 +81,18 @@ public class ProductDaoImpl implements ProductDao {
             }  
         });  
         return list;  
+	}
+	
+	@Override
+	public int indexFindTotal(int typeId,String name){
+			String sql="from Product where del=0 ";
+			if(typeId!=0){
+				sql+=" and type_id="+typeId;
+			}
+			if(name!=null&&!name.equals("")){
+				sql+=" and name="+name;	
+			}
+		List<Order> list=template.find ( sql );
+		return list.size();
 	}
 }

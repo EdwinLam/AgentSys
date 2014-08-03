@@ -45,7 +45,8 @@ public class Order{
 	
 	@Column(name="remark")
 	private String remark;
-
+	
+	
 	public long getId() {
 		return id;
 	}
